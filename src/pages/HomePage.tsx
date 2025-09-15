@@ -14,19 +14,19 @@ import {
   SparklesIcon
 } from '@heroicons/react/24/outline';
 import MockTaleLogo from './../assets/MockTale.jpg';
+import MockTaleLogoPng from './../assets/MockTale.png';
 
 const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Navigation Header */}
-      <nav className="relative z-10 px-4 py-6">
+      <nav className="relative z-10 px-4  bg-gradient-to-r from-blue-400/10  to-purple-400/10">
         <div className="page-container">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 bg-[#8499fb30] rounded-[18px] p-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <img src={MockTaleLogo} alt="MockTale Logo" className="w-full h-full rounded-xl" />
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center justify-center p-2 rounded-xl m-4 bg-[#8499fb30]">
+                <img src={MockTaleLogoPng} alt="MockTale Logo" className="w-21 max-w-[100px] rounded-xl" />
               </div>
-              <h1 className="text-2xl font-bold gradient-text">MockTale</h1>
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
@@ -294,7 +294,7 @@ const HomePage: React.FC = () => {
               <span className="text-xl font-bold text-white">MockTale</span>
             </div>
             <div className="text-gray-400 text-sm">
-              © 2024 MockTale. All rights reserved.
+              © 2025 MockTale. All rights reserved.
             </div>
           </div>
         </div>
