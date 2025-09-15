@@ -20,12 +20,12 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Navigation Header */}
-      <nav className="relative z-10 px-4  bg-gradient-to-r from-blue-400/10  to-purple-400/10">
+      <nav className="relative z-10 px-4 bg-gradient-to-r from-[#8499fb20]  to-[#8499fb30]">
         <div className="page-container">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="flex items-center justify-center p-2 rounded-xl m-4 bg-[#8499fb30]">
-                <img src={MockTaleLogoPng} alt="MockTale Logo" className="w-21 max-w-[100px] rounded-xl" />
+              <div className="flex items-center justify-center rounded-xl m-4">
+                <img src={MockTaleLogoPng} alt="MockTale Logo" className="h-full max-h-[75px] rounded-xl" />
               </div>
             </div>
 
