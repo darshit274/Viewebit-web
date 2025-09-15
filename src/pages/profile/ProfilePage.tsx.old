@@ -1,0 +1,401 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../../store';
+import { clearAuth, updateUser } from '../../store/slices/authSlice';
+import { authService } from '../../services/authService';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { 
+  UserIcon,
+  EnvelopeIcon,
+  PhoneIcon,
+  KeyIcon,
+  CameraIcon,
+  TrophyIcon,
+  BookOpenIcon,
+  ClockIcon,
+  TargetIcon,
+  StarIcon,
+  BellIcon,
+  ShieldCheckIcon,
+  QuestionMarkCircleIcon,
+  ArrowRightOnRectangleIcon,
+  ChevronRightIcon,
+  SunIcon,
+  MoonIcon,
+  LanguageIcon,
+  ArrowDownTrayIcon,
+  Cog6ToothIcon,
+  PencilIcon
+} from '@heroicons/react/24/outline';
+
+const profileSchema = z.object({
+  fullName: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phoneNumber: z.string().min(10, 'Mobile number must be at least 10 digits'),
+  schoolName: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+});
+
+const passwordSchema = z.object({
+  currentPassword: z.string().min(1, 'Current password is required'),
+  newPassword: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string(),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type ProfileFormData = z.infer<typeof profileSchema>;
+type PasswordFormData = z.infer<typeof passwordSchema>;
+
+const ProfilePage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+  const [activeTab, setActiveTab] = useState<'profile' | 'password'>('profile');
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  const profileForm = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      fullName: user?.fullName || '',
+      email: user?.email || '',
+      phoneNumber: user?.phoneNumber || '',
+      schoolName: user?.schoolName || '',
+      city: user?.city || '',
+      state: user?.state || '',
+    },
+  });
+
+  const passwordForm = useForm<PasswordFormData>({
+    resolver: zodResolver(passwordSchema),
+  });
+
+  const onProfileSubmit = async (data: ProfileFormData) => {
+    try {
+      setIsUpdating(true);
+
+      const response = await authService.updateProfile(data);
+
+      if (response.success) {
+        dispatch(updateUser(response.data));
+        toast.success('Profile updated successfully!');
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Failed to update profile';
+      toast.error(errorMessage);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const onPasswordSubmit = async (data: PasswordFormData) => {
+    try {
+      setIsChangingPassword(true);
+
+      const response = await authService.changePassword(
+        data.currentPassword,
+        data.newPassword
+      );
+
+      if (response.success) {
+        toast.success('Password changed successfully!');
+        passwordForm.reset();
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Failed to change password';
+      toast.error(errorMessage);
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      toast.error('File size must be less than 5MB');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const response = await authService.uploadAvatar(formData);
+
+      if (response.success) {
+        dispatch(updateUser(response.data));
+        toast.success('Profile picture updated successfully!');
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Failed to upload profile picture';
+      toast.error(errorMessage);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
+        <p className="mt-2 text-gray-600">Manage your account settings and preferences</p>
+      </div>
+
+      <div className="bg-white shadow rounded-lg">
+        {/* Tab Navigation */}
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8 px-6">
+            <button
+              onClick={() => setActiveTab('profile')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'profile'
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Profile Information
+            </button>
+            <button
+              onClick={() => setActiveTab('password')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'password'
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Change Password
+            </button>
+          </nav>
+        </div>
+
+        <div className="p-6">
+          {activeTab === 'profile' && (
+            <div>
+              {/* Profile Picture Section */}
+              <div className="mb-8">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
+                  Profile Picture
+                </label>
+                <div className="flex items-center space-x-6">
+                  <div className="relative">
+                    <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
+                      {user?.avatarUrl ? (
+                        <img
+                          src={user.avatarUrl}
+                          alt={user.fullName || user.username}
+                          className="w-24 h-24 rounded-full object-cover"
+                        />
+                      ) : (
+                        <UserIcon className="w-12 h-12 text-gray-400" />
+                      )}
+                    </div>
+                    <label className="absolute bottom-0 right-0 bg-primary-500 rounded-full p-2 cursor-pointer hover:bg-primary-600 transition-colors">
+                      <CameraIcon className="w-4 h-4 text-white" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleAvatarUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">
+                      Click the camera icon to upload a new profile picture
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Recommended: 400x400 pixels, max 5MB
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Form */}
+              <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="fullName" className="form-label flex items-center">
+                      <UserIcon className="w-4 h-4 mr-2" />
+                      Full Name
+                    </label>
+                    <input
+                      {...profileForm.register('fullName')}
+                      type="text"
+                      id="fullName"
+                      className="form-input"
+                    />
+                    {profileForm.formState.errors.fullName && (
+                      <p className="form-error">{profileForm.formState.errors.fullName.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="form-label flex items-center">
+                      <EnvelopeIcon className="w-4 h-4 mr-2" />
+                      Email Address
+                    </label>
+                    <input
+                      {...profileForm.register('email')}
+                      type="email"
+                      id="email"
+                      className="form-input"
+                      disabled
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Email cannot be changed after registration
+                    </p>
+                  </div>
+
+                  <div>
+                    <label htmlFor="phoneNumber" className="form-label flex items-center">
+                      <PhoneIcon className="w-4 h-4 mr-2" />
+                      Mobile Number
+                    </label>
+                    <input
+                      {...profileForm.register('phoneNumber')}
+                      type="tel"
+                      id="phoneNumber"
+                      className="form-input"
+                    />
+                    {profileForm.formState.errors.phoneNumber && (
+                      <p className="form-error">{profileForm.formState.errors.phoneNumber.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="schoolName" className="form-label">
+                      School/College Name
+                    </label>
+                    <input
+                      {...profileForm.register('schoolName')}
+                      type="text"
+                      id="schoolName"
+                      className="form-input"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="city" className="form-label">
+                      City
+                    </label>
+                    <input
+                      {...profileForm.register('city')}
+                      type="text"
+                      id="city"
+                      className="form-input"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="state" className="form-label">
+                      State
+                    </label>
+                    <input
+                      {...profileForm.register('state')}
+                      type="text"
+                      id="state"
+                      className="form-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={isUpdating}
+                    className="btn-primary"
+                  >
+                    {isUpdating ? 'Updating...' : 'Update Profile'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {activeTab === 'password' && (
+            <div>
+              <div className="mb-6">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <KeyIcon className="w-5 h-5 mr-2" />
+                  Change Password
+                </h3>
+                <p className="mt-1 text-sm text-gray-600">
+                  Ensure your account stays secure by using a strong password
+                </p>
+              </div>
+
+              <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6">
+                <div>
+                  <label htmlFor="currentPassword" className="form-label">
+                    Current Password
+                  </label>
+                  <input
+                    {...passwordForm.register('currentPassword')}
+                    type="password"
+                    id="currentPassword"
+                    className="form-input"
+                  />
+                  {passwordForm.formState.errors.currentPassword && (
+                    <p className="form-error">{passwordForm.formState.errors.currentPassword.message}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="newPassword" className="form-label">
+                      New Password
+                    </label>
+                    <input
+                      {...passwordForm.register('newPassword')}
+                      type="password"
+                      id="newPassword"
+                      className="form-input"
+                    />
+                    {passwordForm.formState.errors.newPassword && (
+                      <p className="form-error">{passwordForm.formState.errors.newPassword.message}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="confirmPassword" className="form-label">
+                      Confirm New Password
+                    </label>
+                    <input
+                      {...passwordForm.register('confirmPassword')}
+                      type="password"
+                      id="confirmPassword"
+                      className="form-input"
+                    />
+                    {passwordForm.formState.errors.confirmPassword && (
+                      <p className="form-error">{passwordForm.formState.errors.confirmPassword.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={isChangingPassword}
+                    className="btn-primary"
+                  >
+                    {isChangingPassword ? 'Changing...' : 'Change Password'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
