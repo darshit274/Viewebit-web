@@ -22,11 +22,11 @@ const HomePage: React.FC = () => {
       <nav className="relative z-10 px-4 py-6">
         <div className="page-container">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 bg-[#8499fb30] rounded-[18px] p-2">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
                 <img src={MockTaleLogo} alt="MockTale Logo" className="w-full h-full rounded-xl" />
               </div>
-              <h1 className="text-2xl font-bold gradient-text">MockTail</h1>
+              <h1 className="text-2xl font-bold gradient-text">MockTale</h1>
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
@@ -264,7 +264,7 @@ const HomePage: React.FC = () => {
             <span className="gradient-text">Success Journey</span>?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto text-balance">
-            Join thousands of students who have transformed their academic performance with MockTail
+            Join thousands of students who have transformed their academic performance with MockTale
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
@@ -275,7 +275,7 @@ const HomePage: React.FC = () => {
             </Link>
             <Link
               to="/login"
-              className="btn btn-outline btn-lg border-gray-600 text-gray-300 hover:bg-gray-800"
+              className="btn btn-outline btn-lg border-gray-600 text-gray-300 hover:bg-gray-800 bg-gray-600"
             >
               Sign In
             </Link>
@@ -287,14 +287,14 @@ const HomePage: React.FC = () => {
       <footer className="bg-gray-900 border-t border-gray-800 py-12">
         <div className="page-container">
           <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
+            <div className="flex items-center space-x-3 mb-4 md:mb-0 bg-[#8499fb30] rounded-[18px] p-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
               <img src={MockTaleLogo} alt="MockTale Logo" className="w-full h-full rounded-xl" />
               </div>
-              <span className="text-xl font-bold text-white">MockTail</span>
+              <span className="text-xl font-bold text-white">MockTale</span>
             </div>
             <div className="text-gray-400 text-sm">
-              © 2024 MockTail. All rights reserved.
+              © 2024 MockTale. All rights reserved.
             </div>
           </div>
         </div>

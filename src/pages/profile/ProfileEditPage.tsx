@@ -193,6 +193,7 @@ const ProfileEditPage: React.FC = () => {
       if (profileResponse.data.avatarUrl) {
         setImageUri(profileResponse.data.avatarUrl);
       }
+      console.log('Dispatching updateUser with:', profileResponse.data);
       dispatch(updateUser(profileResponse.data));
       
       toast.success('Profile updated successfully!');
