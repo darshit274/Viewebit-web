@@ -26,7 +26,19 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800">
-                <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                    onError={(e) => {
+                      // Fallback to initials if image fails to load
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                ) : null}
+                <div className={`w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center ${user?.avatarUrl ? 'hidden' : ''}`}>
                   <span className="text-white text-sm font-medium">
                     {user?.username?.charAt(0).toUpperCase()}
                   </span>

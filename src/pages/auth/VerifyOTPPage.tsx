@@ -57,10 +57,10 @@ const VerifyOTPPage: React.FC = () => {
 
   // Auto-submit when 4 digits are entered
   useEffect(() => {
-    if (otpValue && otpValue.length === 4 && !isLoading) {
+    if (otpValue && otpValue.length === 4 && !isLoading && !verified) {
       handleSubmit(onSubmit)();
     }
-  }, [otpValue, isLoading]);
+  }, [otpValue, isLoading, verified, handleSubmit]);
 
   // Countdown timer for resend button
   useEffect(() => {
@@ -74,7 +74,7 @@ const VerifyOTPPage: React.FC = () => {
   }, [countdown]);
 
   const onSubmit = async (data: OTPFormData) => {
-    if (!email) return;
+    if (!email || isLoading || verified) return;
 
     try {
       setIsLoading(true);
