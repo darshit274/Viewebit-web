@@ -287,11 +287,8 @@ const HomePage: React.FC = () => {
       <footer className="bg-gray-900 border-t border-gray-800 py-12">
         <div className="page-container">
           <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0 bg-[#8499fb30] rounded-[18px] p-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <img src={MockTaleLogo} alt="MockTale Logo" className="w-full h-full rounded-xl" />
-              </div>
-              <span className="text-xl font-bold text-white">MockTale</span>
+            <div className="flex items-center bg-[#badcff] p-2 rounded-xl">
+              <img src={MockTaleLogoPng} alt="MockTale Logo" className="h-full max-h-[75px] rounded-xl" />
             </div>
             <div className="text-gray-400 text-sm">
               © 2025 MockTale. All rights reserved.
