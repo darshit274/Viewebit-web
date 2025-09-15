@@ -162,7 +162,7 @@ const RegisterPage: React.FC = () => {
         <p className="text-sm text-gray-600">
           Already have an account?{' '}
           <Link
-            to="/auth/login"
+            to="/login"
             className="font-medium text-primary-600 hover:text-primary-500"
           >
             Sign in

@@ -176,13 +176,13 @@ const LoginPage: React.FC = () => {
         </button>
         
         {/* Development Test Login Button */}
-        <button
+        {/* <button
           type="button"
           onClick={handleTestLogin}
           className="w-full mt-3 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-500"
         >
           🧪 Test Login (Development)
-        </button>
+        </button> */}
       </form>
 
       <div className="mt-6 text-center">

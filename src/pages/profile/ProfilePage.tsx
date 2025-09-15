@@ -174,7 +174,7 @@ const ProfilePage: React.FC = () => {
         dispatch(logout());
         
         toast.success('Logged out successfully');
-        navigate('/auth/login');
+        navigate('/login');
       } catch (error) {
         console.error('Error during logout:', error);
         toast.error('Failed to logout. Please try again.');

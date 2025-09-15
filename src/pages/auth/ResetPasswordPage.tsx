@@ -50,7 +50,7 @@ const ResetPasswordPage: React.FC = () => {
 
       if (response.success) {
         toast.success('Password reset successfully! You can now login.');
-        navigate('/auth/login');
+        navigate('/login');
       } else {
         toast.error(response.message);
       }
@@ -146,7 +146,7 @@ const ResetPasswordPage: React.FC = () => {
 
       <div className="mt-6 text-center">
         <button
-          onClick={() => navigate('/auth/login')}
+          onClick={() => navigate('/login')}
           className="text-primary-600 hover:text-primary-500 font-medium text-sm"
         >
           Back to Sign In
