@@ -13,6 +13,7 @@ import {
   ArrowRightIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline';
+import MockTaleLogo from './../assets/MockTale.jpg';
 
 const HomePage: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const HomePage: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <AcademicCapIcon className="w-6 h-6 text-white" />
+                <img src={MockTaleLogo} alt="MockTale Logo" className="w-full h-full rounded-xl" />
               </div>
               <h1 className="text-2xl font-bold gradient-text">MockTail</h1>
             </div>
@@ -288,7 +289,7 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <AcademicCapIcon className="w-5 h-5 text-white" />
+              <img src={MockTaleLogo} alt="MockTale Logo" className="w-full h-full rounded-xl" />
               </div>
               <span className="text-xl font-bold text-white">MockTail</span>
             </div>
