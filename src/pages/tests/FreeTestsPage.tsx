@@ -366,7 +366,7 @@ const FreeTestsPage: React.FC = () => {
           </div>
 
           <Link
-            to={`/free-tests/take/${test.uuid}`}
+            to={`/tests/series/${test.uuid}`}
             className="btn btn-primary group"
           >
             <PlayIcon className="w-4 h-4 mr-2" />

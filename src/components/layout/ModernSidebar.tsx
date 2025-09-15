@@ -69,12 +69,12 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       icon: BookOpenIcon,
       iconSolid: BookOpenIconSolid,
     },
-    {
-      name: 'Analytics',
-      href: '/analytics',
-      icon: ChartBarIcon,
-      iconSolid: ChartBarIconSolid,
-    },
+    // {
+    //   name: 'Analytics',
+    //   href: '/analytics',
+    //   icon: ChartBarIcon,
+    //   iconSolid: ChartBarIconSolid,
+    // },
     {
       name: 'Profile',
       href: '/profile',

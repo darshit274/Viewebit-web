@@ -85,21 +85,77 @@ const TakeTestPage: React.FC = () => {
 
   const fetchQuizQuestions = async () => {
     try {
-      const response = await api.get(`/dynamic/categories/${uuid}/questions`, {
-        params: { 
-          language: 'english',
-          shuffle: true 
+      // First try to get questions directly from category (existing logic)
+      let response;
+      try {
+        response = await api.get(`/dynamic/categories/${uuid}/questions`, {
+          params: {
+            language: 'english',
+            shuffle: true
+          }
+        });
+
+        if (response.data.success) {
+          setQuizData(response.data.data);
+          // Set timer: 1.5 minutes per question
+          setTimeRemaining(response.data.data.questions.length * 90);
+          return;
         }
-      });
-      
-      if (response.data.success) {
-        setQuizData(response.data.data);
-        // Set timer: 1.5 minutes per question
-        setTimeRemaining(response.data.data.questions.length * 90);
+      } catch (categoryError: any) {
+        console.log('Category endpoint failed, trying test series approach...');
+
+        // If category approach fails, try test series approach (for free tests)
+        try {
+          // Get test series details first
+          const seriesResponse = await api.get(`/dynamic/test-series/${uuid}`);
+
+          if (seriesResponse.data.success) {
+            const testSeries = seriesResponse.data.data;
+
+            if (!testSeries.categories || testSeries.categories.length === 0) {
+              toast.error('This test has no questions available yet.');
+              setIsLoading(false);
+              return;
+            }
+
+            // Find the first category that has questions
+            let questionsFound = false;
+            for (const category of testSeries.categories) {
+              if (category.has_questions || category.total_questions_recursive > 0) {
+                try {
+                  const questionsResponse = await api.get(`/dynamic/categories/${category.uuid}/questions`, {
+                    params: {
+                      language: 'english',
+                      shuffle: true
+                    }
+                  });
+
+                  if (questionsResponse.data.success && questionsResponse.data.data.questions.length > 0) {
+                    setQuizData(questionsResponse.data.data);
+                    setTimeRemaining(questionsResponse.data.data.questions.length * 90);
+                    questionsFound = true;
+                    break;
+                  }
+                } catch (err) {
+                  continue; // Try next category
+                }
+              }
+            }
+
+            if (!questionsFound) {
+              toast.error('No questions found in this test series.');
+              setIsLoading(false);
+              return;
+            }
+          }
+        } catch (seriesError: any) {
+          // If both approaches fail, show the original error
+          throw categoryError;
+        }
       }
     } catch (error: any) {
       console.error('Failed to fetch quiz questions:', error);
-      
+
       // Handle authentication errors
       if (error?.response?.status === 401) {
         console.log('❌ 401 Authentication error - redirecting to login');
@@ -107,14 +163,14 @@ const TakeTestPage: React.FC = () => {
         window.location.href = '/login';
         return;
       }
-      
+
       // Handle access denied errors
       if (error?.response?.status === 403) {
         console.log('❌ 403 Access denied error');
         toast.error('Access denied. This quiz requires a subscription.');
         return;
       }
-      
+
       toast.error('Failed to load quiz questions');
     } finally {
       setIsLoading(false);
