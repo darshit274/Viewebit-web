@@ -202,6 +202,15 @@ const TakeTestPage: React.FC = () => {
     }
   };
 
+  // State to store backend-calculated results
+  const [backendResults, setBackendResults] = useState<{
+    score: number;
+    percentage: number;
+    finalScore: number;
+    negativeMarkingEnabled: boolean;
+    negativeMarks: number;
+  } | null>(null);
+
   const handleSubmitQuiz = async () => {
     setIsSubmitting(true);
     try {
@@ -212,9 +221,6 @@ const TakeTestPage: React.FC = () => {
         isCorrect: selectedOption === quizData?.questions[parseInt(questionIndex)]?.correct_answer,
         timeSpent: 60 // Default time per question
       }));
-
-      // Calculate results locally for immediate display
-      const { score, percentage } = calculateScore();
 
       // Submit to backend API
       console.log('Submitting quiz to backend...', {
@@ -234,6 +240,22 @@ const TakeTestPage: React.FC = () => {
       console.log('Quiz submission response:', submitResponse.data);
 
       if (submitResponse.data.success) {
+        // Store backend-calculated results
+        const data = submitResponse.data.data;
+        setBackendResults({
+          score: data.correctAnswers,
+          percentage: data.percentage,
+          finalScore: data.finalScore || data.score,
+          negativeMarkingEnabled: data.negativeMarkingEnabled || false,
+          negativeMarks: data.negativeMarksDeducted || 0
+        });
+
+        console.log('✅ Using backend-calculated results:', {
+          percentage: data.percentage,
+          finalScore: data.finalScore,
+          negativeMarking: data.negativeMarkingEnabled
+        });
+
         toast.success('Quiz submitted successfully!');
         // Only show results if API call succeeds
         setShowResults(true);
@@ -305,7 +327,20 @@ const TakeTestPage: React.FC = () => {
   }
 
   const currentQuestion = quizData.questions[currentQuestionIndex];
-  const { score, percentage } = showResults ? calculateScore() : { score: 0, percentage: 0 };
+
+  // Use backend results if available, otherwise fallback to local calculation
+  const getDisplayResults = () => {
+    if (showResults && backendResults) {
+      return {
+        score: backendResults.score,
+        percentage: backendResults.percentage,
+        finalScore: backendResults.finalScore
+      };
+    }
+    return showResults ? calculateScore() : { score: 0, percentage: 0, finalScore: 0 };
+  };
+
+  const { score, percentage, finalScore } = getDisplayResults();
 
   // Pre-quiz screen
   if (!quizStarted && !showResults) {
@@ -373,14 +408,29 @@ const TakeTestPage: React.FC = () => {
               {percentage}%
             </span>
           </div>
-          
+
           <p className="text-xl text-gray-900 mb-2">
             {score} out of {quizData.questions.length} correct
           </p>
-          
-          <p className="text-gray-600 mb-6">
-            {percentage >= 70 ? 'Excellent work!' : 
-             percentage >= 50 ? 'Good effort!' : 
+
+          {/* Show negative marking info if enabled */}
+          {backendResults?.negativeMarkingEnabled && (
+            <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-sm text-amber-800 font-medium">
+                ⚠️ Negative Marking Applied
+              </p>
+              <p className="text-sm text-amber-700 mt-1">
+                Final Score: {backendResults.finalScore}
+                {backendResults.negativeMarks > 0 && (
+                  <span> (minus {backendResults.negativeMarks} negative marks)</span>
+                )}
+              </p>
+            </div>
+          )}
+
+          <p className="text-gray-600 mb-6 mt-4">
+            {percentage >= 70 ? 'Excellent work!' :
+             percentage >= 50 ? 'Good effort!' :
              'Keep practicing!'}
           </p>
 
