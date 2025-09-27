@@ -14,17 +14,25 @@ import { api } from "../../services/api";
 interface Question {
   id: number;
   uuid: string;
-  question_text: string;
-  question_text_gujarati?: string;
+  question_text: string | null;
+  question_text_gujarati?: string | null;
   options: {
     A: string;
     B: string;
     C: string;
     D: string;
   };
+  option_a?: string | null;
+  option_b?: string | null;
+  option_c?: string | null;
+  option_d?: string | null;
+  option_a_gujarati?: string | null;
+  option_b_gujarati?: string | null;
+  option_c_gujarati?: string | null;
+  option_d_gujarati?: string | null;
   correct_answer: string;
-  explanation?: string;
-  explanation_gujarati?: string;
+  explanation?: string | null;
+  explanation_gujarati?: string | null;
   marks: number;
 }
 
@@ -67,6 +75,36 @@ const TakeTestPage: React.FC = () => {
 
   // Get category info from location state
   const { categoryName, seriesName, questionCount } = location.state || {};
+
+  // Smart language selection functions
+  const getQuestionText = (question: Question, selectedLanguage: "english" | "gujarati"): string => {
+    if (selectedLanguage === 'gujarati') {
+      return question.question_text_gujarati || question.question_text || 'No question available';
+    } else {
+      return question.question_text || question.question_text_gujarati || 'No question available';
+    }
+  };
+
+  const getOptionText = (question: Question, option: "A" | "B" | "C" | "D", selectedLanguage: "english" | "gujarati"): string => {
+    const optionLower = option.toLowerCase() as 'a' | 'b' | 'c' | 'd';
+    const englishKey = `option_${optionLower}` as keyof Question;
+    const gujaratiKey = `option_${optionLower}_gujarati` as keyof Question;
+
+    if (selectedLanguage === 'gujarati') {
+      return (question[gujaratiKey] as string) || (question[englishKey] as string) || question.options[option] || `No option ${option}`;
+    } else {
+      return (question[englishKey] as string) || (question[gujaratiKey] as string) || question.options[option] || `No option ${option}`;
+    }
+  };
+
+  const getLanguageIndicator = (question: Question): "english" | "gujarati" | "both" => {
+    const hasEnglish = question.question_text || question.option_a;
+    const hasGujarati = question.question_text_gujarati || question.option_a_gujarati;
+
+    if (hasEnglish && hasGujarati) return "both";
+    if (hasGujarati) return "gujarati";
+    return "english";
+  };
 
   useEffect(() => {
     if (uuid) {
@@ -137,7 +175,7 @@ const TakeTestPage: React.FC = () => {
                     `/dynamic/categories/${category.uuid}/questions`,
                     {
                       params: {
-                        language: "english",
+                        language: language,
                         shuffle: true,
                       },
                     }
@@ -578,7 +616,7 @@ const TakeTestPage: React.FC = () => {
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-gray-900 mb-2">
-                        {index + 1}. {question.question_text}
+                        {index + 1}. {getQuestionText(question, language)}
                       </p>
                       <div className="text-sm space-y-1">
                         <p>
@@ -589,11 +627,7 @@ const TakeTestPage: React.FC = () => {
                             }
                           >
                             {userAnswer
-                              ? `${userAnswer} - ${
-                                  question.options[
-                                    userAnswer as keyof typeof question.options
-                                  ]
-                                }`
+                              ? `${userAnswer} - ${getOptionText(question, userAnswer as "A" | "B" | "C" | "D", language)}`
                               : "Not answered"}
                           </span>
                         </p>
@@ -603,18 +637,15 @@ const TakeTestPage: React.FC = () => {
                               Correct answer:
                             </span>{" "}
                             <span className="text-green-600">
-                              {question.correct_answer} -{" "}
-                              {
-                                question.options[
-                                  question.correct_answer as keyof typeof question.options
-                                ]
-                              }
+                              {question.correct_answer} - {getOptionText(question, question.correct_answer as "A" | "B" | "C" | "D", language)}
                             </span>
                           </p>
                         )}
-                        {question.explanation && (
+                        {(question.explanation || question.explanation_gujarati) && (
                           <p className="text-gray-600 italic">
-                            {question.explanation}
+                            {language === 'gujarati'
+                              ? (question.explanation_gujarati || question.explanation)
+                              : (question.explanation || question.explanation_gujarati)}
                           </p>
                         )}
                       </div>
@@ -733,16 +764,24 @@ const TakeTestPage: React.FC = () => {
 
         {/* Question */}
         <div className="bg-white rounded-xl border border-gray-100 p-8 mb-6">
-          <h2 className="text-xl font-medium text-gray-900 mb-6">
-            {currentQuestion.question_text}
-          </h2>
+          <div className="flex items-start justify-between mb-6">
+            <h2 className="text-xl font-medium text-gray-900 flex-1">
+              {getQuestionText(currentQuestion, language)}
+            </h2>
+            {/* Language indicator */}
+            <span className={`px-3 py-1 text-xs font-medium rounded-full ml-4 ${
+              getLanguageIndicator(currentQuestion) === 'both' ? 'bg-purple-100 text-purple-800' :
+              getLanguageIndicator(currentQuestion) === 'gujarati' ? 'bg-orange-100 text-orange-800' :
+              'bg-blue-100 text-blue-800'
+            }`}>
+              {getLanguageIndicator(currentQuestion) === 'both' ? 'Both' :
+               getLanguageIndicator(currentQuestion) === 'gujarati' ? 'Gujarati' : 'English'}
+            </span>
+          </div>
 
           <div className="space-y-3">
             {["A", "B", "C", "D"].map((option) => {
-              const optionText =
-                currentQuestion.options[
-                  option as keyof typeof currentQuestion.options
-                ];
+              const optionText = getOptionText(currentQuestion, option as "A" | "B" | "C" | "D", language);
               const isSelected =
                 selectedAnswers[currentQuestionIndex] === option;
 
@@ -775,7 +814,7 @@ const TakeTestPage: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <div className="flex items-center justify-center">
+        {/* <div className="flex items-center justify-center">
           <div className="flex space-x-2">
             {quizData.questions.map((_, index) => (
               <button
@@ -793,7 +832,7 @@ const TakeTestPage: React.FC = () => {
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
 
         {/* Question Navigator Modal */}
         {showNavigator && (
@@ -1018,7 +1057,7 @@ const TakeTestPage: React.FC = () => {
                     >
                       <p className="font-medium flex items-center justify-between">
                         <span>
-                          {index + 1}. {q.question_text}
+                          {index + 1}. {getQuestionText(q, language)}
                         </span>
                         {isMarked && (
                           <span className="ml-2 text-yellow-600">(Marked)</span>
