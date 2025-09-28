@@ -42,6 +42,9 @@ interface QuizData {
     uuid: string;
     name: string;
     description?: string;
+    test_duration_minutes?: number;
+    negative_marking_enabled?: boolean;
+    negative_marks_per_wrong?: number;
   };
   questions: Question[];
   metadata: {
@@ -118,6 +121,15 @@ const TakeTestPage: React.FC = () => {
       timer = setInterval(() => {
         setTimeRemaining((prev) => {
           if (prev <= 1) {
+            // Show toast notification that time is up
+            toast.error("⏰ Time's up! Your test has been automatically submitted.", {
+              duration: 4000,
+              style: {
+                background: '#dc2626',
+                color: 'white',
+                fontWeight: 'bold',
+              }
+            });
             handleSubmitQuiz();
             return 0;
           }
@@ -142,8 +154,10 @@ const TakeTestPage: React.FC = () => {
 
         if (response.data.success) {
           setQuizData(response.data.data);
-          // Set timer: 1.5 minutes per question
-          setTimeRemaining(response.data.data.questions.length * 90);
+          // Use category-level test duration (in minutes) or fallback to 1.5 minutes per question
+          const testDurationMinutes = response.data.data.category?.test_duration_minutes ||
+                                      (response.data.data.questions.length * 1.5);
+          setTimeRemaining(testDurationMinutes * 60); // Convert minutes to seconds
           return;
         }
       } catch (categoryError: any) {
@@ -186,9 +200,10 @@ const TakeTestPage: React.FC = () => {
                     questionsResponse.data.data.questions.length > 0
                   ) {
                     setQuizData(questionsResponse.data.data);
-                    setTimeRemaining(
-                      questionsResponse.data.data.questions.length * 90
-                    );
+                    // Use category-level test duration or fallback to 1.5 minutes per question
+                    const testDurationMinutes = questionsResponse.data.data.category?.test_duration_minutes ||
+                                                (questionsResponse.data.data.questions.length * 1.5);
+                    setTimeRemaining(testDurationMinutes * 60); // Convert minutes to seconds
                     questionsFound = true;
                     break;
                   }
@@ -567,7 +582,10 @@ const TakeTestPage: React.FC = () => {
                 setShowResults(false);
                 setCurrentQuestionIndex(0);
                 setSelectedAnswers({});
-                setTimeRemaining(quizData.questions.length * 90);
+                // Use category-level test duration for retake
+                const testDurationMinutes = quizData.category?.test_duration_minutes ||
+                                            (quizData.questions.length * 1.5);
+                setTimeRemaining(testDurationMinutes * 60);
               }}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >

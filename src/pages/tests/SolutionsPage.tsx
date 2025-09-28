@@ -14,6 +14,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
+import HTMLContent from '../../components/common/HTMLContent';
+import '../../styles/html-content.css';
 
 interface Question {
   id: number;
@@ -59,8 +61,8 @@ const SolutionsPage: React.FC = () => {
   const [showExplanations, setShowExplanations] = useState<{[key: number]: boolean}>({});
   const [showAllExplanations, setShowAllExplanations] = useState(false);
   
-  // Retake/Practice mode state
-  const [practiceMode, setPracticeMode] = useState(false);
+  // Retake/Practice mode state - ON by default
+  const [practiceMode, setPracticeMode] = useState(true);
   const [reattemptAnswers, setReattemptAnswers] = useState<{[key: number]: string}>({});
   const [hasReattempted, setHasReattempted] = useState<{[key: number]: boolean}>({});
   
@@ -468,25 +470,27 @@ const SolutionsPage: React.FC = () => {
           </div>
         )}
 
-        {/* Answer Summary */}
-        <div className="bg-gray-50 rounded-lg p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Your Answer</p>
-              <p className={`text-lg font-semibold ${
-                isCorrect ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {userAnswer ? `${userAnswer} - ${currentQuestion.options[userAnswer as keyof typeof currentQuestion.options]}` : 'Not answered'}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700 mb-1">Correct Answer</p>
-              <p className="text-lg font-semibold text-green-600">
-                {currentQuestion.correct_answer} - {currentQuestion.options[currentQuestion.correct_answer as keyof typeof currentQuestion.options]}
-              </p>
+        {/* Answer Summary - Hide when Practice Mode is ON unless user has reattempted */}
+        {(!practiceMode || hasReattempted[currentQuestionIndex]) && (
+          <div className="bg-gray-50 rounded-lg p-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">Your Answer</p>
+                <p className={`text-lg font-semibold ${
+                  isCorrect ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {userAnswer ? `${userAnswer} - ${currentQuestion.options[userAnswer as keyof typeof currentQuestion.options]}` : 'Not answered'}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">Correct Answer</p>
+                <p className="text-lg font-semibold text-green-600">
+                  {currentQuestion.correct_answer} - {currentQuestion.options[currentQuestion.correct_answer as keyof typeof currentQuestion.options]}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Explanation */}
         {currentQuestion.explanation && (
@@ -526,9 +530,10 @@ const SolutionsPage: React.FC = () => {
              (!practiceMode || hasReattempted[currentQuestionIndex] || !practiceMode) && (
               <div className="px-6 pb-6 border-t border-blue-200">
                 <div className="pt-4">
-                  <p className="text-blue-800 leading-relaxed">
-                    {currentQuestion.explanation}
-                  </p>
+                  <HTMLContent
+                    content={currentQuestion.explanation}
+                    className="text-blue-800 leading-relaxed"
+                  />
                   
                   {/* Show additional context for practice mode */}
                   {practiceMode && hasReattempted[currentQuestionIndex] && (
