@@ -2,6 +2,7 @@ import {
   ArrowLeftIcon,
   CheckCircleIcon,
   ClockIcon,
+  ExclamationTriangleIcon,
   Squares2X2Icon,
   XCircleIcon,
   XMarkIcon,
@@ -75,6 +76,7 @@ const TakeTestPage: React.FC = () => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [showNavigator, setShowNavigator] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showNegativeMarkingWarning, setShowNegativeMarkingWarning] = useState(false);
 
   // Get category info from location state
   const { categoryName, seriesName, questionCount } = location.state || {};
@@ -405,7 +407,24 @@ const TakeTestPage: React.FC = () => {
   };
 
   const startQuiz = () => {
+    // Check if negative marking is enabled
+    if (quizData?.category?.negative_marking_enabled) {
+      // Show warning popup first
+      setShowNegativeMarkingWarning(true);
+    } else {
+      // No negative marking, start immediately
+      setQuizStarted(true);
+    }
+  };
+
+  const handleConfirmStartQuiz = () => {
+    setShowNegativeMarkingWarning(false);
     setQuizStarted(true);
+  };
+
+  const handleCancelStartQuiz = () => {
+    setShowNegativeMarkingWarning(false);
+    // User can review the pre-quiz screen again
   };
 
   if (isLoading) {
@@ -453,19 +472,92 @@ const TakeTestPage: React.FC = () => {
 
   const { score, percentage, finalScore } = getDisplayResults();
 
+  // Negative Marking Warning Modal
+  const NegativeMarkingWarningModal = () => {
+    if (!showNegativeMarkingWarning) return null;
+
+    const negativeMarks = quizData?.category?.negative_marks_per_wrong || 0.25;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
+          {/* Warning Icon */}
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center">
+              <ExclamationTriangleIcon className="h-10 w-10 text-amber-600" />
+            </div>
+          </div>
+
+          {/* Title */}
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
+            Negative Marking Enabled!
+          </h2>
+
+          {/* Warning Message */}
+          <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded">
+            <p className="text-amber-800 font-medium mb-2">
+              ⚠️ This test has negative marking
+            </p>
+            <p className="text-amber-700 text-sm leading-relaxed">
+              For each <strong>wrong answer</strong>, you will lose{" "}
+              <strong className="text-amber-900">{negativeMarks} marks</strong>.
+            </p>
+            <p className="text-amber-700 text-sm mt-2">
+              • Correct answer: <span className="text-green-600 font-semibold">+1 mark</span>
+              <br />
+              • Wrong answer: <span className="text-red-600 font-semibold">-{negativeMarks} marks</span>
+              <br />
+              • Unanswered: <span className="text-gray-600 font-semibold">No penalty</span>
+            </p>
+          </div>
+
+          {/* Tips */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
+            <p className="text-blue-900 font-medium text-sm mb-1">💡 Tips:</p>
+            <ul className="text-blue-800 text-xs space-y-1 list-disc list-inside">
+              <li>Answer only if you're confident</li>
+              <li>Skip questions if unsure</li>
+              <li>Review your answers before submitting</li>
+            </ul>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex space-x-3">
+            <button
+              onClick={handleCancelStartQuiz}
+              className="flex-1 px-4 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleConfirmStartQuiz}
+              className="flex-1 px-4 py-3 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors shadow-md"
+            >
+              I Understand, Start Test
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // Pre-quiz screen
   if (!quizStarted && !showResults) {
     return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-lg hover:bg-gray-100 mr-3"
-          >
-            <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
-          </button>
-          <h1 className="text-xl font-semibold text-gray-900">Quiz Ready</h1>
-        </div>
+      <>
+        {/* Negative Marking Warning Modal */}
+        <NegativeMarkingWarningModal />
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center mb-6">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-lg hover:bg-gray-100 mr-3"
+            >
+              <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
+            </button>
+            <h1 className="text-xl font-semibold text-gray-900">Quiz Ready</h1>
+          </div>
 
         <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -493,6 +585,16 @@ const TakeTestPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Negative Marking Indicator */}
+          {quizData.category.negative_marking_enabled && (
+            <div className="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-lg inline-flex items-center justify-center mx-auto">
+              <ExclamationTriangleIcon className="h-5 w-5 text-amber-600 mr-2" />
+              <span className="text-amber-800 font-medium text-sm">
+                Negative marking enabled (-{quizData.category.negative_marks_per_wrong || 0.25} per wrong answer)
+              </span>
+            </div>
+          )}
+
           <button
             onClick={startQuiz}
             className="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
@@ -500,7 +602,8 @@ const TakeTestPage: React.FC = () => {
             Start Quiz
           </button>
         </div>
-      </div>
+        </div>
+      </>
     );
   }
 

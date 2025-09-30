@@ -369,8 +369,8 @@ const SolutionsPage: React.FC = () => {
             const isReattemptCorrect = isReattemptAnswer && isCorrectAnswer;
             const isReattemptIncorrect = isReattemptAnswer && !isCorrectAnswer;
             
-            // Show original answers by default, or if user has reattempted in practice mode
-            const showOriginalAnswers = !practiceMode || hasUserReattempted;
+            // Show original answers by default, or if user has reattempted in practice mode, or if originally correct
+            const showOriginalAnswers = !practiceMode || hasUserReattempted || isCorrect;
             
             let optionClass = 'border-gray-200 bg-white';
             let labelClass = 'border-gray-300 text-gray-600';
@@ -447,15 +447,15 @@ const SolutionsPage: React.FC = () => {
           })}
         </div>
 
-        {/* Practice Mode Controls */}
+        {/* Practice Mode Controls - Reattempt feedback */}
         {practiceMode && hasReattempted[currentQuestionIndex] && (
           <div className="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
                 <h4 className="text-sm font-medium text-blue-900">Reattempt Complete</h4>
                 <p className="text-sm text-blue-700">
-                  {reattemptAnswers[currentQuestionIndex] === currentQuestion.correct_answer 
-                    ? '🎉 Great job! You got it right this time.' 
+                  {reattemptAnswers[currentQuestionIndex] === currentQuestion.correct_answer
+                    ? '🎉 Great job! You got it right this time.'
                     : '🤔 That\'s still not correct, but you can see the explanation below.'}
                 </p>
               </div>
@@ -470,8 +470,23 @@ const SolutionsPage: React.FC = () => {
           </div>
         )}
 
-        {/* Answer Summary - Hide when Practice Mode is ON unless user has reattempted */}
-        {(!practiceMode || hasReattempted[currentQuestionIndex]) && (
+        {/* Practice Mode Info - Already Correct */}
+        {practiceMode && isCorrect && !hasReattempted[currentQuestionIndex] && (
+          <div className="bg-green-50 rounded-lg p-4 mb-6 border border-green-200">
+            <div className="flex items-center">
+              <CheckCircleIcon className="h-5 w-5 text-green-600 mr-2" />
+              <div>
+                <h4 className="text-sm font-medium text-green-900">Already Correct!</h4>
+                <p className="text-sm text-green-700">
+                  You answered this question correctly. No need to reattempt. View the explanation below.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Answer Summary - Hide when Practice Mode is ON unless user has reattempted or answer is correct */}
+        {(!practiceMode || hasReattempted[currentQuestionIndex] || isCorrect) && (
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -504,7 +519,7 @@ const SolutionsPage: React.FC = () => {
                 <LightBulbIcon className="h-6 w-6 text-blue-600 flex-shrink-0" />
                 <h3 className="text-lg font-medium text-blue-900">
                   View Explanation
-                  {practiceMode && !hasReattempted[currentQuestionIndex] && (
+                  {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && (
                     <span className="text-sm font-normal text-blue-600 ml-2">
                       (Available after reattempt)
                     </span>
@@ -512,7 +527,7 @@ const SolutionsPage: React.FC = () => {
                 </h3>
               </div>
               <div className="flex items-center space-x-2">
-                {practiceMode && !hasReattempted[currentQuestionIndex] && (
+                {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && (
                   <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
                     Locked
                   </span>
@@ -526,8 +541,8 @@ const SolutionsPage: React.FC = () => {
             </button>
             
             {/* Explanation Content - Expandable */}
-            {showExplanations[currentQuestionIndex] && 
-             (!practiceMode || hasReattempted[currentQuestionIndex] || !practiceMode) && (
+            {showExplanations[currentQuestionIndex] &&
+             (!practiceMode || hasReattempted[currentQuestionIndex] || isCorrect) && (
               <div className="px-6 pb-6 border-t border-blue-200">
                 <div className="pt-4">
                   <HTMLContent
@@ -552,8 +567,8 @@ const SolutionsPage: React.FC = () => {
               </div>
             )}
             
-            {/* Locked state message for practice mode */}
-            {practiceMode && !hasReattempted[currentQuestionIndex] && showExplanations[currentQuestionIndex] && (
+            {/* Locked state message for practice mode - only for wrong answers */}
+            {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && showExplanations[currentQuestionIndex] && (
               <div className="px-6 pb-6 border-t border-blue-200">
                 <div className="pt-4 text-center">
                   <div className="text-blue-600 mb-2">
