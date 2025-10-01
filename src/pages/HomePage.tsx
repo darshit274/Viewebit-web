@@ -4,57 +4,92 @@ import {
   AcademicCapIcon,
   DocumentTextIcon,
   ChartBarIcon,
-  PlayIcon,
   CheckCircleIcon,
   StarIcon,
-  UsersIcon,
   ClockIcon,
   TrophyIcon,
   ArrowRightIcon,
-  SparklesIcon
+  SparklesIcon,
+  LanguageIcon,
+  LightBulbIcon,
+  ArrowPathIcon,
+  BookOpenIcon,
+  PuzzlePieceIcon,
+  DevicePhoneMobileIcon,
+  EnvelopeIcon,
+  ChatBubbleLeftRightIcon,
+  QuestionMarkCircleIcon
 } from '@heroicons/react/24/outline';
-import MockTaleLogo from './../assets/MockTale.jpg';
 import MockTaleLogoPng from './../assets/MockTale.png';
+import MockTaleLogoJpg from './../assets/MockTale.jpg';
 
 const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
-      {/* Navigation Header */}
-      <nav className="relative z-10 px-4 bg-gradient-to-r from-[#8499fb20]  to-[#8499fb30]">
-        <div className="page-container">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center justify-center rounded-xl m-4">
-                <img src={MockTaleLogoPng} alt="MockTale Logo" className="h-full max-h-[75px] rounded-xl" />
-              </div>
-            </div>
+      {/* Navigation Header - Premium Design */}
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-cyan-50 via-blue-50 to-indigo-50 backdrop-blur-xl border-b border-white/20 shadow-lg shadow-blue-500/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-24">
+            {/* Logo - Left */}
+            <Link to="/" className="flex items-center relative group">
+              <div className="absolute bg-gradient-to-r from-cyan-400 to-blue-500 rounded-2xl group-hover:opacity-30 transition-opacity p-0 w-full h-3/4"></div>
+              <img
+                src={MockTaleLogoPng}
+                alt="MockTale Academy"
+                className="relative h-20 sm:h-24 w-auto drop-shadow-lg transition-transform group-hover:scale-105"
+              />
+            </Link>
 
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-              <a href="#testimonials" className="text-gray-600 hover:text-gray-900 transition-colors">Reviews</a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
-            </div>
+            {/* Navigation - Center */}
+            <nav className="hidden lg:flex items-center space-x-2 bg-white/60 backdrop-blur-md rounded-full px-3 py-2 shadow-lg shadow-blue-500/10 border border-white/50">
+              <a
+                href="#about"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+              >
+                About
+              </a>
+              <a
+                href="#features"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+              >
+                Features
+              </a>
+              <a
+                href="#faqs"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+              >
+                FAQs
+              </a>
+              <a
+                href="#contact"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+              >
+                Contact
+              </a>
+            </nav>
 
-            <div className="flex items-center space-x-4">
+            {/* Auth Buttons - Right */}
+            <div className="flex items-center gap-3">
               <Link
                 to="/login"
-                className="btn btn-ghost text-gray-700 hover:text-gray-900"
+                className="hidden sm:inline-flex items-center px-6 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 bg-white/60 hover:bg-white backdrop-blur-md rounded-full transition-all duration-200 shadow-md hover:shadow-lg border border-white/50"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
-                className="btn btn-primary"
+                className="group inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-full shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 border border-blue-400/50"
               >
-                Get Started
+                <span>Get Started</span>
+                <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-32 overflow-hidden">
+      <section className="relative pt-20 pb-32 overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-32 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
@@ -62,196 +97,361 @@ const HomePage: React.FC = () => {
         </div>
 
         <div className="page-container relative">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-8 animate-fade-in">
-              <SparklesIcon className="w-4 h-4 mr-2" />
-              Trusted by 10,000+ students
+          <div className="max-w-5xl mx-auto text-center">
+            {/* Tagline Badge */}
+            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 text-blue-900 text-sm font-semibold mb-8 animate-fade-in shadow-md">
+              <SparklesIcon className="w-5 h-5 mr-2" />
+              Practice Relentlessly. Perform Flawlessly.
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-8 animate-slide-up">
-              Master Your{' '}
-              <span className="gradient-text">
-                Exams
-              </span>{' '}
-              with Confidence
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 animate-slide-up leading-tight">
+              MockTale Academy
             </h1>
 
-            {/* Subheading */}
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed animate-slide-up text-balance">
-              Comprehensive test series, study materials, and performance analytics
-              to help you excel in your academic journey.
+            <p className="text-2xl md:text-3xl font-bold mb-6 animate-slide-up">
+              <span className="gradient-text">
+                Your Smart Companion
+              </span>{' '}
+              for Gujarat Government Exam Preparation
             </p>
 
+            {/* Key Features List */}
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm md:text-base text-gray-700 mb-10 animate-fade-in">
+              <span className="flex items-center bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm">
+                <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
+                Full-Length Mock Tests
+              </span>
+              <span className="flex items-center bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm">
+                <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
+                Subject & Topic-Wise Practice
+              </span>
+              <span className="flex items-center bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm">
+                <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
+                Real Exam Pattern
+              </span>
+              <span className="flex items-center bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm">
+                <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
+                Gujarati & English
+              </span>
+            </div>
+
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-scale-in">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-scale-in">
               <Link
                 to="/register"
                 className="btn btn-primary btn-lg group"
               >
-                Start Learning Today
+                🎯 Start Practicing Today
                 <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <button className="btn btn-outline btn-lg group">
-                <PlayIcon className="w-5 h-5 mr-2" />
-                Watch Demo
-              </button>
+              <Link
+                to="/tests"
+                className="btn btn-outline btn-lg group border-2"
+              >
+                Start Free Test
+                <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
-            {/* Social Proof */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-600">
-              <div className="flex items-center">
-                <div className="flex -space-x-2 mr-3">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
-                      className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 border-2 border-white"
-                    />
-                  ))}
-                </div>
-                <span>10,000+ active students</span>
+            {/* Exam Types */}
+            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-6 shadow-xl max-w-4xl mx-auto">
+              <p className="text-sm text-gray-600 mb-3 font-medium">Exams Covered:</p>
+              <div className="flex flex-wrap justify-center gap-2 text-xs md:text-sm">
+                {['GPSC', 'GSSSB', 'GPSSB', 'Police Constable', 'PSI', 'Talati', 'Junior Clerk', 'More...'].map((exam) => (
+                  <span key={exam} className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full font-semibold">
+                    {exam}
+                  </span>
+                ))}
               </div>
-              <div className="flex items-center">
-                <div className="flex text-yellow-400 mr-2">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <StarIcon key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                <span>4.9/5 rating</span>
-              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="section-spacing bg-white">
+        <div className="page-container">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                What is{' '}
+                <span className="gradient-text">MockTale Academy</span>?
+              </h2>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 md:p-12 shadow-lg">
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
+                MockTale Academy is a powerful <strong className="text-blue-600">mock test platform</strong> built for aspirants preparing for various{' '}
+                <strong className="text-purple-600">Gujarat government exams</strong> like GPSC, GSSSB, GPSSB, Police-constable Bharti, PSI, Talati, Junior Clerk and more.
+              </p>
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+                We provide <strong>full-length tests</strong>, <strong>subject-wise practice</strong>, <strong>topic-wise revision</strong>,{' '}
+                <strong>free previous year question papers (PYQPs)</strong> to attempt and <strong>free quizzes</strong> of maths and reasoning in{' '}
+                <strong className="text-green-600">Gujarati and English</strong> helping you master every corner of the syllabus.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="section-spacing bg-white">
+      <section id="features" className="section-spacing bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="page-container">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Everything You Need to{' '}
-              <span className="gradient-text">Succeed</span>
+              Why Choose{' '}
+              <span className="gradient-text">MockTale Academy</span>?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto text-balance">
-              Comprehensive tools and resources designed to maximize your learning potential
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Comprehensive features designed to give you the edge in your exam preparation
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1: Comprehensive Tests */}
-            <div className="card-hover p-8 text-center group">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <AcademicCapIcon className="w-8 h-8 text-white" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature 1: Bilingual Support */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <LanguageIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Comprehensive Tests</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Access thousands of practice questions with detailed explanations,
-                timed tests, and instant feedback to track your progress.
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Bilingual Language Support</h3>
+              <p className="text-gray-600 leading-relaxed">
+                We offer tests in both <strong>Gujarati and English</strong> (where applicable), helping every aspirant prepare in their most comfortable language.
               </p>
-              <ul className="text-left space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Mock tests with real exam patterns
-                </li>
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Detailed performance analytics
-                </li>
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Time management training
-                </li>
-              </ul>
             </div>
 
-            {/* Feature 2: Study Materials */}
-            <div className="card-hover p-8 text-center group">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+            {/* Feature 2: Real Exam Experience */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <DocumentTextIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Study Materials</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Curated study notes, reference books, and video lectures
-                from expert educators to supplement your preparation.
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Real Exam Experience</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our mock tests are crafted to closely mirror the actual exams - right from <strong>question pattern to time pressure</strong> - so you're always exam-ready.
               </p>
-              <ul className="text-left space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Expert-curated content
-                </li>
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Downloadable PDFs
-                </li>
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Regular content updates
-                </li>
-              </ul>
             </div>
 
-            {/* Feature 3: Track Progress */}
-            <div className="card-hover p-8 text-center group">
-              <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+            {/* Feature 3: Instant Results */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <ChartBarIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Track Progress</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Advanced analytics and personalized insights to identify
-                strengths, weaknesses, and optimize your study strategy.
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Instant Results & Smart Analytics</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Get your <strong>marks, rank, and percentile instantly</strong>. Track your performance and identify areas for improvement.
               </p>
-              <ul className="text-left space-y-2 text-sm text-gray-600">
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Detailed performance reports
-                </li>
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Weakness identification
-                </li>
-                <li className="flex items-center">
-                  <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2" />
-                  Personalized recommendations
-                </li>
-              </ul>
+            </div>
+
+            {/* Feature 4: Detailed Solutions */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-amber-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <LightBulbIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Detailed Solutions & Explanations</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Every question includes a <strong>thorough explanation</strong> so you not only know the right answer, but also why it's right - turning every mistake into a learning opportunity.
+              </p>
+            </div>
+
+            {/* Feature 5: Practice Mode */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-rose-500 to-rose-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <ArrowPathIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Practice Mode Option</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Attempt tests in <strong>Practice Mode</strong>, where solutions are hidden - even after submission - so you can revisit and reattempt with full focus.
+              </p>
+            </div>
+
+            {/* Feature 6: Full Syllabus Coverage */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <AcademicCapIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Full Syllabus Coverage</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our <strong>subject-wise and topic-wise tests</strong> are designed to ensure complete coverage of the syllabus - making revision effective and structured.
+              </p>
+            </div>
+
+            {/* Feature 7: Free Quizzes */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <PuzzlePieceIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Frequent Free Quizzes</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Boost your speed and accuracy with our <strong>free quizzes in Maths and Reasoning</strong> - available in both English and Gujarati with solutions.
+              </p>
+            </div>
+
+            {/* Feature 8: Diverse Question Bank */}
+            <div className="card-hover p-8 group bg-white">
+              <div className="w-14 h-14 bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <BookOpenIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Diverse & Curated Question Bank</h3>
+              <p className="text-gray-600 leading-relaxed">
+                We don't limit our questions to any single source. Our content is <strong>carefully selected from various authentic materials</strong> to give you the broadest and most relevant practice.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="section-spacing bg-gradient-to-r from-blue-600 to-purple-600">
+      <section className="section-spacing bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600">
         <div className="page-container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
             <div className="animate-fade-in">
-              <div className="w-12 h-12 mx-auto mb-4">
-                <UsersIcon className="w-full h-full" />
-              </div>
-              <div className="text-3xl md:text-4xl font-bold mb-2">10K+</div>
-              <div className="text-blue-100">Active Students</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">10K+</div>
+              <div className="text-blue-100 font-medium">Active Students</div>
             </div>
             <div className="animate-fade-in">
-              <div className="w-12 h-12 mx-auto mb-4">
-                <AcademicCapIcon className="w-full h-full" />
-              </div>
-              <div className="text-3xl md:text-4xl font-bold mb-2">500+</div>
-              <div className="text-blue-100">Test Series</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">500+</div>
+              <div className="text-blue-100 font-medium">Test Series</div>
             </div>
             <div className="animate-fade-in">
-              <div className="w-12 h-12 mx-auto mb-4">
-                <ClockIcon className="w-full h-full" />
-              </div>
-              <div className="text-3xl md:text-4xl font-bold mb-2">1M+</div>
-              <div className="text-blue-100">Hours Studied</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">50K+</div>
+              <div className="text-blue-100 font-medium">Questions</div>
             </div>
             <div className="animate-fade-in">
-              <div className="w-12 h-12 mx-auto mb-4">
-                <TrophyIcon className="w-full h-full" />
-              </div>
-              <div className="text-3xl md:text-4xl font-bold mb-2">95%</div>
-              <div className="text-blue-100">Success Rate</div>
+              <div className="text-4xl md:text-5xl font-bold mb-2">95%</div>
+              <div className="text-blue-100 font-medium">Success Rate</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQs Section */}
+      <section id="faqs" className="section-spacing bg-white">
+        <div className="page-container">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Frequently Asked{' '}
+              <span className="gradient-text">Questions</span>
+            </h2>
+            <p className="text-xl text-gray-600">Everything you need to know about MockTale Academy</p>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            {/* FAQ 1 */}
+            <div className="card-hover p-6 bg-gradient-to-r from-blue-50 to-purple-50">
+              <div className="flex items-start">
+                <QuestionMarkCircleIcon className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Are the mock tests based on the latest exam pattern?</h3>
+                  <p className="text-gray-700">
+                    Yes, all mock tests are designed to reflect the <strong>latest pattern and difficulty level</strong> of Gujarat government exams.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 2 */}
+            <div className="card-hover p-6 bg-gradient-to-r from-purple-50 to-pink-50">
+              <div className="flex items-start">
+                <QuestionMarkCircleIcon className="w-6 h-6 text-purple-600 mt-1 mr-4 flex-shrink-0" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">What is the language of tests?</h3>
+                  <p className="text-gray-700">
+                    All tests are available in <strong>Gujarati, and in English wherever applicable</strong>. You can switch languages during the test.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 3 */}
+            <div className="card-hover p-6 bg-gradient-to-r from-pink-50 to-rose-50">
+              <div className="flex items-start">
+                <QuestionMarkCircleIcon className="w-6 h-6 text-pink-600 mt-1 mr-4 flex-shrink-0" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">What is Practice Mode?</h3>
+                  <p className="text-gray-700">
+                    Practice Mode lets you <strong>attempt the test without seeing solutions</strong>—so you can revisit and learn without distractions.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 4 */}
+            <div className="card-hover p-6 bg-gradient-to-r from-emerald-50 to-teal-50">
+              <div className="flex items-start">
+                <QuestionMarkCircleIcon className="w-6 h-6 text-emerald-600 mt-1 mr-4 flex-shrink-0" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">How soon do I get results?</h3>
+                  <p className="text-gray-700">
+                    <strong>Instantly.</strong> As soon as you submit, you get marks, rank, percentile, and detailed performance analysis.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Download App Section */}
+      <section className="section-spacing bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 text-white">
+        <div className="page-container text-center">
+          <DevicePhoneMobileIcon className="w-16 h-16 mx-auto mb-6" />
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Prepare Anytime, Anywhere
+          </h2>
+          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl mx-auto">
+            Download MockTale Academy on your phone or access it on your computer - study at your own pace, on your own schedule.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button className="btn btn-lg bg-white text-blue-600 hover:bg-gray-100 font-bold shadow-xl">
+              📱 Download App
+            </button>
+            <Link
+              to="/tests"
+              className="btn btn-lg bg-transparent border-2 border-white text-white hover:bg-white/10 font-bold"
+            >
+              Take a Free Test Now
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="section-spacing bg-white">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Get in{' '}
+              <span className="gradient-text">Touch</span>
+            </h2>
+            <p className="text-xl text-gray-600">Have questions or feedback? Reach out to us anytime.</p>
+          </div>
+
+          <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6">
+            {/* Email */}
+            <a
+              href="mailto:support@mocktale.com"
+              className="card-hover p-8 text-center group bg-gradient-to-br from-blue-50 to-blue-100"
+            >
+              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <EnvelopeIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Email Us</h3>
+              <p className="text-blue-600 font-semibold">support@mocktale.com</p>
+            </a>
+
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/1234567890"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-hover p-8 text-center group bg-gradient-to-br from-green-50 to-green-100"
+            >
+              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <ChatBubbleLeftRightIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">WhatsApp</h3>
+              <p className="text-green-600 font-semibold">Chat with us</p>
+            </a>
           </div>
         </div>
       </section>
@@ -260,24 +460,24 @@ const HomePage: React.FC = () => {
       <section className="section-spacing bg-gray-900">
         <div className="page-container text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Start Your{' '}
-            <span className="gradient-text">Success Journey</span>?
+            Ready to Ace Your{' '}
+            <span className="gradient-text">Gujarat Govt Exams</span>?
           </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto text-balance">
-            Join thousands of students who have transformed their academic performance with MockTale
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Join thousands of students who have transformed their exam preparation with MockTale Academy
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
               className="btn btn-primary btn-lg"
             >
-              Get Started Now
+              Get Started Now - It's Free!
             </Link>
             <Link
-              to="/login"
+              to="/tests"
               className="btn btn-outline btn-lg border-gray-600 text-gray-300 hover:bg-gray-800 bg-gray-600"
             >
-              Sign In
+              Browse Free Tests
             </Link>
           </div>
         </div>
@@ -286,13 +486,51 @@ const HomePage: React.FC = () => {
       {/* Footer */}
       <footer className="bg-gray-900 border-t border-gray-800 py-12">
         <div className="page-container">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center bg-[#badcff] p-2 rounded-xl">
-              <img src={MockTaleLogoPng} alt="MockTale Logo" className="h-full max-h-[75px] rounded-xl" />
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Logo & Description */}
+            <div className="md:col-span-2">
+              <div className="flex items-center mb-4">
+                <img src={MockTaleLogoPng} alt="MockTale Academy" className="h-16 rounded-xl" />
+                <div className="ml-3">
+                  <div className="text-lg font-bold text-white">MockTale Academy</div>
+                  <div className="text-sm text-gray-400">Practice Relentlessly. Perform Flawlessly.</div>
+                </div>
+              </div>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Your trusted platform for Gujarat Government Exam preparation. Comprehensive mock tests, study materials, and analytics to help you succeed.
+              </p>
             </div>
-            <div className="text-gray-400 text-sm">
-              © 2025 MockTale. All rights reserved.
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-white font-bold mb-4">Quick Links</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><a href="#about" className="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#faqs" className="hover:text-white transition-colors">FAQs</a></li>
+                <li><Link to="/tests" className="hover:text-white transition-colors">Free Tests</Link></li>
+              </ul>
             </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="text-white font-bold mb-4">Contact</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li className="flex items-center">
+                  <EnvelopeIcon className="w-4 h-4 mr-2" />
+                  support@mocktale.com
+                </li>
+                <li className="flex items-center">
+                  <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
+                  WhatsApp Support
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+            <p>© 2025 MockTale Academy. All rights reserved.</p>
           </div>
         </div>
       </footer>
