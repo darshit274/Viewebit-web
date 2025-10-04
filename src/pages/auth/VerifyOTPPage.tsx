@@ -7,6 +7,7 @@ import { useAppDispatch } from '../../store';
 import { loginSuccess, setLoading, setError } from '../../store/slices/authSlice';
 import { authService } from '../../services/authService';
 import { toast } from 'react-hot-toast';
+import { ArrowLeft, Mail, Check } from 'lucide-react';
 
 const otpSchema = z.object({
   otp: z.string().min(4, 'OTP must be 4 digits').max(4, 'OTP must be 4 digits'),
@@ -89,12 +90,10 @@ const VerifyOTPPage: React.FC = () => {
 
         // Handle different verification types
         if (verificationType === 'forgot-password') {
-          // Navigate to reset password page
           setTimeout(() => {
             navigate('/reset-password', { state: { email } });
           }, 1000);
         } else if (verificationType === 'login-verification' && password) {
-          // Auto-login after verification
           try {
             const loginResponse = await authService.login(email, password);
             if (loginResponse.success) {
@@ -113,8 +112,6 @@ const VerifyOTPPage: React.FC = () => {
             setTimeout(() => navigate('/login'), 1000);
           }
         } else {
-          // For new registrations, redirect to dashboard
-          // Note: Token would be set during registration if backend provides it
           toast.success('Account verified successfully!');
           setTimeout(() => navigate('/login'), 1000);
         }
@@ -136,12 +133,11 @@ const VerifyOTPPage: React.FC = () => {
 
     try {
       setResendLoading(true);
-      setCountdown(60); // 60 second cooldown
+      setCountdown(60);
 
       if (verificationType === 'forgot-password') {
         await authService.forgotPassword(email);
       } else {
-        // For registration or login verification, use resend OTP endpoint
         await authService.resendOTP(email);
       }
 
@@ -173,77 +169,124 @@ const VerifyOTPPage: React.FC = () => {
   const getSubtitle = () => {
     switch (verificationType) {
       case 'forgot-password':
-        return 'Enter the 4-digit code sent to your email to reset your password';
+        return 'Enter the 4-digit code sent to your email';
       case 'login-verification':
-        return 'Please verify your email to complete the login process';
+        return 'Please verify your email to continue';
       default:
-        return 'Enter the 4-digit code sent to your email to complete registration';
+        return 'Enter the 4-digit code to complete registration';
     }
   };
 
   if (!email) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
   return (
-    <div>
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">{getTitle()}</h2>
-        <p className="text-gray-600 mb-2">{getSubtitle()}</p>
+    <div className="w-full">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <div className="flex justify-center mb-4">
+          <div className="bg-primary-100 p-3 rounded-full">
+            <Mail className="w-8 h-8 text-primary-600" />
+          </div>
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          {getTitle()}
+        </h2>
+        <p className="text-gray-600 text-sm mb-3">
+          {getSubtitle()}
+        </p>
         <p className="text-sm text-gray-500">
-          Code sent to: <span className="font-medium">{email}</span>
+          Code sent to: <span className="font-medium text-gray-700">{email}</span>
         </p>
       </div>
 
+      {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+        {/* OTP Input */}
         <div>
-          <label htmlFor="otp" className="form-label text-center block">
+          <label
+            htmlFor="otp"
+            className="block text-sm font-medium text-gray-700 mb-3 text-center"
+          >
             Verification Code
           </label>
           <input
             {...register('otp')}
             type="text"
+            inputMode="numeric"
             id="otp"
             maxLength={4}
-            className="form-input text-center text-2xl font-bold tracking-widest"
+            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors text-center text-3xl font-bold tracking-[0.5em] disabled:bg-gray-50"
             placeholder="0000"
             onChange={handleOtpChange}
             disabled={verified}
-            style={{ letterSpacing: '0.5em' }}
           />
           {errors.otp && (
-            <p className="form-error text-center">{errors.otp.message}</p>
+            <p className="mt-2 text-sm text-red-600 text-center">{errors.otp.message}</p>
           )}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={isLoading || verified || !otpValue || otpValue.length !== 4}
-          className="btn-primary w-full"
+          className="w-full bg-primary-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
-          {verified ? 'Verified ✓' : isLoading ? 'Verifying...' : 'Verify Code'}
+          {verified ? (
+            <>
+              <Check className="w-5 h-5 mr-2" />
+              Verified
+            </>
+          ) : isLoading ? (
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Verifying...
+            </span>
+          ) : (
+            'Verify Code'
+          )}
         </button>
       </form>
 
-      <div className="mt-6 text-center space-y-4">
-        <div className="flex items-center justify-center space-x-2">
-          <span className="text-sm text-gray-600">Didn't receive the code?</span>
+      {/* Resend & Back Links */}
+      <div className="mt-6 space-y-4">
+        {/* Resend OTP */}
+        <div className="text-center">
+          <span className="text-sm text-gray-600">Didn't receive the code? </span>
           <button
             type="button"
             onClick={handleResendOTP}
             disabled={resendLoading || countdown > 0}
-            className="text-sm font-medium text-primary-600 hover:text-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-sm font-medium text-primary-600 hover:text-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {resendLoading ? 'Sending...' : countdown > 0 ? `Resend in ${countdown}s` : 'Resend Code'}
+            {resendLoading
+              ? 'Sending...'
+              : countdown > 0
+              ? `Resend in ${countdown}s`
+              : 'Resend Code'}
           </button>
         </div>
 
-        <div className="border-t pt-4">
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+
+        {/* Back to Login */}
+        <div>
           <Link
             to="/login"
-            className="text-sm font-medium text-gray-600 hover:text-gray-500"
+            className="flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
           >
-            ← Back to Login
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Login
           </Link>
         </div>
       </div>

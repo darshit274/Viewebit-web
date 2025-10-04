@@ -39,7 +39,9 @@ interface SolutionsData {
     id: number;
     uuid: string;
     name: string;
+    name_gujarati?: string;
     description?: string;
+    description_gujarati?: string;
   };
   solutions: Question[];
   metadata: {
@@ -70,7 +72,14 @@ const SolutionsPage: React.FC = () => {
   const [showNavigator, setShowNavigator] = useState(false);
 
   // Get quiz result data from location state
-  const { categoryName, userAnswers, score, percentage } = location.state || {};
+  const { categoryName, userAnswers, score, percentage, language = 'english' } = location.state || {};
+
+  // Helper function to convert newlines to HTML br tags
+  const formatTextWithLineBreaks = (text: string): string => {
+    if (!text) return '';
+    // Replace \n with <br> tags to preserve line breaks
+    return text.replace(/\n/g, '<br>');
+  };
 
   useEffect(() => {
     if (uuid) {
@@ -82,10 +91,11 @@ const SolutionsPage: React.FC = () => {
     try {
       console.log('Fetching solutions for UUID:', uuid);
       console.log('API URL:', `/dynamic/categories/${uuid}/solutions`);
-      
+      console.log('Using language:', language);
+
       const response = await api.get(`/dynamic/categories/${uuid}/solutions`, {
-        params: { 
-          language: 'english'
+        params: {
+          language: language || 'english'
         }
       });
       
@@ -349,9 +359,14 @@ const SolutionsPage: React.FC = () => {
                 +{currentQuestion.marks} {currentQuestion.marks === 1 ? 'mark' : 'marks'}
               </span>
             </div>
-            <h2 className="text-xl font-medium text-gray-900">
-              {currentQuestion.question_text}
-            </h2>
+            <HTMLContent
+              content={formatTextWithLineBreaks(
+                language === 'gujarati' && currentQuestion.question_text_gujarati
+                  ? currentQuestion.question_text_gujarati
+                  : currentQuestion.question_text
+              )}
+              className="text-xl font-medium text-gray-900"
+            />
           </div>
         </div>
 
@@ -410,11 +425,16 @@ const SolutionsPage: React.FC = () => {
                   }
                 }}
               >
-                <div className="flex items-center">
-                  <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-medium mr-3 ${labelClass}`}>
+                <div className="flex items-start">
+                  <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-medium mr-3 flex-shrink-0 ${labelClass}`}>
                     {option}
                   </span>
-                  <span className="flex-1">{optionText}</span>
+                  <div className="flex-1">
+                    <HTMLContent
+                      content={formatTextWithLineBreaks(optionText)}
+                      className=""
+                    />
+                  </div>
                   
                   {/* Original answer indicators */}
                   {showOriginalAnswers && isCorrectAnswer && (
@@ -491,17 +511,29 @@ const SolutionsPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-1">Your Answer</p>
-                <p className={`text-lg font-semibold ${
+                <div className={`text-lg font-semibold ${
                   isCorrect ? 'text-green-600' : 'text-red-600'
                 }`}>
-                  {userAnswer ? `${userAnswer} - ${currentQuestion.options[userAnswer as keyof typeof currentQuestion.options]}` : 'Not answered'}
-                </p>
+                  {userAnswer ? (
+                    <>
+                      <span>{userAnswer} - </span>
+                      <HTMLContent
+                        content={formatTextWithLineBreaks(currentQuestion.options[userAnswer as keyof typeof currentQuestion.options])}
+                        className="inline"
+                      />
+                    </>
+                  ) : 'Not answered'}
+                </div>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-1">Correct Answer</p>
-                <p className="text-lg font-semibold text-green-600">
-                  {currentQuestion.correct_answer} - {currentQuestion.options[currentQuestion.correct_answer as keyof typeof currentQuestion.options]}
-                </p>
+                <div className="text-lg font-semibold text-green-600">
+                  <span>{currentQuestion.correct_answer} - </span>
+                  <HTMLContent
+                    content={formatTextWithLineBreaks(currentQuestion.options[currentQuestion.correct_answer as keyof typeof currentQuestion.options])}
+                    className="inline"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -546,7 +578,9 @@ const SolutionsPage: React.FC = () => {
               <div className="px-6 pb-6 border-t border-blue-200">
                 <div className="pt-4">
                   <HTMLContent
-                    content={currentQuestion.explanation}
+                    content={language === 'gujarati' && currentQuestion.explanation_gujarati
+                      ? currentQuestion.explanation_gujarati
+                      : currentQuestion.explanation || ''}
                     className="text-blue-800 leading-relaxed"
                   />
                   

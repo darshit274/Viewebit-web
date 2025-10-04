@@ -22,6 +22,7 @@ import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
 import { cn } from '../../utils/cn';
+import HTMLContent from '../../components/common/HTMLContent';
 
 interface TestSeries {
   id: number;
@@ -78,22 +79,22 @@ const TestSeriesCard = ({
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
+        <div className="flex-1 min-w-0 pr-4">
           <div className="flex items-center space-x-2 mb-2">
-            <h3 className="text-xl font-bold text-gray-900">
+            <h3 className="text-xl font-bold text-gray-900 truncate">
               {series.name || series.title}
             </h3>
             {series.is_featured && (
-              <div className="badge badge-yellow">
+              <div className="badge badge-yellow flex-shrink-0">
                 <FireIcon className="w-3 h-3 mr-1" />
                 Featured
               </div>
             )}
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center flex-wrap gap-2">
             <div className="flex items-center">
-              <StarIconSolid className="h-4 w-4 text-yellow-400 mr-1" />
-              <span className="text-sm font-semibold text-gray-900">{series.rating || 4.5}</span>
+              <StarIconSolid className="h-4 w-4 text-yellow-400 mr-1 flex-shrink-0" />
+              <span className="text-sm font-semibold text-gray-900">{typeof series.rating === 'number' ? series.rating.toFixed(1) : '4.5'}</span>
               <span className="text-xs text-gray-500 ml-1">({series.purchase_count || 0} reviews)</span>
             </div>
             <div className={cn('badge text-xs', getDifficultyColor(series.difficulty_level))}>
@@ -102,7 +103,7 @@ const TestSeriesCard = ({
           </div>
         </div>
         {hasAccess && series.pricing_type === 'paid' && (
-          <div className="badge badge-green">
+          <div className="badge badge-green flex-shrink-0">
             <CheckCircleIcon className="h-4 w-4 mr-1" />
             Enrolled
           </div>
@@ -111,9 +112,14 @@ const TestSeriesCard = ({
 
       {/* Description */}
       {series.description && (
-        <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+        <div className="text-sm text-gray-600 mb-4 overflow-hidden" style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden'
+        }}>
           {series.description}
-        </p>
+        </div>
       )}
 
       {/* Stats */}

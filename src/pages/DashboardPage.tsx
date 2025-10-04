@@ -4,18 +4,11 @@ import { useAppSelector } from '../store';
 import {
   AcademicCapIcon,
   DocumentTextIcon,
-  ChartBarIcon,
   TrophyIcon,
   ClockIcon,
   BookOpenIcon,
-  UserGroupIcon,
-  FireIcon,
-  ArrowUpIcon,
   ArrowRightIcon,
-  PlayIcon,
-  CheckCircleIcon,
-  CalendarIcon,
-  StarIcon
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../services/api';
 import { toast } from 'react-hot-toast';
@@ -23,16 +16,18 @@ import { toast } from 'react-hot-toast';
 interface DashboardStats {
   totalTests: number;
   completedTests: number;
-  totalPdfs: number;
-  downloadedPdfs: number;
+  totalScore: number;
   rank: number;
   totalStudents: number;
+  activeSubscriptions: number;
   recentActivity: {
     id: number;
     type: 'test' | 'pdf';
     title: string;
     date: string;
     score?: number;
+    total?: number;
+    percentage?: number;
   }[];
 }
 
@@ -41,25 +36,16 @@ const DashboardPage: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalTests: 0,
     completedTests: 0,
-    totalPdfs: 0,
-    downloadedPdfs: 0,
+    totalScore: 0,
     rank: 0,
     totalStudents: 0,
+    activeSubscriptions: 0,
     recentActivity: [],
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [streak, setStreak] = useState(7);
-  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     fetchDashboardData();
-
-    // Update time every minute
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 60000);
-
-    return () => clearInterval(timer);
   }, []);
 
   const fetchDashboardData = async () => {
@@ -76,12 +62,8 @@ const DashboardPage: React.FC = () => {
     }
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
   const getGreeting = () => {
-    const hour = currentTime.getHours();
+    const hour = new Date().getHours();
     if (hour < 12) return 'Good Morning';
     if (hour < 17) return 'Good Afternoon';
     return 'Good Evening';
@@ -89,203 +71,139 @@ const DashboardPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="flex flex-col items-center">
-          <div className="loading-spinner w-12 h-12 mb-4"></div>
-          <p className="text-gray-600">Loading your dashboard...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="page-container">
+    <div className="p-6">
       {/* Welcome Header */}
-      <div className="mb-8">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex-1">
-            <div className="flex items-center space-x-3 mb-2">
-              <h1 className="text-3xl font-bold text-gray-900">
-                {getGreeting()}, {user?.username}!
-              </h1>
-              <div className="flex items-center bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-sm font-medium">
-                <FireIcon className="w-4 h-4 mr-1" />
-                {streak} day streak
-              </div>
-            </div>
-            <p className="text-gray-600 text-lg">
-              Ready to continue your learning journey? Let's achieve your goals today.
-            </p>
-          </div>
-          <div className="flex items-center space-x-4 mt-4 lg:mt-0">
-            <div className="text-right">
-              <p className="text-sm text-gray-500">Current time</p>
-              <p className="text-lg font-semibold text-gray-900">{formatTime(currentTime)}</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Link to="/tests" className="btn btn-primary">
-                <PlayIcon className="w-4 h-4 mr-2" />
-                Start Test
-              </Link>
-            </div>
-          </div>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">
+          {getGreeting()}, {user?.username || 'Student'}!
+        </h1>
+        <p className="text-gray-600">
+          Welcome back to your learning dashboard
+        </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Total Tests */}
-        <div className="card p-6 group hover:shadow-lg transition-all duration-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-blue-100 rounded-xl group-hover:bg-blue-200 transition-colors">
-              <AcademicCapIcon className="w-6 h-6 text-blue-600" />
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-gray-900">{stats.totalTests}</p>
-              <p className="text-sm text-gray-500">Total Tests</p>
-            </div>
-          </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">Available to take</p>
-            <Link to="/tests" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-              View all <ArrowRightIcon className="w-3 h-3 inline ml-1" />
-            </Link>
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Total Tests</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.totalTests}</p>
+            </div>
+            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+              <AcademicCapIcon className="w-6 h-6 text-primary-600" />
+            </div>
           </div>
         </div>
 
         {/* Completed Tests */}
-        <div className="card p-6 group hover:shadow-lg transition-all duration-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-emerald-100 rounded-xl group-hover:bg-emerald-200 transition-colors">
-              <CheckCircleIcon className="w-6 h-6 text-emerald-600" />
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-gray-900">{stats.completedTests}</p>
-              <p className="text-sm text-gray-500">Completed</p>
-            </div>
-          </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <div className="w-full bg-gray-200 rounded-full h-2 mr-3">
-                <div
-                  className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${stats.totalTests > 0 ? (stats.completedTests / stats.totalTests) * 100 : 0}%` }}
-                ></div>
-              </div>
-              <span className="text-sm text-gray-600 whitespace-nowrap">
-                {stats.totalTests > 0 ? Math.round((stats.completedTests / stats.totalTests) * 100) : 0}%
-              </span>
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Completed</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.completedTests}</p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <CheckCircleIcon className="w-6 h-6 text-green-600" />
             </div>
           </div>
         </div>
 
         {/* Your Rank */}
-        <div className="card p-6 group hover:shadow-lg transition-all duration-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-amber-100 rounded-xl group-hover:bg-amber-200 transition-colors">
-              <TrophyIcon className="w-6 h-6 text-amber-600" />
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.rank ? `#${stats.rank}` : '-'}
-              </p>
-              <p className="text-sm text-gray-500">Your Rank</p>
-            </div>
-          </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">of {stats.totalStudents} students</p>
-            <div className="flex items-center text-emerald-600 text-sm">
-              <ArrowUpIcon className="w-3 h-3 mr-1" />
-              <span>Rising</span>
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Your Rank</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {stats.rank ? `#${stats.rank}` : 'N/A'}
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+              <TrophyIcon className="w-6 h-6 text-yellow-600" />
             </div>
           </div>
         </div>
 
-        {/* Study Materials */}
-        <div className="card p-6 group hover:shadow-lg transition-all duration-200">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-purple-100 rounded-xl group-hover:bg-purple-200 transition-colors">
+        {/* Total Score */}
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Total Score</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.totalScore}</p>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
               <DocumentTextIcon className="w-6 h-6 text-purple-600" />
             </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-gray-900">{stats.totalPdfs}</p>
-              <p className="text-sm text-gray-500">PDFs Available</p>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">{stats.downloadedPdfs} downloaded</p>
-            <Link to="/pdfs" className="text-purple-600 hover:text-purple-700 text-sm font-medium">
-              Browse <ArrowRightIcon className="w-3 h-3 inline ml-1" />
-            </Link>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
         <div className="lg:col-span-2">
-          <div className="card">
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900">Recent Activity</h2>
-                <button className="text-gray-400 hover:text-gray-600">
-                  <CalendarIcon className="w-5 h-5" />
-                </button>
-              </div>
+          <div className="bg-white border border-gray-200 rounded-lg">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
             </div>
             <div className="p-6">
               {stats.recentActivity.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <ClockIcon className="w-8 h-8 text-gray-400" />
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No recent activity</h3>
-                  <p className="text-gray-500 mb-6">Start taking tests to see your progress here</p>
-                  <Link to="/tests" className="btn btn-primary">
+                  <h3 className="text-base font-medium text-gray-900 mb-2">No recent activity</h3>
+                  <p className="text-sm text-gray-600 mb-4">Start taking tests to see your progress here</p>
+                  <Link
+                    to="/tests"
+                    className="inline-block px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                  >
                     Take Your First Test
                   </Link>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  {stats.recentActivity.map((activity, index) => (
+                <div className="space-y-3">
+                  {stats.recentActivity.map((activity) => (
                     <div
                       key={activity.id}
-                      className="flex items-center space-x-4 p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                      <div className={`p-2 rounded-lg ${
-                        activity.type === 'test' ? 'bg-blue-100' : 'bg-purple-100'
-                      }`}>
-                        {activity.type === 'test' ? (
-                          <AcademicCapIcon className={`w-5 h-5 ${
-                            activity.type === 'test' ? 'text-blue-600' : 'text-purple-600'
-                          }`} />
-                        ) : (
-                          <DocumentTextIcon className={`w-5 h-5 ${
-                            activity.type === 'test' ? 'text-blue-600' : 'text-purple-600'
-                          }`} />
-                        )}
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          activity.type === 'test' ? 'bg-primary-100' : 'bg-purple-100'
+                        }`}>
+                          {activity.type === 'test' ? (
+                            <AcademicCapIcon className="w-5 h-5 text-primary-600" />
+                          ) : (
+                            <DocumentTextIcon className="w-5 h-5 text-purple-600" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{activity.title}</p>
+                          <p className="text-sm text-gray-600">
+                            {new Date(activity.date).toLocaleDateString()}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-gray-900">{activity.title}</p>
-                        <p className="text-sm text-gray-500">
-                          {new Date(activity.date).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
-                      </div>
-                      {activity.score !== undefined && (
+                      {activity.percentage !== undefined && (
                         <div className="text-right">
-                          <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            activity.score >= 80 ? 'bg-emerald-100 text-emerald-800' :
-                            activity.score >= 60 ? 'bg-yellow-100 text-yellow-800' :
+                          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            activity.percentage >= 75 ? 'bg-green-100 text-green-800' :
+                            activity.percentage >= 50 ? 'bg-yellow-100 text-yellow-800' :
                             'bg-red-100 text-red-800'
                           }`}>
-                            <StarIcon className="w-3 h-3 mr-1" />
-                            {activity.score}%
-                          </div>
+                            {activity.percentage}%
+                          </span>
                         </div>
                       )}
                     </div>
@@ -296,70 +214,35 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Sidebar Widgets */}
-        <div className="space-y-6">
-          {/* Study Streak */}
-          <div className="card p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Study Streak</h3>
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <FireIcon className="w-5 h-5 text-orange-600" />
-              </div>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-bold text-gray-900 mb-2">{streak}</p>
-              <p className="text-sm text-gray-500 mb-4">days in a row</p>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-orange-500 h-2 rounded-full" style={{ width: `${(streak / 30) * 100}%` }}></div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2">Keep it up! Goal: 30 days</p>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="card p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        {/* Quick Actions */}
+        <div className="space-y-4">
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="space-y-3">
               <Link
                 to="/tests"
-                className="flex items-center p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors group"
+                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
               >
-                <div className="p-2 bg-blue-100 rounded-lg mr-3 group-hover:bg-blue-200">
-                  <PlayIcon className="w-4 h-4 text-blue-600" />
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                    <AcademicCapIcon className="w-5 h-5 text-primary-600" />
+                  </div>
+                  <span className="font-medium text-gray-900">Take a Test</span>
                 </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">Take a Test</p>
-                  <p className="text-sm text-gray-500">Start practicing now</p>
-                </div>
-                <ArrowRightIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
+                <ArrowRightIcon className="w-4 h-4 text-gray-400" />
               </Link>
 
               <Link
                 to="/pdfs"
-                className="flex items-center p-3 rounded-lg bg-purple-50 hover:bg-purple-100 transition-colors group"
+                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-colors"
               >
-                <div className="p-2 bg-purple-100 rounded-lg mr-3 group-hover:bg-purple-200">
-                  <BookOpenIcon className="w-4 h-4 text-purple-600" />
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <BookOpenIcon className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <span className="font-medium text-gray-900">Study Materials</span>
                 </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">Study Materials</p>
-                  <p className="text-sm text-gray-500">Browse resources</p>
-                </div>
-                <ArrowRightIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
-              </Link>
-
-              <Link
-                to="/profile/performance"
-                className="flex items-center p-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition-colors group"
-              >
-                <div className="p-2 bg-emerald-100 rounded-lg mr-3 group-hover:bg-emerald-200">
-                  <ChartBarIcon className="w-4 h-4 text-emerald-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">View Performance</p>
-                  <p className="text-sm text-gray-500">Track your progress</p>
-                </div>
-                <ArrowRightIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-600" />
+                <ArrowRightIcon className="w-4 h-4 text-gray-400" />
               </Link>
             </div>
           </div>

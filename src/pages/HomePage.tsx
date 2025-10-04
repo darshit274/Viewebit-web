@@ -429,14 +429,14 @@ const HomePage: React.FC = () => {
           <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6">
             {/* Email */}
             <a
-              href="mailto:support@mocktale.com"
+              href="mailto:mocktaleacademy@gmail.com"
               className="card-hover p-8 text-center group bg-gradient-to-br from-blue-50 to-blue-100"
             >
               <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <EnvelopeIcon className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-2">Email Us</h3>
-              <p className="text-blue-600 font-semibold">support@mocktale.com</p>
+              <p className="text-blue-600 font-semibold">mocktaleacademy@gmail.com</p>
             </a>
 
             {/* WhatsApp */}
@@ -518,7 +518,7 @@ const HomePage: React.FC = () => {
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li className="flex items-center">
                   <EnvelopeIcon className="w-4 h-4 mr-2" />
-                  support@mocktale.com
+                  mocktaleacademy@gmail.com
                 </li>
                 <li className="flex items-center">
                   <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />

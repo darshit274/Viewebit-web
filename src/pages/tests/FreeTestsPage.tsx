@@ -272,33 +272,35 @@ const FreeTestsPage: React.FC = () => {
     return (
       <div className="card-hover p-6 cursor-pointer group">
         <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-              <GiftIconSolid className="w-6 h-6 text-emerald-600" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center space-x-2 mb-1">
-                <h3 className="text-lg font-bold text-gray-900">
+          <div className="flex-1 min-w-0 pr-3">
+            <div className="flex items-center space-x-2 mb-2">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center group-hover:bg-emerald-200 transition-colors flex-shrink-0">
+                <GiftIconSolid className="w-6 h-6 text-emerald-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-gray-900 truncate">
                   {test.title || test.name}
                 </h3>
-                {test.is_featured && (
-                  <div className="badge badge-yellow">
-                    <FireIcon className="w-3 h-3 mr-1" />
-                    Featured
+                <div className="flex items-center gap-2 flex-wrap">
+                  {test.is_featured && (
+                    <div className="badge badge-yellow flex-shrink-0">
+                      <FireIcon className="w-3 h-3 mr-1" />
+                      Featured
+                    </div>
+                  )}
+                  <div className="badge badge-green flex-shrink-0">
+                    <GiftIcon className="w-3 h-3 mr-1" />
+                    FREE
                   </div>
-                )}
-                <div className="badge badge-green">
-                  <GiftIcon className="w-3 h-3 mr-1" />
-                  FREE
                 </div>
               </div>
-              {test.description && (
-                <p className="text-sm text-gray-600 line-clamp-2">{test.description}</p>
-              )}
             </div>
+            {test.description && (
+              <p className="text-sm text-gray-600 line-clamp-2">{test.description}</p>
+            )}
           </div>
 
-          <div className={cn('badge text-xs', getDifficultyColor(test.difficulty_level))}>
+          <div className={cn('badge text-xs flex-shrink-0', getDifficultyColor(test.difficulty_level))}>
             {test.difficulty_level?.charAt(0).toUpperCase() + test.difficulty_level?.slice(1)}
           </div>
         </div>
@@ -322,23 +324,12 @@ const FreeTestsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Rating and Category */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center">
-              <StarIconSolid className="w-4 h-4 text-yellow-400 mr-1" />
-              <span className="text-sm font-semibold text-gray-900">{test.rating || 4.5}</span>
-            </div>
-            <span className="text-sm text-gray-500">•</span>
-            <span className="text-sm text-gray-600">{test.category_name}</span>
+        {/* Category Info */}
+        {test.category_name && test.category_name !== 'General' && (
+          <div className="mb-4">
+            <span className="text-sm font-medium text-gray-600">{test.category_name}</span>
           </div>
-          {test.attempts_count && (
-            <div className="flex items-center text-sm text-gray-500">
-              <UserGroupIcon className="w-4 h-4 mr-1" />
-              <span>{test.attempts_count} attempts</span>
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Previous Attempt Info */}
         {test.hasAttempted && (
@@ -357,17 +348,10 @@ const FreeTestsPage: React.FC = () => {
         )}
 
         {/* Action Button */}
-        <div className="flex items-center justify-between">
-          <div className="text-xs text-gray-500">
-            <div className="flex items-center">
-              <CalendarIcon className="w-3 h-3 mr-1" />
-              Added {new Date(test.created_at).toLocaleDateString()}
-            </div>
-          </div>
-
+        <div className="flex items-center justify-end">
           <Link
             to={`/tests/series/${test.uuid}`}
-            className="btn btn-primary group"
+            className="btn btn-primary group w-full justify-center"
           >
             <PlayIcon className="w-4 h-4 mr-2" />
             {test.hasAttempted ? 'Retake Test' : 'Start Test'}

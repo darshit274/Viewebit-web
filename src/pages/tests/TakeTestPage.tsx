@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../services/api";
+import HTMLContent from "../../components/common/HTMLContent";
 
 interface Question {
   id: number;
@@ -61,10 +62,11 @@ const TakeTestPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showSubmitConfirmation, setShowSubmitConfirmation] = useState(false);
   const [markedQuestions, setMarkedQuestions] = useState<{
     [key: number]: boolean;
   }>({});
-  const [language, setLanguage] = useState<"english" | "gujarati">("english");
+  const [language, setLanguage] = useState<"english" | "gujarati">("gujarati");
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -80,6 +82,13 @@ const TakeTestPage: React.FC = () => {
 
   // Get category info from location state
   const { categoryName, seriesName, questionCount } = location.state || {};
+
+  // Helper function to convert newlines to HTML br tags
+  const formatTextWithLineBreaks = (text: string): string => {
+    if (!text) return '';
+    // Replace \n with <br> tags to preserve line breaks
+    return text.replace(/\n/g, '<br>');
+  };
 
   // Smart language selection functions
   const getQuestionText = (question: Question, selectedLanguage: "english" | "gujarati"): string => {
@@ -150,7 +159,7 @@ const TakeTestPage: React.FC = () => {
         response = await api.get(`/dynamic/categories/${uuid}/questions`, {
           params: {
             language: language,
-            shuffle: true,
+            shuffle: false,  // Changed to false to maintain Excel order
           },
         });
 
@@ -192,7 +201,7 @@ const TakeTestPage: React.FC = () => {
                     {
                       params: {
                         language: language,
-                        shuffle: true,
+                        shuffle: false,  // Changed to false to maintain Excel order
                       },
                     }
                   );
@@ -283,6 +292,13 @@ const TakeTestPage: React.FC = () => {
   };
 
   const handleReviewAndSubmit = () => {
+    // Always show confirmation dialog first
+    setShowSubmitConfirmation(true);
+  };
+
+  const handleConfirmSubmit = () => {
+    setShowSubmitConfirmation(false);
+    // Check if there are marked questions for review
     if (
       Object.values(markedQuestions).filter((value) => value === true).length
     ) {
@@ -585,6 +601,35 @@ const TakeTestPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Language Selector */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Choose Language / ભાષા પસંદ કરો
+            </label>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={() => setLanguage("gujarati")}
+                className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                  language === "gujarati"
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                ગુજરાતી (Gujarati)
+              </button>
+              <button
+                onClick={() => setLanguage("english")}
+                className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                  language === "english"
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                English
+              </button>
+            </div>
+          </div>
+
           {/* Negative Marking Indicator */}
           {quizData.category.negative_marking_enabled && (
             <div className="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-lg inline-flex items-center justify-center mx-auto">
@@ -673,6 +718,7 @@ const TakeTestPage: React.FC = () => {
                     userAnswers: selectedAnswers,
                     score,
                     percentage,
+                    language: language,
                   },
                 });
               }}
@@ -786,16 +832,17 @@ const TakeTestPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
+        <div className="mb-6">
+          {/* Top Row - Title and Back Button */}
+          <div className="flex items-center mb-3">
             <button
               onClick={() => navigate(-1)}
-              className="p-2 rounded-lg hover:bg-gray-100 mr-3"
+              className="p-2 rounded-lg hover:bg-gray-100 mr-3 flex-shrink-0"
             >
               <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
             </button>
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl font-semibold text-gray-900 truncate">
                 {quizData.category.name}
               </h1>
               <p className="text-sm text-gray-500">
@@ -805,7 +852,8 @@ const TakeTestPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          {/* Bottom Row - Timer, Navigator, and Submit */}
+          <div className="flex items-center justify-end space-x-4">
             <div className="flex items-center text-sm text-gray-600">
               <ClockIcon className="h-4 w-4 mr-1" />
               <span
@@ -825,7 +873,6 @@ const TakeTestPage: React.FC = () => {
             </button>
             <button
               onClick={handleReviewAndSubmit}
-              // onClick={() => setShowReviewModal(true)}
               disabled={isSubmitting}
               className="px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
@@ -862,7 +909,7 @@ const TakeTestPage: React.FC = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={handleMarkForReview}
-              className={`px-6 py-2 rounded-lg border font-medium transition-colors ${
+              className={`px-4 sm:px-6 py-2 rounded-lg border font-medium transition-colors text-sm sm:text-base ${
                 markedQuestions[currentQuestionIndex]
                   ? "bg-yellow-100 border-yellow-400 text-yellow-700 hover:bg-yellow-200"
                   : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -886,9 +933,12 @@ const TakeTestPage: React.FC = () => {
         {/* Question */}
         <div className="bg-white rounded-xl border border-gray-100 p-8 mb-6">
           <div className="flex items-start justify-between mb-6">
-            <h2 className="text-xl font-medium text-gray-900 flex-1">
-              {getQuestionText(currentQuestion, language)}
-            </h2>
+            <div className="flex-1">
+              <HTMLContent
+                content={formatTextWithLineBreaks(getQuestionText(currentQuestion, language))}
+                className="text-xl font-medium text-gray-900"
+              />
+            </div>
             {/* Language indicator */}
             <span className={`px-3 py-1 text-xs font-medium rounded-full ml-4 ${
               getLanguageIndicator(currentQuestion) === 'both' ? 'bg-purple-100 text-purple-800' :
@@ -916,9 +966,9 @@ const TakeTestPage: React.FC = () => {
                       : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                   }`}
                 >
-                  <div className="flex items-center">
+                  <div className="flex items-start">
                     <span
-                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-medium mr-3 ${
+                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-medium mr-3 flex-shrink-0 ${
                         isSelected
                           ? "border-blue-500 bg-blue-500 text-white"
                           : "border-gray-300 text-gray-600"
@@ -926,7 +976,12 @@ const TakeTestPage: React.FC = () => {
                     >
                       {option}
                     </span>
-                    <span>{optionText}</span>
+                    <div className="flex-1">
+                      <HTMLContent
+                        content={formatTextWithLineBreaks(optionText)}
+                        className=""
+                      />
+                    </div>
                   </div>
                 </button>
               );
@@ -1142,6 +1197,37 @@ const TakeTestPage: React.FC = () => {
                           }/${quizData.questions.length})`}
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Submit Confirmation Modal */}
+        {showSubmitConfirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                  <ExclamationTriangleIcon className="h-8 w-8 text-yellow-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Submit Test?</h3>
+                <p className="text-gray-600 mb-6">
+                  Are you sure you want to submit the test? You won't be able to change your answers after submission.
+                </p>
+                <div className="flex gap-3 w-full">
+                  <button
+                    onClick={() => setShowSubmitConfirmation(false)}
+                    className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirmSubmit}
+                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                  >
+                    Yes, Submit
+                  </button>
                 </div>
               </div>
             </div>
