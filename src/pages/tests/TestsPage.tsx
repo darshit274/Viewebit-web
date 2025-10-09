@@ -35,8 +35,6 @@ interface TestSeries {
   currency: string;
   rating?: number;
   purchase_count?: number;
-  subscription_duration_days: number;
-  demo_tests_count: number;
   free_tests?: number;
   tests_count?: number;
   total_tests?: number;
@@ -92,14 +90,18 @@ const TestSeriesCard = ({
             )}
           </div>
           <div className="flex items-center flex-wrap gap-2">
-            <div className="flex items-center">
-              <StarIconSolid className="h-4 w-4 text-yellow-400 mr-1 flex-shrink-0" />
-              <span className="text-sm font-semibold text-gray-900">{typeof series.rating === 'number' ? series.rating.toFixed(1) : '4.5'}</span>
-              <span className="text-xs text-gray-500 ml-1">({series.purchase_count || 0} reviews)</span>
-            </div>
-            <div className={cn('badge text-xs', getDifficultyColor(series.difficulty_level))}>
-              {series.difficulty_level?.charAt(0).toUpperCase() + series.difficulty_level?.slice(1)}
-            </div>
+            {series.difficulty_level && (
+              <div className={cn('badge text-xs', getDifficultyColor(series.difficulty_level))}>
+                {series.difficulty_level.charAt(0).toUpperCase() + series.difficulty_level.slice(1)}
+              </div>
+            )}
+            {series.purchase_count > 0 && (
+              <div className="flex items-center">
+                <StarIconSolid className="h-4 w-4 text-yellow-400 mr-1 flex-shrink-0" />
+                <span className="text-sm font-semibold text-gray-900">{typeof series.rating === 'number' ? series.rating.toFixed(1) : '4.5'}</span>
+                <span className="text-xs text-gray-500 ml-1">({series.purchase_count} reviews)</span>
+              </div>
+            )}
           </div>
         </div>
         {hasAccess && series.pricing_type === 'paid' && (
@@ -129,15 +131,15 @@ const TestSeriesCard = ({
           <p className="text-lg font-bold text-gray-900">{series.tests_count || series.total_tests || 0}</p>
           <p className="text-xs text-gray-500">Tests</p>
         </div>
-        <div className="text-center p-3 bg-emerald-50 rounded-lg">
-          <GiftIcon className="h-5 w-5 text-emerald-600 mx-auto mb-1" />
-          <p className="text-lg font-bold text-gray-900">{series.demo_tests_count || series.free_tests || 0}</p>
-          <p className="text-xs text-gray-500">Free</p>
-        </div>
         <div className="text-center p-3 bg-purple-50 rounded-lg">
           <ClockIcon className="h-5 w-5 text-purple-600 mx-auto mb-1" />
-          <p className="text-lg font-bold text-gray-900">{Math.ceil((series.subscription_duration_days || 365) / 30)}</p>
+          <p className="text-lg font-bold text-gray-900">12</p>
           <p className="text-xs text-gray-500">Months</p>
+        </div>
+        <div className="text-center p-3 bg-emerald-50 rounded-lg">
+          <CheckCircleIcon className="h-5 w-5 text-emerald-600 mx-auto mb-1" />
+          <p className="text-lg font-bold text-gray-900">Full</p>
+          <p className="text-xs text-gray-500">Access</p>
         </div>
       </div>
 
@@ -157,25 +159,15 @@ const TestSeriesCard = ({
               </>
             )}
           </div>
-          <div className="flex items-center text-sm text-gray-500">
-            <UsersIcon className="h-4 w-4 mr-1" />
-            <span>{series.purchase_count || 0} students enrolled</span>
-          </div>
+          {series.purchase_count > 0 && (
+            <div className="flex items-center text-sm text-gray-500">
+              <UsersIcon className="h-4 w-4 mr-1" />
+              <span>{series.purchase_count} students enrolled</span>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col space-y-2">
-          {(series.demo_tests_count || series.free_tests || 0) > 0 && !hasAccess && (
-            <button
-              className="btn btn-outline btn-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                window.location.href = `/tests/series/${series.uuid}`;
-              }}
-            >
-              Try Free
-            </button>
-          )}
-
           {hasAccess ? (
             <Link
               to={`/tests/series/${series.uuid}`}
@@ -212,6 +204,7 @@ const TestsPage: React.FC = () => {
   const [pagination, setPagination] = useState<any>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [selectedPricing, setSelectedPricing] = useState<string>('all');
+  const [selectedEnrollment, setSelectedEnrollment] = useState<string>('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
@@ -283,6 +276,34 @@ const TestsPage: React.FC = () => {
     window.location.href = `/tests/series/${series.uuid}`;
   };
 
+  // Filter test series based on selected filters
+  const filteredTestSeries = testSeries.filter((series) => {
+    // Difficulty filter
+    if (selectedDifficulty !== 'all' && series.difficulty_level !== selectedDifficulty) {
+      return false;
+    }
+
+    // Pricing filter
+    if (selectedPricing !== 'all' && series.pricing_type !== selectedPricing) {
+      return false;
+    }
+
+    // Enrollment filter
+    if (selectedEnrollment !== 'all') {
+      const subscriptionAccess = subscriptionData[series.id];
+      const isEnrolled = subscriptionAccess?.hasAccess && series.pricing_type === 'paid';
+
+      if (selectedEnrollment === 'enrolled' && !isEnrolled) {
+        return false;
+      }
+      if (selectedEnrollment === 'not-enrolled' && (isEnrolled || series.pricing_type === 'free')) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
   // Error State
   if (error) {
     return (
@@ -341,7 +362,7 @@ const TestsPage: React.FC = () => {
 
           {/* Filter Options */}
           {isFilterOpen && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
               <div>
                 <label className="form-label">Difficulty Level</label>
                 <select
@@ -367,11 +388,24 @@ const TestsPage: React.FC = () => {
                   <option value="paid">Paid</option>
                 </select>
               </div>
+              <div>
+                <label className="form-label">Enrollment</label>
+                <select
+                  className="form-input"
+                  value={selectedEnrollment}
+                  onChange={(e) => setSelectedEnrollment(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  <option value="enrolled">Enrolled Only</option>
+                  <option value="not-enrolled">Not Enrolled</option>
+                </select>
+              </div>
               <div className="flex items-end">
                 <button
                   onClick={() => {
                     setSelectedDifficulty('all');
                     setSelectedPricing('all');
+                    setSelectedEnrollment('all');
                     setSearchQuery('');
                   }}
                   className="btn btn-ghost w-full"
@@ -409,30 +443,31 @@ const TestsPage: React.FC = () => {
             </div>
           ))}
         </div>
-      ) : testSeries.length === 0 ? (
+      ) : filteredTestSeries.length === 0 ? (
         // Empty State
         <div className="text-center py-16">
           <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <AcademicCapIcon className="h-10 w-10 text-gray-400" />
           </div>
           <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            {searchQuery ? 'No results found' : 'No test series available'}
+            {searchQuery || selectedDifficulty !== 'all' || selectedPricing !== 'all' || selectedEnrollment !== 'all' ? 'No results found' : 'No test series available'}
           </h3>
           <p className="text-gray-600 mb-8 max-w-md mx-auto">
-            {searchQuery
-              ? `We couldn't find any test series matching "${searchQuery}". Try adjusting your search or filters.`
+            {searchQuery || selectedDifficulty !== 'all' || selectedPricing !== 'all' || selectedEnrollment !== 'all'
+              ? `No test series match your current filters. Try adjusting your search or filters.`
               : 'Check back later for new test series to enhance your preparation.'}
           </p>
-          {searchQuery && (
+          {(searchQuery || selectedDifficulty !== 'all' || selectedPricing !== 'all' || selectedEnrollment !== 'all') && (
             <button
               onClick={() => {
                 setSearchQuery('');
                 setSelectedDifficulty('all');
                 setSelectedPricing('all');
+                setSelectedEnrollment('all');
               }}
               className="btn btn-primary"
             >
-              Clear Search
+              Clear All Filters
             </button>
           )}
         </div>
@@ -442,7 +477,7 @@ const TestsPage: React.FC = () => {
           {/* Results Summary */}
           <div className="flex items-center justify-between mb-6">
             <p className="text-gray-600">
-              Showing <span className="font-semibold">{testSeries.length}</span> test series
+              Showing <span className="font-semibold">{filteredTestSeries.length}</span> of <span className="font-semibold">{testSeries.length}</span> test series
               {searchQuery && <span> for "{searchQuery}"</span>}
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -458,7 +493,7 @@ const TestsPage: React.FC = () => {
 
           {/* Test Series Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testSeries.map((series) => (
+            {filteredTestSeries.map((series) => (
               <TestSeriesCard
                 key={series.uuid}
                 series={series}

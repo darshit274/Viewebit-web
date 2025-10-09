@@ -122,18 +122,18 @@ const FreeTestsPage: React.FC = () => {
         const transformedTests = (Array.isArray(data) ? data : []).map((test: any) => ({
           ...test,
           title: test.title || test.name || 'Free Test',
-          timeLimit: `${test.duration_minutes || 60} minutes`,
-          questionsCount: test.total_questions || test.questions_count || 50,
+          timeLimit: test.duration_minutes ? `${test.duration_minutes} minutes` : undefined,
+          questionsCount: test.total_questions || test.questions_count || test.total_questions_count || 0,
           category_name: test.category || test.subject || 'General',
           hasAttempted: false, // This would come from user attempt history
           bestScore: null, // This would come from user attempt history
           lastAttemptDate: null, // This would come from user attempt history
-          rating: test.rating || 4.2,
-          attempts_count: test.attempts_count || Math.floor(Math.random() * 500) + 100,
-          difficulty_level: test.difficulty_level || 'intermediate',
-          duration_minutes: test.duration_minutes || 60,
-          total_questions: test.total_questions || test.questions_count || 50,
-          total_marks: test.total_marks || test.total_questions || 50,
+          rating: test.rating,
+          attempts_count: test.attempts_count || test.purchase_count,
+          difficulty_level: test.difficulty_level,
+          duration_minutes: test.duration_minutes || test.test_duration_minutes,
+          total_questions: test.total_questions || test.questions_count || test.total_questions_count || 0,
+          total_marks: test.total_marks || test.total_questions || test.questions_count || 0,
           uuid: test.uuid || test.id,
           created_at: test.created_at || new Date().toISOString(),
           is_featured: test.is_featured || false,
@@ -306,23 +306,31 @@ const FreeTestsPage: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="text-center p-3 bg-blue-50 rounded-lg">
-            <QuestionMarkCircleIcon className="w-4 h-4 text-blue-600 mx-auto mb-1" />
-            <p className="text-sm font-bold text-gray-900">{test.total_questions}</p>
-            <p className="text-xs text-gray-500">Questions</p>
+        {(test.total_questions > 0 || test.duration_minutes > 0 || test.total_marks > 0) && (
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            {test.total_questions > 0 && (
+              <div className="text-center p-3 bg-blue-50 rounded-lg">
+                <QuestionMarkCircleIcon className="w-4 h-4 text-blue-600 mx-auto mb-1" />
+                <p className="text-sm font-bold text-gray-900">{test.total_questions}</p>
+                <p className="text-xs text-gray-500">Questions</p>
+              </div>
+            )}
+            {test.duration_minutes > 0 && (
+              <div className="text-center p-3 bg-purple-50 rounded-lg">
+                <ClockIcon className="w-4 h-4 text-purple-600 mx-auto mb-1" />
+                <p className="text-sm font-bold text-gray-900">{test.duration_minutes}</p>
+                <p className="text-xs text-gray-500">Minutes</p>
+              </div>
+            )}
+            {test.total_marks > 0 && (
+              <div className="text-center p-3 bg-amber-50 rounded-lg">
+                <StarIcon className="w-4 h-4 text-amber-600 mx-auto mb-1" />
+                <p className="text-sm font-bold text-gray-900">{test.total_marks}</p>
+                <p className="text-xs text-gray-500">Marks</p>
+              </div>
+            )}
           </div>
-          <div className="text-center p-3 bg-purple-50 rounded-lg">
-            <ClockIcon className="w-4 h-4 text-purple-600 mx-auto mb-1" />
-            <p className="text-sm font-bold text-gray-900">{test.duration_minutes}</p>
-            <p className="text-xs text-gray-500">Minutes</p>
-          </div>
-          <div className="text-center p-3 bg-amber-50 rounded-lg">
-            <StarIcon className="w-4 h-4 text-amber-600 mx-auto mb-1" />
-            <p className="text-sm font-bold text-gray-900">{test.total_marks}</p>
-            <p className="text-xs text-gray-500">Marks</p>
-          </div>
-        </div>
+        )}
 
         {/* Category Info */}
         {test.category_name && test.category_name !== 'General' && (

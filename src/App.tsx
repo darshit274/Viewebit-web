@@ -35,6 +35,10 @@ import TestLeaderboardPage from './pages/tests/TestLeaderboardPage';
 import PDFsPage from './pages/pdfs/PDFsPage';
 import PDFViewerPage from './pages/pdfs/PDFViewerPage';
 import FreeTestsPage from './pages/tests/FreeTestsPage';
+import FreeInPaidTestsPage from './pages/tests/FreeInPaidTestsPage';
+import TestHistoryPage from './pages/tests/TestHistoryPage';
+import TestHistoryDetailPage from './pages/tests/TestHistoryDetailPage';
+import TestAttemptsPage from './pages/tests/TestAttemptsPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import ProfileEditPage from './pages/profile/ProfileEditPage';
@@ -125,7 +129,16 @@ function AppContent() {
             {/* Free Test Routes */}
             <Route path="/free-tests" element={<FreeTestsPage />} />
             <Route path="/free-tests/take/:id" element={<TakeTestPage />} />
-            
+
+            {/* Free in Paid Series Routes */}
+            <Route path="/free-in-paid-tests" element={<FreeInPaidTestsPage />} />
+
+            {/* Test History Routes */}
+            <Route path="/test-history" element={<TestHistoryPage />} />
+            <Route path="/test-history/test/:testId/attempts" element={<TestAttemptsPage />} />
+            <Route path="/test-history/:sessionId" element={<TestHistoryDetailPage />} />
+            <Route path="/test-history/:sessionId/solutions" element={<TestSolutionsPage />} />
+
             {/* PDF Routes */}
             <Route path="/pdfs" element={<PDFsPage />} />
             <Route path="/pdfs/view/:id" element={<PDFViewerPage />} />

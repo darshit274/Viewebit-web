@@ -29,8 +29,6 @@ interface TestSeries {
   currency: string;
   rating?: number;
   purchase_count?: number;
-  subscription_duration_days: number;
-  demo_tests_count: number;
   is_purchased?: boolean;
   is_subscribed?: boolean;
   difficulty_level: 'beginner' | 'intermediate' | 'advanced';
@@ -248,18 +246,26 @@ const TestSeriesDetailPage: React.FC = () => {
 
         {/* Stats Row */}
         <div className="flex items-center space-x-6 mb-6">
-          <div className="flex items-center">
-            <StarIconSolid className="h-4 w-4 text-yellow-400 mr-1" />
-            <span className="text-sm font-medium text-gray-900">{series.rating || 4.5} rating</span>
-          </div>
-          <div className="flex items-center">
-            <UsersIcon className="h-4 w-4 text-gray-500 mr-1" />
-            <span className="text-sm text-gray-500">{series.purchase_count || 0} enrolled</span>
-          </div>
-          <div className="flex items-center">
-            <TrophyIcon className="h-4 w-4 text-gray-500 mr-1" />
-            <span className="text-sm text-gray-500 capitalize">{series.difficulty_level}</span>
-          </div>
+          {series.purchase_count > 0 && (
+            <>
+              {series.rating && (
+                <div className="flex items-center">
+                  <StarIconSolid className="h-4 w-4 text-yellow-400 mr-1" />
+                  <span className="text-sm font-medium text-gray-900">{series.rating.toFixed(1)} rating</span>
+                </div>
+              )}
+              <div className="flex items-center">
+                <UsersIcon className="h-4 w-4 text-gray-500 mr-1" />
+                <span className="text-sm text-gray-500">{series.purchase_count} enrolled</span>
+              </div>
+            </>
+          )}
+          {series.difficulty_level && (
+            <div className="flex items-center">
+              <TrophyIcon className="h-4 w-4 text-gray-500 mr-1" />
+              <span className="text-sm text-gray-500 capitalize">{series.difficulty_level}</span>
+            </div>
+          )}
         </div>
 
         {/* Access Information */}

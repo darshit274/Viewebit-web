@@ -1,6 +1,6 @@
 /* HTML Content Styling for Rich Text from TinyMCE */
 .html-content {
-  @apply text-blue-800 leading-relaxed;
+  @apply text-gray-900 leading-relaxed;
 }
 
 .html-content p {
@@ -13,7 +13,7 @@
 
 .html-content h1, .html-content h2, .html-content h3,
 .html-content h4, .html-content h5, .html-content h6 {
-  @apply font-semibold text-blue-900 mb-2 mt-4;
+  @apply font-semibold text-gray-900 mb-2 mt-4;
 }
 
 .html-content h1 { @apply text-xl; }
@@ -22,7 +22,7 @@
 .html-content h4, .html-content h5, .html-content h6 { @apply text-sm; }
 
 .html-content strong, .html-content b {
-  @apply font-semibold text-blue-900;
+  @apply font-semibold text-gray-900;
 }
 
 .html-content em, .html-content i {
@@ -50,7 +50,7 @@
 }
 
 .html-content a {
-  @apply text-blue-600 hover:text-blue-800 underline;
+  @apply text-gray-900 hover:text-gray-700 underline;
 }
 
 .html-content img {
@@ -70,7 +70,7 @@
 }
 
 .html-content blockquote {
-  @apply border-l-4 border-blue-300 pl-4 my-3 bg-blue-50 py-2 rounded-r-lg;
+  @apply border-l-4 border-gray-300 pl-4 my-3 bg-gray-50 py-2 rounded-r-lg;
 }
 
 .html-content code {

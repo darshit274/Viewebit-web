@@ -9,6 +9,8 @@ import {
   DocumentTextIcon,
   UserCircleIcon,
   BookOpenIcon,
+  GiftIcon,
+  ClockIcon,
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon
@@ -18,7 +20,9 @@ import {
   AcademicCapIcon as AcademicCapIconSolid,
   DocumentTextIcon as DocumentTextIconSolid,
   UserCircleIcon as UserCircleIconSolid,
-  BookOpenIcon as BookOpenIconSolid
+  BookOpenIcon as BookOpenIconSolid,
+  GiftIcon as GiftIconSolid,
+  ClockIcon as ClockIconSolid
 } from '@heroicons/react/24/solid';
 
 interface NavigationItem {
@@ -64,6 +68,18 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       href: '/free-tests',
       icon: BookOpenIcon,
       iconSolid: BookOpenIconSolid,
+    },
+    {
+      name: 'Free Samples',
+      href: '/free-in-paid-tests',
+      icon: GiftIcon,
+      iconSolid: GiftIconSolid,
+    },
+    {
+      name: 'Test History',
+      href: '/test-history',
+      icon: ClockIcon,
+      iconSolid: ClockIconSolid,
     },
     {
       name: 'Profile',
