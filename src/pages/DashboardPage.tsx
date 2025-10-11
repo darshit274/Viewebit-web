@@ -93,7 +93,7 @@ const DashboardPage: React.FC = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {/* Total Tests */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex items-center justify-between">
@@ -120,30 +120,15 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Your Rank */}
+        {/* Active Subscriptions */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Your Rank</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {stats.rank ? `#${stats.rank}` : 'N/A'}
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <TrophyIcon className="w-6 h-6 text-yellow-600" />
-            </div>
-          </div>
-        </div>
-
-        {/* Total Score */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 mb-1">Total Score</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalScore}</p>
+              <p className="text-sm text-gray-600 mb-1">Active Subscriptions</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.activeSubscriptions}</p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <DocumentTextIcon className="w-6 h-6 text-purple-600" />
+              <TrophyIcon className="w-6 h-6 text-purple-600" />
             </div>
           </div>
         </div>

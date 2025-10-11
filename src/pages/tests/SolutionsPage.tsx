@@ -216,10 +216,7 @@ const SolutionsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex gap-8">
-          {/* Main Content */}
-          <div className="flex-1 max-w-4xl">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
@@ -237,8 +234,15 @@ const SolutionsPage: React.FC = () => {
           </div>
         </div>
         
-        {/* Score Display */}
+        {/* Score Display and Navigator Button */}
         <div className="flex items-center space-x-4">
+          <button
+            onClick={() => setShowNavigator(true)}
+            className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors border border-gray-300"
+            title="Question Navigator"
+          >
+            <Squares2X2Icon className="h-5 w-5" />
+          </button>
           <div className="text-right">
             <p className="text-sm text-gray-500">Your Score</p>
             <p className="text-lg font-semibold text-gray-900">
@@ -247,7 +251,7 @@ const SolutionsPage: React.FC = () => {
           </div>
           <div className="flex items-center">
             <TrophyIcon className={`h-6 w-6 ${
-              percentage >= 70 ? 'text-green-600' : 
+              percentage >= 70 ? 'text-green-600' :
               percentage >= 50 ? 'text-yellow-600' : 'text-red-600'
             }`} />
           </div>
@@ -662,133 +666,168 @@ const SolutionsPage: React.FC = () => {
           {currentQuestionIndex === solutionsData.solutions.length - 1 ? 'Finish' : 'Next'}
         </button>
       </div>
-          </div>
 
-          {/* Right Sidebar - Question Navigator */}
-          <div className="w-80 flex-shrink-0">
-            <div className="sticky top-8">
-              <div className="bg-white rounded-xl border border-gray-100 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Question Navigator</h3>
-                
-                {/* Question Grid */}
-                <div className="grid grid-cols-6 gap-2 mb-6">
-                  {solutionsData && solutionsData.solutions.map((question, index) => {
-                    const isCurrentQuestion = index === currentQuestionIndex;
-                    const originalUserAnswer = userAnswers ? userAnswers[index] : null;
-                    const isOriginalCorrect = originalUserAnswer === question.correct_answer;
-                    const hasReattemptedThis = hasReattempted[index];
-                    const reattemptAnswer = reattemptAnswers[index];
-                    const isReattemptCorrect = reattemptAnswer === question.correct_answer;
-                    
-                    // Determine question status
-                    let statusClass = '';
-                    let statusColor = '';
-                    
-                    if (isCurrentQuestion) {
-                      statusClass = 'border-blue-500 border-2 bg-blue-100 text-blue-800';
-                      statusColor = 'current';
-                    } else if (practiceMode && hasReattemptedThis) {
-                      if (isReattemptCorrect) {
-                        statusClass = 'bg-green-100 text-green-800 border border-green-300';
-                        statusColor = 'reattempt-correct';
-                      } else {
-                        statusClass = 'bg-orange-100 text-orange-800 border border-orange-300';
-                        statusColor = 'reattempt-incorrect';
-                      }
-                    } else if (originalUserAnswer) {
-                      if (isOriginalCorrect) {
-                        statusClass = 'bg-green-50 text-green-700 border border-green-200';
-                        statusColor = 'correct';
-                      } else {
-                        statusClass = 'bg-red-50 text-red-700 border border-red-200';
-                        statusColor = 'incorrect';
-                      }
+      {/* Question Navigator Modal */}
+      {showNavigator && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <h3 className="text-xl font-semibold text-gray-900">
+                Question Navigator
+              </h3>
+              <button
+                onClick={() => setShowNavigator(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <XMarkIcon className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {/* Question Grid */}
+              <div className="grid grid-cols-6 md:grid-cols-8 gap-3 mb-8">
+                {solutionsData && solutionsData.solutions.map((question, index) => {
+                  const isCurrentQuestion = index === currentQuestionIndex;
+                  const originalUserAnswer = userAnswers ? userAnswers[index] : null;
+                  const isOriginalCorrect = originalUserAnswer === question.correct_answer;
+                  const hasReattemptedThis = hasReattempted[index];
+                  const reattemptAnswer = reattemptAnswers[index];
+                  const isReattemptCorrect = reattemptAnswer === question.correct_answer;
+
+                  // Determine question status
+                  let statusClass = '';
+
+                  if (isCurrentQuestion) {
+                    statusClass = 'border-blue-500 border-3 bg-blue-100 text-blue-800 ring-2 ring-blue-200';
+                  } else if (practiceMode && hasReattemptedThis) {
+                    if (isReattemptCorrect) {
+                      statusClass = 'bg-green-100 text-green-800 border-2 border-green-300 hover:bg-green-200';
                     } else {
-                      statusClass = 'bg-gray-50 text-gray-500 border border-gray-200';
-                      statusColor = 'unanswered';
+                      statusClass = 'bg-orange-100 text-orange-800 border-2 border-orange-300 hover:bg-orange-200';
                     }
-                    
-                    return (
-                      <button
-                        key={question.id}
-                        onClick={() => setCurrentQuestionIndex(index)}
-                        className={`w-12 h-12 rounded-lg flex items-center justify-center text-sm font-semibold transition-all hover:scale-105 ${statusClass}`}
-                        title={`Question ${index + 1}`}
-                      >
-                        {index + 1}
-                      </button>
-                    );
-                  })}
-                </div>
+                  } else if (originalUserAnswer) {
+                    if (isOriginalCorrect) {
+                      statusClass = 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100';
+                    } else {
+                      statusClass = 'bg-red-50 text-red-700 border-2 border-red-200 hover:bg-red-100';
+                    }
+                  } else {
+                    statusClass = 'bg-gray-50 text-gray-500 border-2 border-gray-200 hover:bg-gray-100';
+                  }
 
-                {/* Legend */}
-                <div className="space-y-2 text-xs">
-                  <h4 className="font-medium text-gray-700 mb-2">Legend:</h4>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded bg-blue-100 border border-blue-300"></div>
-                    <span className="text-gray-600">Current Question</span>
+                  return (
+                    <button
+                      key={question.id}
+                      onClick={() => {
+                        setCurrentQuestionIndex(index);
+                        setShowNavigator(false);
+                      }}
+                      className={`w-14 h-14 rounded-xl flex items-center justify-center text-sm font-bold transition-all hover:scale-110 transform ${statusClass}`}
+                      title={`Question ${index + 1}`}
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Legend */}
+              <div className="mb-8">
+                <h4 className="font-semibold text-gray-800 mb-4 text-sm">Legend:</h4>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 rounded-lg bg-blue-100 border-2 border-blue-500 ring-1 ring-blue-200 flex-shrink-0"></div>
+                    <span className="text-gray-700">Current</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded bg-green-50 border border-green-200"></div>
-                    <span className="text-gray-600">Correct Answer</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 rounded-lg bg-green-50 border-2 border-green-200 flex-shrink-0"></div>
+                    <span className="text-gray-700">Correct</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded bg-red-50 border border-red-200"></div>
-                    <span className="text-gray-600">Wrong Answer</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 rounded-lg bg-red-50 border-2 border-red-200 flex-shrink-0"></div>
+                    <span className="text-gray-700">Wrong</span>
                   </div>
                   {practiceMode && (
                     <>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-3 h-3 rounded bg-green-100 border border-green-300"></div>
-                        <span className="text-gray-600">Reattempt Correct</span>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-5 h-5 rounded-lg bg-green-100 border-2 border-green-300 flex-shrink-0"></div>
+                        <span className="text-gray-700">Reattempt ✓</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-3 h-3 rounded bg-orange-100 border border-orange-300"></div>
-                        <span className="text-gray-600">Reattempt Wrong</span>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-5 h-5 rounded-lg bg-orange-100 border-2 border-orange-300 flex-shrink-0"></div>
+                        <span className="text-gray-700">Reattempt ✗</span>
                       </div>
                     </>
                   )}
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded bg-gray-50 border border-gray-200"></div>
-                    <span className="text-gray-600">Unanswered</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 rounded-lg bg-gray-50 border-2 border-gray-200 flex-shrink-0"></div>
+                    <span className="text-gray-700">Unanswered</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress Statistics */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <h4 className="font-semibold text-gray-800 mb-4 text-base">
+                  Solution Progress
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-gray-900">
+                      {solutionsData?.solutions.length || 0}
+                    </div>
+                    <div className="text-sm text-gray-600">Total</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">
+                      {score || 0}
+                    </div>
+                    <div className="text-sm text-gray-600">Correct</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-red-600">
+                      {(solutionsData?.solutions.length || 0) - (score || 0)}
+                    </div>
+                    <div className="text-sm text-gray-600">Wrong</div>
+                  </div>
+                  <div className="text-center">
+                    <div className={`text-2xl font-bold ${
+                      (percentage || 0) >= 70 ? 'text-green-600' :
+                      (percentage || 0) >= 50 ? 'text-yellow-600' : 'text-red-600'
+                    }`}>
+                      {percentage || 0}%
+                    </div>
+                    <div className="text-sm text-gray-600">Score</div>
                   </div>
                 </div>
 
-                {/* Statistics */}
-                <div className="mt-6 pt-4 border-t border-gray-100">
-                  <h4 className="font-medium text-gray-700 mb-3">Progress</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Total Questions:</span>
-                      <span className="font-medium">{solutionsData?.solutions.length || 0}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Your Score:</span>
-                      <span className="font-medium">{score || 0}/{solutionsData?.solutions.length || 0}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Percentage:</span>
-                      <span className={`font-medium ${
-                        (percentage || 0) >= 70 ? 'text-green-600' : 
-                        (percentage || 0) >= 50 ? 'text-yellow-600' : 'text-red-600'
-                      }`}>
-                        {percentage || 0}%
+                {practiceMode && Object.keys(hasReattempted).length > 0 && (
+                  <div className="pt-4 border-t border-gray-200">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">Questions Reattempted:</span>
+                      <span className="text-lg font-bold text-blue-600">
+                        {Object.values(hasReattempted).filter(Boolean).length}
                       </span>
                     </div>
-                    {practiceMode && Object.keys(hasReattempted).length > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Reattempted:</span>
-                        <span className="font-medium text-blue-600">
-                          {Object.values(hasReattempted).filter(Boolean).length}
-                        </span>
-                      </div>
-                    )}
                   </div>
+                )}
+
+                {/* Action Button */}
+                <div className="mt-6">
+                  <button
+                    onClick={() => setShowNavigator(false)}
+                    className="w-full px-6 py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors"
+                  >
+                    Continue Review
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      )}
       </div>
     </div>
   );

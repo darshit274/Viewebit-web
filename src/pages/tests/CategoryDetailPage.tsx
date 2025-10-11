@@ -25,6 +25,9 @@ interface CategoryDetail {
   has_subcategories: boolean;
   subcategories?: SubCategory[];
   questions?: Question[];
+  test_duration_minutes?: number;
+  negative_marking_enabled?: boolean;
+  negative_marks_per_wrong?: number;
 }
 
 interface SubCategory {
@@ -217,7 +220,11 @@ const CategoryDetailPage: React.FC = () => {
               </div>
               <div className="flex items-center">
                 <ClockIcon className="h-4 w-4 mr-1" />
-                <span>{Math.ceil(questions.length * 1.5)} min</span>
+                <span>
+                  {category?.test_duration_minutes
+                    ? `${category.test_duration_minutes} min`
+                    : `${Math.ceil(questions.length * 1.5)} min`}
+                </span>
               </div>
             </div>
           </div>

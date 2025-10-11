@@ -297,13 +297,8 @@ const TakeTestPage: React.FC = () => {
     if (currentQuestionIndex < quizData.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      if (
-        Object.values(markedQuestions).filter((value) => value === true).length
-      ) {
-        setShowReviewModal(true);
-      } else {
-        handleSubmitQuiz();
-      }
+      // Show confirmation modal before submitting
+      setShowSubmitConfirmation(true);
     }
   };
 
