@@ -366,6 +366,7 @@ const TakeTestPage: React.FC = () => {
           : `quiz-user-${Date.now()}`,
         testSeriesId: uuid, // Treat uuid as test series ID (to match leaderboard expectation)
         answers: answers,
+        totalQuestions: quizData?.questions.length || 0, // IMPORTANT: Send actual total for correct calculation
         totalTimeSpent: Math.max(
           0,
           (quizData?.questions.length || 0) * 90 - timeRemaining
