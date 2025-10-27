@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  HomeIcon, 
-  AcademicCapIcon, 
-  DocumentIcon, 
+import {
+  HomeIcon,
+  AcademicCapIcon,
+  DocumentIcon,
   TrophyIcon,
   UserIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  DocumentTextIcon
 } from '@heroicons/react/24/outline';
 
 const Navigation: React.FC = () => {
@@ -17,6 +18,7 @@ const Navigation: React.FC = () => {
     { name: 'Test Series', href: '/tests', icon: AcademicCapIcon },
     { name: 'PDFs', href: '/pdfs', icon: DocumentIcon },
     { name: 'Free Tests', href: '/free-tests', icon: ChartBarIcon },
+    { name: 'Previous Years Papers', href: '/previous-years-papers', icon: DocumentTextIcon },
     { name: 'Profile', href: '/profile', icon: UserIcon },
   ];
 

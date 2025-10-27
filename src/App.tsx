@@ -36,6 +36,7 @@ import PDFsPage from './pages/pdfs/PDFsPage';
 import PDFViewerPage from './pages/pdfs/PDFViewerPage';
 import FreeTestsPage from './pages/tests/FreeTestsPage';
 import FreeInPaidTestsPage from './pages/tests/FreeInPaidTestsPage';
+import PreviousYearsPapersPage from './pages/tests/PreviousYearsPapersPage';
 import TestHistoryPage from './pages/tests/TestHistoryPage';
 import TestHistoryDetailPage from './pages/tests/TestHistoryDetailPage';
 import TestAttemptsPage from './pages/tests/TestAttemptsPage';
@@ -129,6 +130,9 @@ function AppContent() {
             {/* Free Test Routes */}
             <Route path="/free-tests" element={<FreeTestsPage />} />
             <Route path="/free-tests/take/:id" element={<TakeTestPage />} />
+
+            {/* Previous Years Papers Routes */}
+            <Route path="/previous-years-papers" element={<PreviousYearsPapersPage />} />
 
             {/* Free in Paid Series Routes */}
             <Route path="/free-in-paid-tests" element={<FreeInPaidTestsPage />} />

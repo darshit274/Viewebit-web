@@ -42,6 +42,8 @@ interface Category {
   has_subcategories: boolean;
   subcategories_count?: number;
   questions_count?: number;
+  node_type?: 'container' | 'question_holder' | 'unset';
+  is_free_in_paid_series?: boolean;
 }
 
 const TestSeriesDetailPage: React.FC = () => {
@@ -100,16 +102,37 @@ const TestSeriesDetailPage: React.FC = () => {
     window.location.href = `/payment?seriesId=${series.id}&title=${encodeURIComponent(series.name || series.title || 'Test Series')}&price=${series.price}&type=test-series`;
   };
 
-  const handleCategorySelect = (categoryUuid: string, categoryName: string) => {
-    // Check subscription access before allowing navigation
+  const handleCategorySelect = (category: Category) => {
+    // For paid series without subscription, check access control
     if (series?.pricing_type === 'paid' && subscriptionAccess && !subscriptionAccess.hasAccess) {
-      toast.error('This test series requires a subscription. Please purchase to access the content.');
-      return;
+      // Containers are always navigable (they just hold subcategories)
+      if (category.node_type === 'container') {
+        // Allow navigation to container
+        navigate(`/tests/category/${category.uuid}`, {
+          state: {
+            categoryName: category.name,
+            seriesUuid: uuid,
+            seriesName: series?.name || series?.title
+          }
+        });
+        return;
+      }
+
+      // Question holders - check is_free_in_paid_series flag
+      if (category.node_type === 'question_holder') {
+        if (!category.is_free_in_paid_series) {
+          // Locked test - show error
+          toast.error('This test requires a subscription. Please purchase to access.');
+          return;
+        }
+        // Free test in paid series - allow navigation
+      }
     }
 
-    navigate(`/tests/category/${categoryUuid}`, {
-      state: { 
-        categoryName,
+    // Allow navigation (free series, has subscription, or free test in paid series)
+    navigate(`/tests/category/${category.uuid}`, {
+      state: {
+        categoryName: category.name,
         seriesUuid: uuid,
         seriesName: series?.name || series?.title
       }
@@ -118,7 +141,7 @@ const TestSeriesDetailPage: React.FC = () => {
 
   const handleStartFreeTest = () => {
     if (categories && categories.length > 0) {
-      handleCategorySelect(categories[0].uuid, categories[0].name);
+      handleCategorySelect(categories[0]);
     } else {
       toast.error('No free tests are available in this series');
     }
@@ -127,7 +150,7 @@ const TestSeriesDetailPage: React.FC = () => {
   const CategoryCard = ({ category }: { category: Category }) => (
     <div
       className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
-      onClick={() => handleCategorySelect(category.uuid, category.name)}
+      onClick={() => handleCategorySelect(category)}
     >
       <div className="flex items-center">
         <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
@@ -308,10 +331,10 @@ const TestSeriesDetailPage: React.FC = () => {
             )}
 
             {subscriptionAccess?.hasAccess ? (
-              <button 
+              <button
                 onClick={() => {
                   if (categories.length > 0) {
-                    handleCategorySelect(categories[0].uuid, categories[0].name);
+                    handleCategorySelect(categories[0]);
                   }
                 }}
                 className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"

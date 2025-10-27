@@ -30,7 +30,7 @@ interface TestSeries {
   name: string;
   title?: string;
   description?: string;
-  pricing_type: 'free' | 'paid';
+  pricing_type: 'free' | 'paid' | 'previous_years_question_papers';
   price: number;
   currency: string;
   rating?: number;
@@ -215,20 +215,24 @@ const TestsPage: React.FC = () => {
     try {
       setError(null);
       const response = await api.get('/dynamic/test-series', {
-        params: { 
+        params: {
           page,
           limit: 20,
           search: searchQuery || undefined
         }
       });
-      
+
       if (response.data.success) {
         const series = response.data.data;
-        setTestSeries(series);
+        // Filter out PYQs - they should only appear in Previous Years Papers page
+        const filteredSeries = series.filter((s: TestSeries) =>
+          s.pricing_type !== 'previous_years_question_papers'
+        );
+        setTestSeries(filteredSeries);
         setPagination(response.data.pagination);
 
-        // Fetch subscription access for each series
-        const subscriptionPromises = series.map(async (s: TestSeries) => {
+        // Fetch subscription access for each series (use filtered series)
+        const subscriptionPromises = filteredSeries.map(async (s: TestSeries) => {
           try {
             const accessResponse = await api.get(`/subscription-access/test-series/${s.id}`);
             return {

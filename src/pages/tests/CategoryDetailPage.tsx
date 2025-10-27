@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { 
+import {
   ArrowLeftIcon,
   FolderIcon,
   DocumentTextIcon,
@@ -9,8 +9,15 @@ import {
   CheckCircleIcon,
   ChevronRightIcon,
   BookOpenIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  LockClosedIcon,
+  GiftIcon,
+  ArrowRightIcon,
+  LockOpenIcon,
+  SparklesIcon as SparklesIconOutline,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
+import { SparklesIcon } from '@heroicons/react/24/solid';
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
 
@@ -28,6 +35,8 @@ interface CategoryDetail {
   test_duration_minutes?: number;
   negative_marking_enabled?: boolean;
   negative_marks_per_wrong?: number;
+  node_type?: 'container' | 'question_holder' | 'unset';
+  is_free_in_paid_series?: boolean;
 }
 
 interface SubCategory {
@@ -39,6 +48,21 @@ interface SubCategory {
   has_subcategories: boolean;
   subcategories_count?: number;
   questions_count?: number;
+  node_type: 'container' | 'question_holder' | 'unset';
+  is_free_in_paid_series?: boolean;
+}
+
+interface SubscriptionAccessState {
+  hasAccess: boolean;
+  isPaidSeries: boolean;
+  isLoading: boolean;
+  testSeries?: {
+    uuid: string;
+    title: string;
+    pricing_type: 'free' | 'paid';
+    price?: number;
+    currency?: string;
+  };
 }
 
 interface Question {
@@ -68,6 +92,17 @@ const CategoryDetailPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Subscription state
+  const [subscriptionAccess, setSubscriptionAccess] = useState<SubscriptionAccessState>({
+    hasAccess: false,
+    isPaidSeries: false,
+    isLoading: true,
+  });
+
+  // Modal state
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [lockedTestName, setLockedTestName] = useState('');
+
   // Get navigation data from location state
   const { categoryName, seriesUuid, seriesName } = location.state || {};
 
@@ -77,11 +112,35 @@ const CategoryDetailPage: React.FC = () => {
     }
   }, [uuid]);
 
+  // Fetch subscription access on page load
+  useEffect(() => {
+    if (seriesUuid) {
+      fetchSubscriptionAccess();
+    }
+  }, [seriesUuid]);
+
+  const fetchSubscriptionAccess = async () => {
+    try {
+      const response = await api.get(`/subscription-access/test-series/${seriesUuid}`);
+      if (response.data.success) {
+        setSubscriptionAccess({
+          hasAccess: response.data.data.hasAccess,
+          isPaidSeries: response.data.data.testSeries.pricing_type === 'paid',
+          isLoading: false,
+          testSeries: response.data.data.testSeries,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to check subscription access:', error);
+      setSubscriptionAccess((prev) => ({ ...prev, isLoading: false }));
+    }
+  };
+
   const fetchCategoryDetail = async () => {
     try {
       setError(null);
       const response = await api.get(`/dynamic/categories/${uuid}`);
-      
+
       if (response.data.success) {
         const responseData = response.data.data;
         // The API returns { category, content_type, content, breadcrumb, statistics }
@@ -101,22 +160,40 @@ const CategoryDetailPage: React.FC = () => {
     }
   };
 
-  const handleSubcategorySelect = async (subcategory: SubCategory) => {
-    // Check subscription access before allowing navigation
-    try {
-      const response = await api.get(`/subscription-access/test-series/${seriesUuid}`);
-      if (response.data.success && !response.data.data.hasAccess && response.data.data.testSeries.pricing_type === 'paid') {
-        toast.error('This test series requires a subscription. Please purchase to access the content.');
-        return;
-      }
-    } catch (error) {
-      console.error('Failed to check subscription access:', error);
-      toast.error('Unable to verify access. Please try again.');
+  // Helper to determine if a subcategory is accessible
+  const isSubcategoryAccessible = (subcategory: SubCategory): boolean => {
+    // Free series - all accessible
+    if (!subscriptionAccess.isPaidSeries) return true;
+
+    // Paid series with subscription - all accessible
+    if (subscriptionAccess.hasAccess) return true;
+
+    // Paid series without subscription
+    // Containers are always navigable (no lock)
+    if (subcategory.node_type === 'container') return true;
+
+    // Question holders - check is_free_in_paid_series
+    if (subcategory.node_type === 'question_holder') {
+      return subcategory.is_free_in_paid_series === true;
+    }
+
+    // Default: not accessible
+    return false;
+  };
+
+  const handleSubcategorySelect = (subcategory: SubCategory) => {
+    const isAccessible = isSubcategoryAccessible(subcategory);
+
+    // If not accessible, show subscription modal
+    if (subscriptionAccess.isPaidSeries && !isAccessible) {
+      setLockedTestName(subcategory.name);
+      setShowSubscriptionModal(true);
       return;
     }
 
+    // Navigate to subcategory
     navigate(`/tests/category/${subcategory.uuid}`, {
-      state: { 
+      state: {
         categoryName: subcategory.name,
         seriesUuid,
         seriesName,
@@ -126,38 +203,33 @@ const CategoryDetailPage: React.FC = () => {
   };
 
   const handleStartQuiz = async () => {
-    console.log('🎮 Starting quiz - Debug info:', { 
-      category: category?.name, 
-      seriesUuid, 
+    console.log('🎮 Starting quiz - Debug info:', {
+      category: category?.name,
+      seriesUuid,
       seriesName,
-      questionsCount: category?.questions?.length 
+      questionsCount: category?.questions?.length,
+      nodeType: category?.node_type,
+      isFreeInPaidSeries: category?.is_free_in_paid_series
     });
-    
+
     if (!category || !category.questions || category.questions.length === 0) {
       toast.error('No questions available in this category');
       return;
     }
-    
-    // Skip subscription check if seriesUuid is not available
-    if (seriesUuid) {
-      try {
-        console.log('🔍 Checking subscription access for series:', seriesUuid);
-        const response = await api.get(`/subscription-access/test-series/${seriesUuid}`);
-        console.log('🔍 Subscription response:', response.data);
-        
-        if (response.data.success && !response.data.data.hasAccess && response.data.data.testSeries.pricing_type === 'paid') {
-          toast.error('This test requires a subscription. Please purchase the test series to access this content.');
-          return;
-        }
-      } catch (error) {
-        console.error('❌ Failed to check subscription access:', error);
-        // Don't block quiz if subscription check fails - let user try
-        console.warn('⚠️ Subscription check failed, allowing quiz to proceed');
+
+    // Check subscription access using the same logic as subcategory navigation
+    if (subscriptionAccess.isPaidSeries && !subscriptionAccess.hasAccess) {
+      // If this is a free sample in a paid series, allow access
+      if (category.is_free_in_paid_series === true) {
+        console.log('✅ Free sample in paid series - allowing quiz');
+      } else {
+        // Not a free sample - block access
+        console.log('❌ Locked test - blocking access');
+        toast.error('This test requires a subscription. Please purchase the test series to access this content.');
+        return;
       }
-    } else {
-      console.warn('⚠️ No seriesUuid available, skipping subscription check');
     }
-    
+
     console.log('✅ Navigating to quiz page');
     navigate(`/tests/quiz/${uuid}`, {
       state: {
@@ -168,36 +240,97 @@ const CategoryDetailPage: React.FC = () => {
     });
   };
 
-  const SubcategoryCard = ({ subcategory }: { subcategory: SubCategory }) => (
-    <div
-      className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
-      onClick={() => handleSubcategorySelect(subcategory)}
-    >
-      <div className="flex items-center">
-        <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-          <FolderIcon className="h-5 w-5 text-blue-600" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-base font-medium text-gray-900 truncate">
-            {subcategory.name}
-          </h3>
-          <div className="mt-1">
-            <p className="text-sm text-gray-500">
-              {subcategory.has_subcategories 
-                ? `${subcategory.subcategories_count} subcategories`
-                : `${subcategory.questions_count} questions`}
-            </p>
+  const SubcategoryCard = ({ subcategory }: { subcategory: SubCategory }) => {
+    const isQuestionHolder = subcategory.node_type === 'question_holder';
+    const isContainer = subcategory.node_type === 'container';
+    const isAccessible = isSubcategoryAccessible(subcategory);
+    const isFreeInPaid =
+      subscriptionAccess.isPaidSeries &&
+      !subscriptionAccess.hasAccess &&
+      isQuestionHolder &&
+      subcategory.is_free_in_paid_series;
+    const isLocked =
+      subscriptionAccess.isPaidSeries &&
+      !subscriptionAccess.hasAccess &&
+      isQuestionHolder &&
+      !isAccessible;
+
+    return (
+      <div
+        className={`bg-white rounded-xl border p-4 hover:shadow-md transition-all duration-200 cursor-pointer ${
+          isLocked ? 'opacity-70 border-dashed border-gray-300 bg-gray-50' : 'border-gray-100'
+        }`}
+        onClick={() => handleSubcategorySelect(subcategory)}
+      >
+        <div className="flex items-center">
+          {/* Icon */}
+          <div
+            className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
+              isLocked ? 'bg-gray-200' : 'bg-blue-100'
+            }`}
+          >
+            {isLocked ? (
+              <LockClosedIcon className="h-5 w-5 text-gray-500" />
+            ) : isContainer ? (
+              <FolderIcon className="h-5 w-5 text-blue-600" />
+            ) : (
+              <DocumentTextIcon className="h-5 w-5 text-blue-600" />
+            )}
           </div>
-          {subcategory.description && (
-            <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-              {subcategory.description}
-            </p>
-          )}
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <h3
+                className={`text-base font-medium truncate ${
+                  isLocked ? 'text-gray-500' : 'text-gray-900'
+                }`}
+              >
+                {subcategory.name}
+              </h3>
+
+              {/* FREE Badge */}
+              {isFreeInPaid && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold text-green-700 bg-green-100 border border-green-200">
+                  <GiftIcon className="h-3 w-3" />
+                  FREE
+                </span>
+              )}
+
+              {/* LOCKED Badge */}
+              {isLocked && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold text-gray-600 bg-gray-100 border border-gray-200">
+                  <LockClosedIcon className="h-3 w-3" />
+                  LOCKED
+                </span>
+              )}
+            </div>
+
+            <div className="mt-1">
+              <p className="text-sm text-gray-500">
+                {subcategory.has_subcategories
+                  ? `${subcategory.subcategories_count} subcategories`
+                  : `${subcategory.questions_count} questions`}
+              </p>
+            </div>
+
+            {subcategory.description && (
+              <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                {subcategory.description}
+              </p>
+            )}
+          </div>
+
+          {/* Arrow */}
+          <ChevronRightIcon
+            className={`h-5 w-5 flex-shrink-0 ${
+              isLocked ? 'text-gray-300' : 'text-gray-400'
+            }`}
+          />
         </div>
-        <ChevronRightIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
       </div>
-    </div>
-  );
+    );
+  };
 
   const QuizCard = ({ questions }: { questions: Question[] }) => (
     <div
@@ -270,6 +403,80 @@ const CategoryDetailPage: React.FC = () => {
     </nav>
   );
 
+  // Subscription Required Modal Component
+  const SubscriptionRequiredModal = () => {
+    if (!showSubscriptionModal) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 overflow-y-auto">
+        {/* Backdrop */}
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+          onClick={() => setShowSubscriptionModal(false)}
+        />
+
+        {/* Modal */}
+        <div className="flex min-h-full items-center justify-center p-4">
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowSubscriptionModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
+
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
+                <SparklesIcon className="h-10 w-10 text-white" />
+              </div>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-2xl font-bold text-gray-900 text-center mb-2">
+              Premium Content
+            </h3>
+
+            {/* Description */}
+            <p className="text-gray-600 text-center mb-6">
+              Subscribe to unlock unlimited access to all tests and features in this series.
+            </p>
+
+            {/* Locked Test Badge */}
+            {lockedTestName && (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 mb-6 flex items-center gap-2">
+                <LockClosedIcon className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                <span className="text-sm text-gray-700 font-medium truncate">
+                  {lockedTestName}
+                </span>
+              </div>
+            )}
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowSubscriptionModal(false)}
+                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                Later
+              </button>
+              <button
+                onClick={() => {
+                  setShowSubscriptionModal(false);
+                  navigate(`/tests/series/${seriesUuid}`);
+                }}
+                className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl"
+              >
+                View Plans
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -326,6 +533,9 @@ const CategoryDetailPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Subscription Required Modal */}
+      <SubscriptionRequiredModal />
+
       {/* Header */}
       <div className="flex items-center mb-6">
         <button
@@ -352,18 +562,25 @@ const CategoryDetailPage: React.FC = () => {
       )}
 
       {/* Subcategories */}
-      {category.has_subcategories && category.subcategories && category.subcategories.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Subcategories ({category.subcategories.length})
-          </h2>
-          <div className="space-y-4">
-            {category.subcategories.map((subcategory) => (
-              <SubcategoryCard key={subcategory.uuid} subcategory={subcategory} />
-            ))}
+      {category.has_subcategories && category.subcategories && category.subcategories.length > 0 && (() => {
+        // Filter out unset types
+        const visibleSubcategories = category.subcategories.filter(
+          (sub) => sub.node_type !== 'unset'
+        );
+
+        return visibleSubcategories.length > 0 ? (
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Subcategories ({visibleSubcategories.length})
+            </h2>
+            <div className="space-y-4">
+              {visibleSubcategories.map((subcategory) => (
+                <SubcategoryCard key={subcategory.uuid} subcategory={subcategory} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        ) : null;
+      })()}
 
       {/* Quiz/Questions */}
       {category.questions && category.questions.length > 0 && (
@@ -376,13 +593,25 @@ const CategoryDetailPage: React.FC = () => {
       )}
 
       {/* Empty State */}
-      {(!category.subcategories || category.subcategories.length === 0) && 
+      {(!category.subcategories || category.subcategories.length === 0) &&
        (!category.questions || category.questions.length === 0) && (
         <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
           <BookOpenIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No content available</h3>
           <p className="text-gray-600">This category doesn't have any subcategories or tests yet.</p>
         </div>
+      )}
+
+      {/* Unlock All Tests Button */}
+      {subscriptionAccess.isPaidSeries && !subscriptionAccess.hasAccess && (
+        <button
+          onClick={() => navigate(`/tests/series/${seriesUuid}`)}
+          className="w-full mt-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 group"
+        >
+          <LockOpenIcon className="h-5 w-5" />
+          <span>Unlock All Tests in This Series</span>
+          <ArrowRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+        </button>
       )}
     </div>
   );

@@ -80,6 +80,8 @@ const TakeTestPage: React.FC = () => {
   const [showNavigator, setShowNavigator] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showNegativeMarkingWarning, setShowNegativeMarkingWarning] = useState(false);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
 
   // Get category info from location state
   const { categoryName, seriesName, questionCount } = location.state || {};
@@ -151,6 +153,43 @@ const TakeTestPage: React.FC = () => {
     }
     return () => clearInterval(timer);
   }, [quizStarted, timeRemaining, showResults]);
+
+  // Handle browser navigation (back button, close tab, refresh) during quiz
+  useEffect(() => {
+    // Only block navigation if quiz is started and not finished
+    if (!quizStarted || showResults) {
+      return;
+    }
+
+    // Handle browser back/forward buttons and page close/refresh
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'Are you sure you want to close the test? Your progress will be lost.';
+      return e.returnValue;
+    };
+
+    // Handle React Router navigation (back button within app)
+    const handlePopState = (e: PopStateEvent) => {
+      e.preventDefault();
+      // Show custom confirmation dialog
+      setShowExitConfirmation(true);
+      // Push current state back to prevent immediate navigation
+      window.history.pushState(null, '', window.location.href);
+    };
+
+    // Add event listeners
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handlePopState);
+
+    // Push initial state to enable popstate detection
+    window.history.pushState(null, '', window.location.href);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [quizStarted, showResults]);
 
   const fetchQuizQuestions = async () => {
     try {
@@ -453,6 +492,17 @@ const TakeTestPage: React.FC = () => {
   const handleCancelStartQuiz = () => {
     setShowNegativeMarkingWarning(false);
     // User can review the pre-quiz screen again
+  };
+
+  const handleConfirmExit = () => {
+    setShowExitConfirmation(false);
+    // User confirmed exit - navigate back
+    navigate(-1);
+  };
+
+  const handleCancelExit = () => {
+    setShowExitConfirmation(false);
+    // User wants to stay on the test
   };
 
   if (isLoading) {
@@ -941,7 +991,13 @@ const TakeTestPage: React.FC = () => {
           {/* Top Row - Title and Back Button */}
           <div className="flex items-start sm:items-center mb-3">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                if (quizStarted && !showResults) {
+                  setShowExitConfirmation(true);
+                } else {
+                  navigate(-1);
+                }
+              }}
               className="p-2 rounded-lg hover:bg-gray-100 mr-2 sm:mr-3 flex-shrink-0"
             >
               <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />
@@ -1332,6 +1388,62 @@ const TakeTestPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Exit Confirmation Modal */}
+        {showExitConfirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
+              {/* Warning Icon */}
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                  <ExclamationTriangleIcon className="h-10 w-10 text-red-600" />
+                </div>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-2xl font-bold text-gray-900 text-center mb-2">
+                Exit Test?
+              </h3>
+
+              {/* Message */}
+              <p className="text-center text-gray-600 mb-6">
+                Are you sure you want to close the test? All your progress will be lost and cannot be recovered.
+              </p>
+
+              {/* Current Progress Info */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-600">Questions Answered:</span>
+                  <span className="text-sm font-bold text-gray-900">
+                    {Object.keys(selectedAnswers).length} / {quizData?.questions.length}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Time Remaining:</span>
+                  <span className="text-sm font-bold text-blue-600">
+                    {formatTime(timeRemaining)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCancelExit}
+                  className="flex-1 px-4 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+                >
+                  Continue Test
+                </button>
+                <button
+                  onClick={handleConfirmExit}
+                  className="flex-1 px-4 py-3 border-2 border-red-300 text-red-600 font-semibold rounded-xl hover:bg-red-50 transition-colors"
+                >
+                  Exit Test
+                </button>
               </div>
             </div>
           </div>

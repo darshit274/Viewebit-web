@@ -15,6 +15,7 @@ import {
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
 import HTMLContent from '../../components/common/HTMLContent';
+import ReportQuestionButton from '../../components/tests/ReportQuestionButton';
 import '../../styles/html-content.css';
 
 interface Question {
@@ -351,17 +352,24 @@ const SolutionsPage: React.FC = () => {
             )}
           </div>
           <div className="flex-1">
-            <div className="flex items-center space-x-2 mb-2">
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                isCorrect 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-red-100 text-red-800'
-              }`}>
-                {isCorrect ? 'Correct' : 'Incorrect'}
-              </span>
-              <span className="text-sm text-gray-500">
-                +{currentQuestion.marks} {currentQuestion.marks === 1 ? 'mark' : 'marks'}
-              </span>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-2">
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  isCorrect
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  {isCorrect ? 'Correct' : 'Incorrect'}
+                </span>
+                <span className="text-sm text-gray-500">
+                  +{currentQuestion.marks} {currentQuestion.marks === 1 ? 'mark' : 'marks'}
+                </span>
+              </div>
+              <ReportQuestionButton
+                questionId={currentQuestion.id}
+                questionNumber={currentQuestionIndex + 1}
+                userAnswer={userAnswer || undefined}
+              />
             </div>
             <HTMLContent
               content={formatTextWithLineBreaks(
