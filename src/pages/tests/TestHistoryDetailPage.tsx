@@ -252,20 +252,9 @@ const TestHistoryDetailPage: React.FC = () => {
               <div className="flex flex-col items-center justify-center border-l-0 sm:border-l-2 border-blue-300">
                 <div className="text-3xl sm:text-4xl font-bold text-blue-600 mb-1">{result.accuracy}%</div>
                 <div className="text-xs sm:text-sm text-gray-600 font-medium">Accuracy</div>
-                <div className="text-xs text-gray-500 mt-1">{result.finalScore.toFixed(2)}/{(result.attempted > 0 ? (result.finalScore / result.accuracy * 100) : 0).toFixed(2)} marks</div>
+                <div className="text-xs text-gray-500 mt-1">{result.finalScore.toFixed(2)}/{result.attempted} marks</div>
                 <div className="text-xs text-gray-400">from {result.attempted} attempted</div>
               </div>
-            </div>
-          </div>
-
-          {/* Time Taken */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-gray-700">
-                <ClockIcon className="h-5 w-5" />
-                <span className="font-medium">Time Taken</span>
-              </div>
-              <span className="text-lg font-bold text-gray-900">{formatTime(result.timeSpent)}</span>
             </div>
           </div>
 

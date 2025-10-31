@@ -300,30 +300,6 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="section-spacing bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600">
-        <div className="page-container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
-            <div className="animate-fade-in">
-              <div className="text-4xl md:text-5xl font-bold mb-2">10K+</div>
-              <div className="text-blue-100 font-medium">Active Students</div>
-            </div>
-            <div className="animate-fade-in">
-              <div className="text-4xl md:text-5xl font-bold mb-2">500+</div>
-              <div className="text-blue-100 font-medium">Test Series</div>
-            </div>
-            <div className="animate-fade-in">
-              <div className="text-4xl md:text-5xl font-bold mb-2">50K+</div>
-              <div className="text-blue-100 font-medium">Questions</div>
-            </div>
-            <div className="animate-fade-in">
-              <div className="text-4xl md:text-5xl font-bold mb-2">95%</div>
-              <div className="text-blue-100 font-medium">Success Rate</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FAQs Section */}
       <section id="faqs" className="section-spacing bg-white">
         <div className="page-container">

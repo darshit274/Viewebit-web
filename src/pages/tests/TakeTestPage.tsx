@@ -719,9 +719,10 @@ const TakeTestPage: React.FC = () => {
   if (showResults) {
     // Calculate detailed statistics
     const totalQuestions = quizData.questions.length;
-    const correctAnswers = backendResults?.score ?? score;
-    const wrongAnswers = backendResults?.wrongAnswers ?? 0;
     const answeredQuestions = Object.keys(selectedAnswers).length;
+    const correctAnswers = backendResults?.correctAnswers ?? score;
+    // Wrong answers = attempted - correct (NOT defaulting to 0!)
+    const wrongAnswers = backendResults?.wrongAnswers ?? (answeredQuestions - correctAnswers);
     const notAttempted = totalQuestions - answeredQuestions;
 
     // Marks calculation - use backend data if available, otherwise calculate from questions
@@ -739,10 +740,23 @@ const TakeTestPage: React.FC = () => {
     const negativeMarks = backendResults?.negativeMarksDeducted ?? 0;
     const obtainedMarks = backendResults?.finalScore ?? correctAnswers; // Final score after negative marking
 
-    // Accuracy = (obtained marks / attempted marks) × 100
-    const accuracy = attemptedMarks > 0
-      ? Math.round((obtainedMarks / attemptedMarks) * 100)
-      : 0;
+    // Accuracy = (correct answers / attempted questions) × 100
+    // Use backend percentage if available, otherwise calculate
+    const accuracy = backendResults?.percentage ?? (answeredQuestions > 0
+      ? Math.round((correctAnswers / answeredQuestions) * 100)
+      : 0);
+
+    console.log("📊 Frontend Quiz Results Display:", {
+      totalQuestions,
+      answeredQuestions,
+      correctAnswers,
+      wrongAnswers,
+      notAttempted,
+      accuracy: accuracy + "%",
+      finalScore: obtainedMarks,
+      backendData: backendResults,
+      formula: `Accuracy = ${correctAnswers}/${answeredQuestions} × 100 = ${accuracy}%`
+    });
 
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
