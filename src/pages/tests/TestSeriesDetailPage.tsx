@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { 
+import React, { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import {
   ArrowLeftIcon,
   StarIcon,
   UsersIcon,
@@ -12,11 +12,11 @@ import {
   ChevronRightIcon,
   FolderIcon,
   BookOpenIcon,
-  ExclamationTriangleIcon
-} from '@heroicons/react/24/outline';
-import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
-import { api } from '../../services/api';
-import { toast } from 'react-hot-toast';
+  ExclamationTriangleIcon,
+} from "@heroicons/react/24/outline";
+import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
+import { api } from "../../services/api";
+import { toast } from "react-hot-toast";
 
 interface TestSeries {
   id: number;
@@ -24,14 +24,14 @@ interface TestSeries {
   name: string;
   title?: string;
   description?: string;
-  pricing_type: 'free' | 'paid';
+  pricing_type: "free" | "paid";
   price: number;
   currency: string;
   rating?: number;
   purchase_count?: number;
   is_purchased?: boolean;
   is_subscribed?: boolean;
-  difficulty_level: 'beginner' | 'intermediate' | 'advanced';
+  difficulty_level: "beginner" | "intermediate" | "advanced";
   categories?: Category[];
 }
 
@@ -42,7 +42,7 @@ interface Category {
   has_subcategories: boolean;
   subcategories_count?: number;
   questions_count?: number;
-  node_type?: 'container' | 'question_holder' | 'unset';
+  node_type?: "container" | "question_holder" | "unset";
   is_free_in_paid_series?: boolean;
 }
 
@@ -66,11 +66,11 @@ const TestSeriesDetailPage: React.FC = () => {
       setError(null);
       // First get the series details
       const seriesResponse = await api.get(`/dynamic/test-series/${uuid}`);
-      
+
       if (seriesResponse.data.success) {
         const seriesData = seriesResponse.data.data;
         setSeries(seriesData);
-        
+
         // Categories are included in the response
         if (seriesData.categories) {
           setCategories(seriesData.categories);
@@ -78,19 +78,21 @@ const TestSeriesDetailPage: React.FC = () => {
 
         // Fetch subscription access for this series
         try {
-          const accessResponse = await api.get(`/subscription-access/test-series/${seriesData.id}`);
+          const accessResponse = await api.get(
+            `/subscription-access/test-series/${seriesData.id}`
+          );
           if (accessResponse.data.success) {
             setSubscriptionAccess(accessResponse.data.data);
           }
         } catch (accessError) {
-          console.warn('Failed to fetch subscription access:', accessError);
+          console.warn("Failed to fetch subscription access:", accessError);
           // Continue without subscription data
         }
       }
     } catch (error: any) {
-      console.error('Failed to fetch series detail:', error);
-      setError('Failed to load test series details');
-      toast.error('Failed to load test series details');
+      console.error("Failed to fetch series detail:", error);
+      setError("Failed to load test series details");
+      toast.error("Failed to load test series details");
     } finally {
       setIsLoading(false);
     }
@@ -98,31 +100,41 @@ const TestSeriesDetailPage: React.FC = () => {
 
   const handlePurchase = () => {
     if (!series) return;
-    
-    window.location.href = `/payment?seriesId=${series.id}&title=${encodeURIComponent(series.name || series.title || 'Test Series')}&price=${series.price}&type=test-series`;
+
+    window.location.href = `/payment?seriesId=${
+      series.id
+    }&title=${encodeURIComponent(
+      series.name || series.title || "Test Series"
+    )}&price=${series.price}&type=test-series`;
   };
 
   const handleCategorySelect = (category: Category) => {
     // For paid series without subscription, check access control
-    if (series?.pricing_type === 'paid' && subscriptionAccess && !subscriptionAccess.hasAccess) {
+    if (
+      series?.pricing_type === "paid" &&
+      subscriptionAccess &&
+      !subscriptionAccess.hasAccess
+    ) {
       // Containers are always navigable (they just hold subcategories)
-      if (category.node_type === 'container') {
+      if (category.node_type === "container") {
         // Allow navigation to container
         navigate(`/tests/category/${category.uuid}`, {
           state: {
             categoryName: category.name,
             seriesUuid: uuid,
-            seriesName: series?.name || series?.title
-          }
+            seriesName: series?.name || series?.title,
+          },
         });
         return;
       }
 
       // Question holders - check is_free_in_paid_series flag
-      if (category.node_type === 'question_holder') {
+      if (category.node_type === "question_holder") {
         if (!category.is_free_in_paid_series) {
           // Locked test - show error
-          toast.error('This test requires a subscription. Please purchase to access.');
+          toast.error(
+            "This test requires a subscription. Please purchase to access."
+          );
           return;
         }
         // Free test in paid series - allow navigation
@@ -134,8 +146,8 @@ const TestSeriesDetailPage: React.FC = () => {
       state: {
         categoryName: category.name,
         seriesUuid: uuid,
-        seriesName: series?.name || series?.title
-      }
+        seriesName: series?.name || series?.title,
+      },
     });
   };
 
@@ -143,7 +155,7 @@ const TestSeriesDetailPage: React.FC = () => {
     if (categories && categories.length > 0) {
       handleCategorySelect(categories[0]);
     } else {
-      toast.error('No free tests are available in this series');
+      toast.error("No free tests are available in this series");
     }
   };
 
@@ -162,7 +174,7 @@ const TestSeriesDetailPage: React.FC = () => {
           </h3>
           <div className="mt-1">
             <p className="text-sm text-gray-500">
-              {category.has_subcategories 
+              {category.has_subcategories
                 ? `${category.subcategories_count} subcategories`
                 : `${category.questions_count} questions`}
             </p>
@@ -203,7 +215,10 @@ const TestSeriesDetailPage: React.FC = () => {
         {/* Categories Skeleton */}
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="w-full h-16 bg-gray-200 rounded-xl animate-pulse"></div>
+            <div
+              key={index}
+              className="w-full h-16 bg-gray-200 rounded-xl animate-pulse"
+            ></div>
           ))}
         </div>
       </div>
@@ -215,17 +230,19 @@ const TestSeriesDetailPage: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center mb-6">
           <button
-            onClick={() => navigate('/tests')}
+            onClick={() => navigate("/tests")}
             className="p-2 rounded-lg hover:bg-gray-100 mr-3"
           >
             <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
           </button>
           <h1 className="text-xl font-semibold text-gray-900">Error</h1>
         </div>
-        
+
         <div className="text-center py-12">
           <ExclamationTriangleIcon className="mx-auto h-16 w-16 text-red-500 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to load test series</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Failed to load test series
+          </h3>
           <p className="text-gray-600 mb-6">Please try again later</p>
           <button
             onClick={fetchSeriesDetail}
@@ -243,7 +260,7 @@ const TestSeriesDetailPage: React.FC = () => {
       {/* Header */}
       <div className="flex items-center mb-6">
         <button
-          onClick={() => navigate('/tests')}
+          onClick={() => navigate("/tests")}
           className="p-2 rounded-lg hover:bg-gray-100 mr-3"
         >
           <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
@@ -260,10 +277,17 @@ const TestSeriesDetailPage: React.FC = () => {
         <h2 className="text-2xl font-bold text-gray-900 mb-4">
           {series.name || series.title}
         </h2>
-        
-        {series.description && (
+
+        {series?.description && (
           <p className="text-gray-600 mb-6 leading-relaxed">
-            {series.description}
+            {series?.description?.split("\n").map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                {index !== series?.description?.split("\n")?.length - 1 && (
+                  <br />
+                )}
+              </React.Fragment>
+            ))}
           </p>
         )}
 
@@ -274,26 +298,32 @@ const TestSeriesDetailPage: React.FC = () => {
               {series.rating && (
                 <div className="flex items-center">
                   <StarIconSolid className="h-4 w-4 text-yellow-400 mr-1" />
-                  <span className="text-sm font-medium text-gray-900">{series.rating.toFixed(1)} rating</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {series.rating.toFixed(1)} rating
+                  </span>
                 </div>
               )}
               <div className="flex items-center">
                 <UsersIcon className="h-4 w-4 text-gray-500 mr-1" />
-                <span className="text-sm text-gray-500">{series.purchase_count} enrolled</span>
+                <span className="text-sm text-gray-500">
+                  {series.purchase_count} enrolled
+                </span>
               </div>
             </>
           )}
           {series.difficulty_level && (
             <div className="flex items-center">
               <TrophyIcon className="h-4 w-4 text-gray-500 mr-1" />
-              <span className="text-sm text-gray-500 capitalize">{series.difficulty_level}</span>
+              <span className="text-sm text-gray-500 capitalize">
+                {series.difficulty_level}
+              </span>
             </div>
           )}
         </div>
 
         {/* Access Information */}
         <div className="mb-6">
-          {(subscriptionAccess?.hasAccess || series.pricing_type === 'free') ? (
+          {subscriptionAccess?.hasAccess || series.pricing_type === "free" ? (
             <div className="flex items-center px-4 py-2 bg-green-50 border border-green-200 rounded-lg">
               <CheckCircleIcon className="h-5 w-5 text-green-600 mr-2" />
               <span className="text-sm font-medium text-green-700">
@@ -314,21 +344,24 @@ const TestSeriesDetailPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <span className="text-2xl font-bold text-gray-900">
-              {series.pricing_type === 'free' ? 'Free' : `₹${series.price}`}
+              {series.pricing_type === "free" ? "Free" : `₹${series.price}`}
             </span>
-            <span className="text-base text-gray-500">{series.currency || 'INR'}</span>
+            <span className="text-base text-gray-500">
+              {series.currency || "INR"}
+            </span>
           </div>
 
           <div className="flex items-center space-x-3">
-            {series.pricing_type === 'free' && !subscriptionAccess?.hasAccess && (
-              <button 
-                onClick={handleStartFreeTest}
-                className="flex items-center px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
-              >
-                <GiftIcon className="h-4 w-4 mr-1" />
-                Try Free
-              </button>
-            )}
+            {series.pricing_type === "free" &&
+              !subscriptionAccess?.hasAccess && (
+                <button
+                  onClick={handleStartFreeTest}
+                  className="flex items-center px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                >
+                  <GiftIcon className="h-4 w-4 mr-1" />
+                  Try Free
+                </button>
+              )}
 
             {subscriptionAccess?.hasAccess ? (
               <button
@@ -357,14 +390,20 @@ const TestSeriesDetailPage: React.FC = () => {
       {/* Categories Section */}
       <div>
         <div className="mb-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Available Categories</h3>
-          <p className="text-gray-600">{categories.length} categories available</p>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            Available Categories
+          </h3>
+          <p className="text-gray-600">
+            {categories.length} categories available
+          </p>
         </div>
 
         {categories.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
             <BookOpenIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <h4 className="text-lg font-medium text-gray-900 mb-2">No categories available</h4>
+            <h4 className="text-lg font-medium text-gray-900 mb-2">
+              No categories available
+            </h4>
             <p className="text-gray-600">Categories will be added soon</p>
           </div>
         ) : (
