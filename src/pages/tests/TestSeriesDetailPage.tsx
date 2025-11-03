@@ -159,36 +159,67 @@ const TestSeriesDetailPage: React.FC = () => {
     }
   };
 
-  const CategoryCard = ({ category }: { category: Category }) => (
-    <div
-      className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
-      onClick={() => handleCategorySelect(category)}
-    >
-      <div className="flex items-center">
-        <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-          <FolderIcon className="h-5 w-5 text-blue-600" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-base font-medium text-gray-900 truncate">
-            {category.name}
-          </h3>
-          <div className="mt-1">
-            <p className="text-sm text-gray-500">
-              {category.has_subcategories
-                ? `${category.subcategories_count} subcategories`
-                : `${category.questions_count} questions`}
-            </p>
+  const CategoryCard = ({ category }: { category: Category }) => {
+    // Determine access status for badge
+    const isPaidSeries = series?.pricing_type === "paid";
+    const hasAccess = subscriptionAccess?.hasAccess || series?.pricing_type === "free";
+    const isFreeInPaid = category.is_free_in_paid_series;
+    const isLocked = isPaidSeries && !hasAccess && !isFreeInPaid && category.node_type === "question_holder";
+    const isAccessible = hasAccess;
+    const isFree = isFreeInPaid;
+
+    return (
+      <div
+        className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
+        onClick={() => handleCategorySelect(category)}
+      >
+        <div className="flex items-center">
+          <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+            <FolderIcon className="h-5 w-5 text-blue-600" />
           </div>
-          {category.description && (
-            <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-              {category.description}
-            </p>
-          )}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-base font-medium text-gray-900 truncate">
+                {category.name}
+              </h3>
+              {/* Access Status Badges */}
+              {isLocked && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                  <LockClosedIcon className="h-3 w-3 mr-1" />
+                  Locked
+                </span>
+              )}
+              {isFree && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                  <GiftIcon className="h-3 w-3 mr-1" />
+                  FREE
+                </span>
+              )}
+              {isAccessible && isPaidSeries && !isFree && category.node_type === "question_holder" && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                  <CheckCircleIcon className="h-3 w-3 mr-1" />
+                  Unlocked
+                </span>
+              )}
+            </div>
+            <div className="mt-1">
+              <p className="text-sm text-gray-500">
+                {category.has_subcategories
+                  ? `${category.subcategories_count} subcategories`
+                  : `${category.questions_count} questions`}
+              </p>
+            </div>
+            {category.description && (
+              <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                {category.description}
+              </p>
+            )}
+          </div>
+          <ChevronRightIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
         </div>
-        <ChevronRightIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
       </div>
-    </div>
-  );
+    );
+  };
 
   if (isLoading) {
     return (

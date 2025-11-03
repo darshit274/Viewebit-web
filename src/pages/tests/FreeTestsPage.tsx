@@ -299,45 +299,7 @@ const FreeTestsPage: React.FC = () => {
               <p className="text-sm text-gray-600 line-clamp-2">{test.description}</p>
             )}
           </div>
-
-          <div className={cn('badge text-xs flex-shrink-0', getDifficultyColor(test.difficulty_level))}>
-            {test.difficulty_level?.charAt(0).toUpperCase() + test.difficulty_level?.slice(1)}
-          </div>
         </div>
-
-        {/* Stats Grid */}
-        {(test.total_questions > 0 || test.duration_minutes > 0 || test.total_marks > 0) && (
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            {test.total_questions > 0 && (
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <QuestionMarkCircleIcon className="w-4 h-4 text-blue-600 mx-auto mb-1" />
-                <p className="text-sm font-bold text-gray-900">{test.total_questions}</p>
-                <p className="text-xs text-gray-500">Questions</p>
-              </div>
-            )}
-            {test.duration_minutes > 0 && (
-              <div className="text-center p-3 bg-purple-50 rounded-lg">
-                <ClockIcon className="w-4 h-4 text-purple-600 mx-auto mb-1" />
-                <p className="text-sm font-bold text-gray-900">{test.duration_minutes}</p>
-                <p className="text-xs text-gray-500">Minutes</p>
-              </div>
-            )}
-            {test.total_marks > 0 && (
-              <div className="text-center p-3 bg-amber-50 rounded-lg">
-                <StarIcon className="w-4 h-4 text-amber-600 mx-auto mb-1" />
-                <p className="text-sm font-bold text-gray-900">{test.total_marks}</p>
-                <p className="text-xs text-gray-500">Marks</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Category Info */}
-        {test.category_name && test.category_name !== 'General' && (
-          <div className="mb-4">
-            <span className="text-sm font-medium text-gray-600">{test.category_name}</span>
-          </div>
-        )}
 
         {/* Previous Attempt Info */}
         {test.hasAttempted && (
