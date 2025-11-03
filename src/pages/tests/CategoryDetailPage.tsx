@@ -91,6 +91,7 @@ const CategoryDetailPage: React.FC = () => {
   const [category, setCategory] = useState<CategoryDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [testHistory, setTestHistory] = useState<any[]>([]);
 
   // Subscription state
   const [subscriptionAccess, setSubscriptionAccess] = useState<SubscriptionAccessState>({
@@ -109,6 +110,7 @@ const CategoryDetailPage: React.FC = () => {
   useEffect(() => {
     if (uuid) {
       fetchCategoryDetail();
+      fetchTestHistory();
     }
   }, [uuid]);
 
@@ -160,6 +162,48 @@ const CategoryDetailPage: React.FC = () => {
     }
   };
 
+  const fetchTestHistory = async () => {
+    try {
+      const response = await api.get('/test-history', {
+        params: { page: 1, limit: 100 },
+      });
+      console.log('📚 [CategoryDetail] Test history API response:', response.data);
+      if (response.data.success && response.data.data.history) {
+        console.log('📚 [CategoryDetail] History items:', response.data.data.history.length);
+        console.log('📚 [CategoryDetail] First item sample:', response.data.data.history[0]);
+        setTestHistory(response.data.data.history);
+      }
+    } catch (error) {
+      console.warn('Failed to fetch test history:', error);
+      // Continue without test history
+    }
+  };
+
+  const isCurrentCategoryCompleted = (): boolean => {
+    if (!testHistory || testHistory.length === 0 || !uuid) {
+      console.log(`🔍 [CategoryDetail] No test history for ${uuid}`);
+      return false;
+    }
+
+    const completed = testHistory.some((item: any) => {
+      // Check multiple UUID fields to match
+      const matchesCategoryUuid = item.categoryUuid === uuid;
+      const matchesTestUuid = item.testUuid === uuid;
+
+      console.log(`🔍 [CategoryDetail] Checking ${uuid}:`, {
+        itemCategoryUuid: item.categoryUuid,
+        itemTestUuid: item.testUuid,
+        matchesCategoryUuid,
+        matchesTestUuid,
+      });
+
+      return matchesCategoryUuid || matchesTestUuid;
+    });
+
+    console.log(`✅ [CategoryDetail] Category ${uuid} completed:`, completed);
+    return completed;
+  };
+
   // Helper to determine if a subcategory is accessible
   const isSubcategoryAccessible = (subcategory: SubCategory): boolean => {
     // Free series - all accessible
@@ -200,6 +244,18 @@ const CategoryDetailPage: React.FC = () => {
         parentCategoryName: category?.name
       }
     });
+  };
+
+  const handleViewResults = () => {
+    if (!uuid || !category) return;
+    navigate(`/test-history/test/${uuid}/attempts`, {
+      state: { testName: category.name },
+    });
+  };
+
+  const handleReattempt = () => {
+    // Re-attempt means starting the quiz fresh
+    handleStartQuiz();
   };
 
   const handleStartQuiz = async () => {
@@ -332,50 +388,86 @@ const CategoryDetailPage: React.FC = () => {
     );
   };
 
-  const QuizCard = ({ questions }: { questions: Question[] }) => (
-    <div
-      className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
-      onClick={handleStartQuiz}
-    >
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center">
-          <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
-            <PlayIcon className="h-6 w-6 text-blue-600" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">
-              Start Quiz
-            </h3>
-            <div className="flex items-center space-x-4 text-sm text-gray-500">
-              <div className="flex items-center">
-                <DocumentTextIcon className="h-4 w-4 mr-1" />
-                <span>{questions.length} questions</span>
+  const QuizCard = ({ questions }: { questions: Question[] }) => {
+    const isCompleted = isCurrentCategoryCompleted();
+
+    return (
+      <div className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-200">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
+              <PlayIcon className="h-6 w-6 text-blue-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {isCompleted ? 'Quiz Completed' : 'Start Quiz'}
+                </h3>
+                {isCompleted && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-green-600 text-white">
+                    COMPLETED
+                  </span>
+                )}
               </div>
-              <div className="flex items-center">
-                <ClockIcon className="h-4 w-4 mr-1" />
-                <span>
-                  {category?.test_duration_minutes
-                    ? `${category.test_duration_minutes} min`
-                    : `${Math.ceil(questions.length * 1.5)} min`}
-                </span>
+              <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex items-center">
+                  <DocumentTextIcon className="h-4 w-4 mr-1" />
+                  <span>{questions.length} questions</span>
+                </div>
+                <div className="flex items-center">
+                  <ClockIcon className="h-4 w-4 mr-1" />
+                  <span>
+                    {category?.test_duration_minutes
+                      ? `${category.test_duration_minutes} min`
+                      : `${Math.ceil(questions.length * 1.5)} min`}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
+          <div className="flex items-center">
+            <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+              Free Practice
+            </span>
+          </div>
         </div>
-        <div className="flex items-center">
-          <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
-            Free Practice
-          </span>
+
+        <div className="bg-gray-50 rounded-lg p-3 mt-3">
+          <p className="text-sm text-gray-600">
+            Practice questions from <strong>{category?.name}</strong> category. Test your knowledge and improve your understanding.
+          </p>
         </div>
+
+        {/* Action Buttons */}
+        {isCompleted ? (
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={handleViewResults}
+              className="flex-1 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <DocumentTextIcon className="h-5 w-5" />
+              View Results
+            </button>
+            <button
+              onClick={handleReattempt}
+              className="flex-1 px-4 py-2.5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <PlayIcon className="h-5 w-5" />
+              Re-attempt
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={handleStartQuiz}
+            className="w-full mt-4 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+          >
+            <PlayIcon className="h-5 w-5" />
+            Start Quiz
+          </button>
+        )}
       </div>
-      
-      <div className="bg-gray-50 rounded-lg p-3 mt-3">
-        <p className="text-sm text-gray-600">
-          Practice questions from <strong>{category?.name}</strong> category. Test your knowledge and improve your understanding.
-        </p>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const BreadcrumbNav = () => (
     <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6">

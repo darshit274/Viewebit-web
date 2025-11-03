@@ -52,12 +52,14 @@ const TestSeriesDetailPage: React.FC = () => {
   const [series, setSeries] = useState<TestSeries | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subscriptionAccess, setSubscriptionAccess] = useState<any>(null);
+  const [testHistory, setTestHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (uuid) {
       fetchSeriesDetail();
+      fetchTestHistory();
     }
   }, [uuid]);
 
@@ -96,6 +98,48 @@ const TestSeriesDetailPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const fetchTestHistory = async () => {
+    try {
+      const response = await api.get("/test-history", {
+        params: { page: 1, limit: 100 },
+      });
+      console.log("📚 [TestSeriesDetail] Test history API response:", response.data);
+      if (response.data.success && response.data.data.history) {
+        console.log("📚 [TestSeriesDetail] History items:", response.data.data.history.length);
+        console.log("📚 [TestSeriesDetail] First item sample:", response.data.data.history[0]);
+        setTestHistory(response.data.data.history);
+      }
+    } catch (error) {
+      console.warn("Failed to fetch test history:", error);
+      // Continue without test history
+    }
+  };
+
+  const isCategoryCompleted = (categoryUuid: string) => {
+    if (!testHistory || testHistory.length === 0) {
+      console.log(`🔍 [TestSeriesDetail] No test history for ${categoryUuid}`);
+      return false;
+    }
+
+    const completed = testHistory.some((item: any) => {
+      // Check multiple UUID fields to match (following mobile app strategy)
+      const matchesCategoryUuid = item.categoryUuid === categoryUuid;
+      const matchesTestUuid = item.testUuid === categoryUuid;
+
+      console.log(`🔍 [TestSeriesDetail] Checking ${categoryUuid}:`, {
+        itemCategoryUuid: item.categoryUuid,
+        itemTestUuid: item.testUuid,
+        matchesCategoryUuid,
+        matchesTestUuid,
+      });
+
+      return matchesCategoryUuid || matchesTestUuid;
+    });
+
+    console.log(`✅ [TestSeriesDetail] Category ${categoryUuid} completed:`, completed);
+    return completed;
   };
 
   const handlePurchase = () => {
@@ -159,6 +203,12 @@ const TestSeriesDetailPage: React.FC = () => {
     }
   };
 
+  const handleViewResults = (categoryUuid: string, categoryName: string) => {
+    navigate(`/test-history/test/${categoryUuid}/attempts`, {
+      state: { testName: categoryName },
+    });
+  };
+
   const CategoryCard = ({ category }: { category: Category }) => {
     // Determine access status for badge
     const isPaidSeries = series?.pricing_type === "paid";
@@ -167,11 +217,31 @@ const TestSeriesDetailPage: React.FC = () => {
     const isLocked = isPaidSeries && !hasAccess && !isFreeInPaid && category.node_type === "question_holder";
     const isAccessible = hasAccess;
     const isFree = isFreeInPaid;
+    const isQuestionHolder = category.node_type === "question_holder";
+    const isCompleted = isQuestionHolder && isCategoryCompleted(category.uuid);
+
+    const handleCardClick = (e: React.MouseEvent) => {
+      // Don't navigate if clicking on Result/Take Test button
+      const target = e.target as HTMLElement;
+      if (target.closest('.action-button')) {
+        return;
+      }
+      handleCategorySelect(category);
+    };
+
+    const handleActionButtonClick = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (isCompleted) {
+        handleViewResults(category.uuid, category.name);
+      } else {
+        handleCategorySelect(category);
+      }
+    };
 
     return (
       <div
         className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-all duration-200 cursor-pointer"
-        onClick={() => handleCategorySelect(category)}
+        onClick={handleCardClick}
       >
         <div className="flex items-center">
           <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
@@ -182,6 +252,12 @@ const TestSeriesDetailPage: React.FC = () => {
               <h3 className="text-base font-medium text-gray-900 truncate">
                 {category.name}
               </h3>
+              {/* Completion Badge */}
+              {isCompleted && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-green-600 text-white">
+                  COMPLETED
+                </span>
+              )}
               {/* Access Status Badges */}
               {isLocked && (
                 <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
@@ -195,7 +271,7 @@ const TestSeriesDetailPage: React.FC = () => {
                   FREE
                 </span>
               )}
-              {isAccessible && isPaidSeries && !isFree && category.node_type === "question_holder" && (
+              {isAccessible && isPaidSeries && !isFree && isQuestionHolder && !isCompleted && (
                 <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
                   <CheckCircleIcon className="h-3 w-3 mr-1" />
                   Unlocked
@@ -214,8 +290,25 @@ const TestSeriesDetailPage: React.FC = () => {
                 {category.description}
               </p>
             )}
+            {/* Result / Take Test Button for Question Holders */}
+            {isQuestionHolder && !isLocked && (
+              <div className="mt-3">
+                <button
+                  onClick={handleActionButtonClick}
+                  className={`action-button w-full px-4 py-2 rounded-lg font-medium transition-colors ${
+                    isCompleted
+                      ? "bg-green-600 hover:bg-green-700 text-white"
+                      : "bg-gray-600 hover:bg-gray-700 text-white"
+                  }`}
+                >
+                  {isCompleted ? "Result" : "Take Test"}
+                </button>
+              </div>
+            )}
           </div>
-          <ChevronRightIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+          {!isQuestionHolder && (
+            <ChevronRightIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+          )}
         </div>
       </div>
     );
