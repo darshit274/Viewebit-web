@@ -253,7 +253,7 @@ const TestAttemptsPage: React.FC = () => {
                       </div>
 
                       {/* Stats Grid */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                      <div className="grid grid-cols-3 gap-3 text-sm">
                         <div className="flex flex-col">
                           <span className="text-gray-500 mb-1">Correct</span>
                           <span className="font-semibold text-green-600">{attempt.correct}</span>
@@ -265,10 +265,6 @@ const TestAttemptsPage: React.FC = () => {
                         <div className="flex flex-col">
                           <span className="text-gray-500 mb-1">Unanswered</span>
                           <span className="font-semibold text-gray-600">{attempt.unanswered}</span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-gray-500 mb-1">Time</span>
-                          <span className="font-semibold text-gray-900">{attempt.timeTaken}</span>
                         </div>
                       </div>
                     </div>

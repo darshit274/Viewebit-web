@@ -370,7 +370,8 @@ const TestLeaderboardPage: React.FC = () => {
                         )}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {entry.correct_answers}/{entry.total_questions} correct • {entry.percentage}% • {entry.percentile}th percentile
+                        {/* {entry.correct_answers}/{entry.total_questions} correct • {entry.percentage}% • {entry.percentile}th percentile */}
+                        {entry.correct_answers}/{entry.total_questions} correct
                       </p>
                     </div>
                   </div>

@@ -79,44 +79,75 @@ const TakeTestPage: React.FC = () => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [showNavigator, setShowNavigator] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showNegativeMarkingWarning, setShowNegativeMarkingWarning] = useState(false);
+  const [showNegativeMarkingWarning, setShowNegativeMarkingWarning] =
+    useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
-  const [pendingNavigation, setPendingNavigation] = useState<(() => void) | null>(null);
+  const [pendingNavigation, setPendingNavigation] = useState<
+    (() => void) | null
+  >(null);
 
   // Get category info from location state
   const { categoryName, seriesName, questionCount } = location.state || {};
 
   // Helper function to convert newlines to HTML br tags
   const formatTextWithLineBreaks = (text: string): string => {
-    if (!text) return '';
+    if (!text) return "";
     // Replace \n with <br> tags to preserve line breaks
-    return text.replace(/\n/g, '<br>');
+    return text.replace(/\n/g, "<br>");
   };
 
   // Smart language selection functions
-  const getQuestionText = (question: Question, selectedLanguage: "english" | "gujarati"): string => {
-    if (selectedLanguage === 'gujarati') {
-      return question.question_text_gujarati || question.question_text || 'No question available';
+  const getQuestionText = (
+    question: Question,
+    selectedLanguage: "english" | "gujarati"
+  ): string => {
+    if (selectedLanguage === "gujarati") {
+      return (
+        question.question_text_gujarati ||
+        question.question_text ||
+        "No question available"
+      );
     } else {
-      return question.question_text || question.question_text_gujarati || 'No question available';
+      return (
+        question.question_text ||
+        question.question_text_gujarati ||
+        "No question available"
+      );
     }
   };
 
-  const getOptionText = (question: Question, option: "A" | "B" | "C" | "D", selectedLanguage: "english" | "gujarati"): string => {
-    const optionLower = option.toLowerCase() as 'a' | 'b' | 'c' | 'd';
+  const getOptionText = (
+    question: Question,
+    option: "A" | "B" | "C" | "D",
+    selectedLanguage: "english" | "gujarati"
+  ): string => {
+    const optionLower = option.toLowerCase() as "a" | "b" | "c" | "d";
     const englishKey = `option_${optionLower}` as keyof Question;
     const gujaratiKey = `option_${optionLower}_gujarati` as keyof Question;
 
-    if (selectedLanguage === 'gujarati') {
-      return (question[gujaratiKey] as string) || (question[englishKey] as string) || question.options[option] || `No option ${option}`;
+    if (selectedLanguage === "gujarati") {
+      return (
+        (question[gujaratiKey] as string) ||
+        (question[englishKey] as string) ||
+        question.options[option] ||
+        `No option ${option}`
+      );
     } else {
-      return (question[englishKey] as string) || (question[gujaratiKey] as string) || question.options[option] || `No option ${option}`;
+      return (
+        (question[englishKey] as string) ||
+        (question[gujaratiKey] as string) ||
+        question.options[option] ||
+        `No option ${option}`
+      );
     }
   };
 
-  const getLanguageIndicator = (question: Question): "english" | "gujarati" | "both" => {
+  const getLanguageIndicator = (
+    question: Question
+  ): "english" | "gujarati" | "both" => {
     const hasEnglish = question.question_text || question.option_a;
-    const hasGujarati = question.question_text_gujarati || question.option_a_gujarati;
+    const hasGujarati =
+      question.question_text_gujarati || question.option_a_gujarati;
 
     if (hasEnglish && hasGujarati) return "both";
     if (hasGujarati) return "gujarati";
@@ -136,14 +167,17 @@ const TakeTestPage: React.FC = () => {
         setTimeRemaining((prev) => {
           if (prev <= 1) {
             // Show toast notification that time is up
-            toast.error("⏰ Time's up! Your test has been automatically submitted.", {
-              duration: 4000,
-              style: {
-                background: '#dc2626',
-                color: 'white',
-                fontWeight: 'bold',
+            toast.error(
+              "⏰ Time's up! Your test has been automatically submitted.",
+              {
+                duration: 4000,
+                style: {
+                  background: "#dc2626",
+                  color: "white",
+                  fontWeight: "bold",
+                },
               }
-            });
+            );
             handleSubmitQuiz();
             return 0;
           }
@@ -164,7 +198,8 @@ const TakeTestPage: React.FC = () => {
     // Handle browser back/forward buttons and page close/refresh
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      e.returnValue = 'Are you sure you want to close the test? Your progress will be lost.';
+      e.returnValue =
+        "Are you sure you want to close the test? Your progress will be lost.";
       return e.returnValue;
     };
 
@@ -174,20 +209,20 @@ const TakeTestPage: React.FC = () => {
       // Show custom confirmation dialog
       setShowExitConfirmation(true);
       // Push current state back to prevent immediate navigation
-      window.history.pushState(null, '', window.location.href);
+      window.history.pushState(null, "", window.location.href);
     };
 
     // Add event listeners
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('popstate', handlePopState);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("popstate", handlePopState);
 
     // Push initial state to enable popstate detection
-    window.history.pushState(null, '', window.location.href);
+    window.history.pushState(null, "", window.location.href);
 
     // Cleanup
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, [quizStarted, showResults]);
 
@@ -199,15 +234,16 @@ const TakeTestPage: React.FC = () => {
         response = await api.get(`/dynamic/categories/${uuid}/questions`, {
           params: {
             language: language,
-            shuffle: false,  // Changed to false to maintain Excel order
+            shuffle: false, // Changed to false to maintain Excel order
           },
         });
 
         if (response.data.success) {
           setQuizData(response.data.data);
           // Use category-level test duration (in minutes) or fallback to 1.5 minutes per question
-          const testDurationMinutes = response.data.data.category?.test_duration_minutes ||
-                                      (response.data.data.questions.length * 1.5);
+          const testDurationMinutes =
+            response.data.data.category?.test_duration_minutes ||
+            response.data.data.questions.length * 1.5;
           setTimeRemaining(testDurationMinutes * 60); // Convert minutes to seconds
           return;
         }
@@ -241,7 +277,7 @@ const TakeTestPage: React.FC = () => {
                     {
                       params: {
                         language: language,
-                        shuffle: false,  // Changed to false to maintain Excel order
+                        shuffle: false, // Changed to false to maintain Excel order
                       },
                     }
                   );
@@ -252,8 +288,10 @@ const TakeTestPage: React.FC = () => {
                   ) {
                     setQuizData(questionsResponse.data.data);
                     // Use category-level test duration or fallback to 1.5 minutes per question
-                    const testDurationMinutes = questionsResponse.data.data.category?.test_duration_minutes ||
-                                                (questionsResponse.data.data.questions.length * 1.5);
+                    const testDurationMinutes =
+                      questionsResponse.data.data.category
+                        ?.test_duration_minutes ||
+                      questionsResponse.data.data.questions.length * 1.5;
                     setTimeRemaining(testDurationMinutes * 60); // Convert minutes to seconds
                     questionsFound = true;
                     break;
@@ -314,11 +352,11 @@ const TakeTestPage: React.FC = () => {
       const newAnswers = { ...selectedAnswers };
       delete newAnswers[currentQuestionIndex];
       setSelectedAnswers(newAnswers);
-      toast.success('Answer deselected', {
+      toast.success("Answer deselected", {
         duration: 1500,
         style: {
-          background: '#6366f1',
-          color: 'white',
+          background: "#6366f1",
+          color: "white",
         },
       });
     } else {
@@ -581,17 +619,22 @@ const TakeTestPage: React.FC = () => {
               <strong className="text-amber-900">{negativeMarks} marks</strong>.
             </p>
             <p className="text-amber-700 text-xs sm:text-sm mt-2">
-              • Correct answer: <span className="text-green-600 font-semibold">+1 mark</span>
-              <br />
-              • Wrong answer: <span className="text-red-600 font-semibold">-{negativeMarks} marks</span>
-              <br />
-              • Unanswered: <span className="text-gray-600 font-semibold">No penalty</span>
+              • Correct answer:{" "}
+              <span className="text-green-600 font-semibold">+1 mark</span>
+              <br />• Wrong answer:{" "}
+              <span className="text-red-600 font-semibold">
+                -{negativeMarks} marks
+              </span>
+              <br />• Unanswered:{" "}
+              <span className="text-gray-600 font-semibold">No penalty</span>
             </p>
           </div>
 
           {/* Tips */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 sm:p-3 mb-4 sm:mb-6">
-            <p className="text-blue-900 font-medium text-xs sm:text-sm mb-1">💡 Tips:</p>
+            <p className="text-blue-900 font-medium text-xs sm:text-sm mb-1">
+              💡 Tips:
+            </p>
             <ul className="text-blue-800 text-xs space-y-1 list-disc list-inside">
               <li>Answer only if you're confident</li>
               <li>Skip questions if unsure</li>
@@ -635,81 +678,89 @@ const TakeTestPage: React.FC = () => {
             >
               <ArrowLeftIcon className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />
             </button>
-            <h1 className="text-base sm:text-xl font-semibold text-gray-900">Quiz Ready</h1>
+            <h1 className="text-base sm:text-xl font-semibold text-gray-900">
+              Quiz Ready
+            </h1>
           </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-8 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 break-words">
-            {quizData.category.name}
-          </h2>
+          <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-8 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 break-words">
+              {quizData.category.name}
+            </h2>
 
-          {quizData.category.description && (
-            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-2">
-              {quizData.category.description}
-            </p>
-          )}
+            {quizData.category.description && (
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-2">
+                {quizData.category.description}
+              </p>
+            )}
 
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-md mx-auto">
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-blue-600">
-                {quizData.questions.length}
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 max-w-md mx-auto">
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600">
+                  {quizData.questions.length}
+                </div>
+                <div className="text-xs sm:text-sm text-gray-500">
+                  Questions
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-gray-500">Questions</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-green-600">
-                {formatTime(timeRemaining)}
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-bold text-green-600">
+                  {formatTime(timeRemaining)}
+                </div>
+                <div className="text-xs sm:text-sm text-gray-500">
+                  Time Limit
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-gray-500">Time Limit</div>
             </div>
+
+            {/* Language Selector */}
+            <div className="mb-6">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-3 text-center">
+                Choose Language / ભાષા પસંદ કરો
+              </label>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md mx-auto">
+                <button
+                  onClick={() => setLanguage("gujarati")}
+                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
+                    language === "gujarati"
+                      ? "bg-blue-600 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  ગુજરાતી (Gujarati)
+                </button>
+                <button
+                  onClick={() => setLanguage("english")}
+                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
+                    language === "english"
+                      ? "bg-blue-600 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  English
+                </button>
+              </div>
+            </div>
+
+            {/* Negative Marking Indicator */}
+            {quizData.category.negative_marking_enabled && (
+              <div className="mb-4 sm:mb-6 p-2 sm:p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-center mx-auto max-w-sm">
+                <ExclamationTriangleIcon className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600 mr-1.5 sm:mr-2 flex-shrink-0" />
+                <span className="text-amber-800 font-medium text-xs sm:text-sm">
+                  Negative marking enabled (-
+                  {quizData.category.negative_marks_per_wrong || 0.25} per wrong
+                  answer)
+                </span>
+              </div>
+            )}
+
+            <button
+              onClick={startQuiz}
+              className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
+            >
+              Start Quiz
+            </button>
           </div>
-
-          {/* Language Selector */}
-          <div className="mb-6">
-            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-3 text-center">
-              Choose Language / ભાષા પસંદ કરો
-            </label>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md mx-auto">
-              <button
-                onClick={() => setLanguage("gujarati")}
-                className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
-                  language === "gujarati"
-                    ? "bg-blue-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                ગુજરાતી (Gujarati)
-              </button>
-              <button
-                onClick={() => setLanguage("english")}
-                className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
-                  language === "english"
-                    ? "bg-blue-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                English
-              </button>
-            </div>
-          </div>
-
-          {/* Negative Marking Indicator */}
-          {quizData.category.negative_marking_enabled && (
-            <div className="mb-4 sm:mb-6 p-2 sm:p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-center mx-auto max-w-sm">
-              <ExclamationTriangleIcon className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600 mr-1.5 sm:mr-2 flex-shrink-0" />
-              <span className="text-amber-800 font-medium text-xs sm:text-sm">
-                Negative marking enabled (-{quizData.category.negative_marks_per_wrong || 0.25} per wrong answer)
-              </span>
-            </div>
-          )}
-
-          <button
-            onClick={startQuiz}
-            className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
-          >
-            Start Quiz
-          </button>
-        </div>
         </div>
       </>
     );
@@ -722,29 +773,35 @@ const TakeTestPage: React.FC = () => {
     const answeredQuestions = Object.keys(selectedAnswers).length;
     const correctAnswers = backendResults?.correctAnswers ?? score;
     // Wrong answers = attempted - correct (NOT defaulting to 0!)
-    const wrongAnswers = backendResults?.wrongAnswers ?? (answeredQuestions - correctAnswers);
+    const wrongAnswers =
+      backendResults?.wrongAnswers ?? answeredQuestions - correctAnswers;
     const notAttempted = totalQuestions - answeredQuestions;
 
     // Marks calculation - use backend data if available, otherwise calculate from questions
     // Backend returns: totalMarks, obtainedMarks (before negative), negativeMarksDeducted, finalScore (after negative)
-    const totalMarks = backendResults?.totalMarks ?? quizData.questions.reduce((sum, q) => sum + (q.marks || 1), 0);
+    const totalMarks =
+      backendResults?.totalMarks ??
+      quizData.questions.reduce((sum, q) => sum + (q.marks || 1), 0);
 
     // Calculate attempted marks (sum of marks for attempted questions only)
     let attemptedMarks = 0;
-    Object.keys(selectedAnswers).forEach(index => {
+    Object.keys(selectedAnswers).forEach((index) => {
       const question = quizData.questions[parseInt(index)];
       attemptedMarks += question?.marks || 1;
     });
 
-    const obtainedMarksBeforeNegative = backendResults?.obtainedMarks ?? correctAnswers;
+    const obtainedMarksBeforeNegative =
+      backendResults?.obtainedMarks ?? correctAnswers;
     const negativeMarks = backendResults?.negativeMarksDeducted ?? 0;
     const obtainedMarks = backendResults?.finalScore ?? correctAnswers; // Final score after negative marking
 
     // Accuracy = (correct answers / attempted questions) × 100
     // Use backend percentage if available, otherwise calculate
-    const accuracy = backendResults?.percentage ?? (answeredQuestions > 0
-      ? Math.round((correctAnswers / answeredQuestions) * 100)
-      : 0);
+    const accuracy =
+      backendResults?.percentage ??
+      (answeredQuestions > 0
+        ? Math.round((correctAnswers / answeredQuestions) * 100)
+        : 0);
 
     console.log("📊 Frontend Quiz Results Display:", {
       totalQuestions,
@@ -755,7 +812,7 @@ const TakeTestPage: React.FC = () => {
       accuracy: accuracy + "%",
       finalScore: obtainedMarks,
       backendData: backendResults,
-      formula: `Accuracy = ${correctAnswers}/${answeredQuestions} × 100 = ${accuracy}%`
+      formula: `Accuracy = ${correctAnswers}/${answeredQuestions} × 100 = ${accuracy}%`,
     });
 
     return (
@@ -764,7 +821,9 @@ const TakeTestPage: React.FC = () => {
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             Quiz Results
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 break-words px-4">{quizData.category.name}</p>
+          <p className="text-sm sm:text-base text-gray-600 break-words px-4">
+            {quizData.category.name}
+          </p>
         </div>
 
         {/* Main Results Card */}
@@ -797,14 +856,22 @@ const TakeTestPage: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 mb-4">
             {/* Total Questions */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-blue-700">{totalQuestions}</div>
-              <div className="text-xs sm:text-sm text-blue-600 font-medium">Total Questions</div>
+              <div className="text-xl sm:text-2xl font-bold text-blue-700">
+                {totalQuestions}
+              </div>
+              <div className="text-xs sm:text-sm text-blue-600 font-medium">
+                Total Questions
+              </div>
             </div>
 
             {/* Attempted */}
             <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-purple-700">{answeredQuestions}</div>
-              <div className="text-xs sm:text-sm text-purple-600 font-medium">Attempted</div>
+              <div className="text-xl sm:text-2xl font-bold text-purple-700">
+                {answeredQuestions}
+              </div>
+              <div className="text-xs sm:text-sm text-purple-600 font-medium">
+                Attempted
+              </div>
             </div>
           </div>
 
@@ -813,22 +880,34 @@ const TakeTestPage: React.FC = () => {
             {/* Correct */}
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
               <CheckCircleIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-green-700">{correctAnswers}</div>
-              <div className="text-xs sm:text-sm text-green-600 font-medium">Correct</div>
+              <div className="text-2xl font-bold text-green-700">
+                {correctAnswers}
+              </div>
+              <div className="text-xs sm:text-sm text-green-600 font-medium">
+                Correct
+              </div>
             </div>
 
             {/* Wrong */}
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
               <XCircleIcon className="h-8 w-8 text-red-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-red-700">{wrongAnswers}</div>
-              <div className="text-xs sm:text-sm text-red-600 font-medium">Wrong</div>
+              <div className="text-2xl font-bold text-red-700">
+                {wrongAnswers}
+              </div>
+              <div className="text-xs sm:text-sm text-red-600 font-medium">
+                Wrong
+              </div>
             </div>
 
             {/* Not Attempted */}
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
               <ClockIcon className="h-8 w-8 text-gray-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-700">{notAttempted}</div>
-              <div className="text-xs sm:text-sm text-gray-600 font-medium">Not Attempted</div>
+              <div className="text-2xl font-bold text-gray-700">
+                {notAttempted}
+              </div>
+              <div className="text-xs sm:text-sm text-gray-600 font-medium">
+                Not Attempted
+              </div>
             </div>
           </div>
 
@@ -839,24 +918,38 @@ const TakeTestPage: React.FC = () => {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-600">Total Marks:</span>
-                  <span className="text-lg font-bold text-gray-900">{totalMarks}</span>
+                  <span className="text-lg font-bold text-gray-900">
+                    {totalMarks}
+                  </span>
                 </div>
                 {negativeMarks > 0 && (
                   <>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-gray-500">Marks Obtained:</span>
-                      <span className="text-sm font-semibold text-gray-700">{obtainedMarksBeforeNegative}</span>
+                      <span className="text-xs text-gray-500">
+                        Marks Obtained:
+                      </span>
+                      <span className="text-sm font-semibold text-gray-700">
+                        {obtainedMarksBeforeNegative}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-amber-600">Negative Marks:</span>
-                      <span className="text-sm font-semibold text-amber-600">-{negativeMarks}</span>
+                      <span className="text-xs text-amber-600">
+                        Negative Marks:
+                      </span>
+                      <span className="text-sm font-semibold text-amber-600">
+                        -{negativeMarks}
+                      </span>
                     </div>
                     <div className="h-px bg-gray-300 my-2"></div>
                   </>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Final Score:</span>
-                  <span className="text-xl font-bold text-blue-600">{obtainedMarks}</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Final Score:
+                  </span>
+                  <span className="text-xl font-bold text-blue-600">
+                    {obtainedMarks}
+                  </span>
                 </div>
               </div>
 
@@ -865,7 +958,9 @@ const TakeTestPage: React.FC = () => {
                 <div className="text-3xl sm:text-4xl font-bold text-blue-600 mb-1">
                   {accuracy}%
                 </div>
-                <div className="text-xs sm:text-sm text-gray-600 font-medium">Accuracy</div>
+                <div className="text-xs sm:text-sm text-gray-600 font-medium">
+                  Accuracy
+                </div>
                 <div className="text-xs text-gray-500 mt-1">
                   {obtainedMarks}/{attemptedMarks} marks
                 </div>
@@ -901,8 +996,9 @@ const TakeTestPage: React.FC = () => {
                 setCurrentQuestionIndex(0);
                 setSelectedAnswers({});
                 // Use category-level test duration for retake
-                const testDurationMinutes = quizData.category?.test_duration_minutes ||
-                                            (quizData.questions.length * 1.5);
+                const testDurationMinutes =
+                  quizData.category?.test_duration_minutes ||
+                  quizData.questions.length * 1.5;
                 setTimeRemaining(testDurationMinutes * 60);
               }}
               className="px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm sm:text-base font-medium"
@@ -1120,25 +1216,38 @@ const TakeTestPage: React.FC = () => {
             <div className="flex items-start justify-between gap-2 sm:gap-4">
               <div className="flex-1">
                 <HTMLContent
-                  content={formatTextWithLineBreaks(getQuestionText(currentQuestion, language))}
+                  content={formatTextWithLineBreaks(
+                    getQuestionText(currentQuestion, language)
+                  )}
                   className="text-sm sm:text-base lg:text-lg font-medium text-gray-900"
                 />
               </div>
               {/* Language indicator - hidden on mobile */}
-              <span className={`hidden sm:inline-flex flex-shrink-0 px-3 py-1 text-xs font-medium rounded-full ${
-                getLanguageIndicator(currentQuestion) === 'both' ? 'bg-purple-100 text-purple-800' :
-                getLanguageIndicator(currentQuestion) === 'gujarati' ? 'bg-orange-100 text-orange-800' :
-                'bg-blue-100 text-blue-800'
-              }`}>
-                {getLanguageIndicator(currentQuestion) === 'both' ? 'Both' :
-                 getLanguageIndicator(currentQuestion) === 'gujarati' ? 'Gujarati' : 'English'}
+              <span
+                className={`hidden sm:inline-flex flex-shrink-0 px-3 py-1 text-xs font-medium rounded-full ${
+                  getLanguageIndicator(currentQuestion) === "both"
+                    ? "bg-purple-100 text-purple-800"
+                    : getLanguageIndicator(currentQuestion) === "gujarati"
+                    ? "bg-orange-100 text-orange-800"
+                    : "bg-blue-100 text-blue-800"
+                }`}
+              >
+                {getLanguageIndicator(currentQuestion) === "both"
+                  ? "Both"
+                  : getLanguageIndicator(currentQuestion) === "gujarati"
+                  ? "Gujarati"
+                  : "English"}
               </span>
             </div>
           </div>
 
           <div className="space-y-2 sm:space-y-3">
             {["A", "B", "C", "D"].map((option) => {
-              const optionText = getOptionText(currentQuestion, option as "A" | "B" | "C" | "D", language);
+              const optionText = getOptionText(
+                currentQuestion,
+                option as "A" | "B" | "C" | "D",
+                language
+              );
               const isSelected =
                 selectedAnswers[currentQuestionIndex] === option;
 
@@ -1234,7 +1343,9 @@ const TakeTestPage: React.FC = () => {
                       // Marked for review - orange/yellow color
                       statusClass =
                         "bg-amber-50 text-amber-700 border-2 border-amber-400 hover:bg-amber-100";
-                      statusText = isAnswered ? "Marked for Review (Answered)" : "Marked for Review";
+                      statusText = isAnswered
+                        ? "Marked for Review (Answered)"
+                        : "Marked for Review";
                     } else if (isAnswered) {
                       statusClass =
                         "bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100";
@@ -1279,7 +1390,9 @@ const TakeTestPage: React.FC = () => {
 
                 {/* Legend */}
                 <div className="mb-6 sm:mb-8">
-                  <h4 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-sm sm:text-base">Legend:</h4>
+                  <h4 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-sm sm:text-base">
+                    Legend:
+                  </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 text-xs sm:text-sm">
                     <div className="flex items-center space-x-2 sm:space-x-3">
                       <div className="w-5 h-5 rounded-lg bg-blue-100 border-2 border-blue-500 ring-1 ring-blue-200 flex-shrink-0"></div>
@@ -1318,20 +1431,30 @@ const TakeTestPage: React.FC = () => {
                       <div className="text-xl sm:text-2xl font-bold text-green-600">
                         {Object.keys(selectedAnswers).length}
                       </div>
-                      <div className="text-xs sm:text-sm text-gray-600">Answered</div>
+                      <div className="text-xs sm:text-sm text-gray-600">
+                        Answered
+                      </div>
                     </div>
                     <div className="text-center">
                       <div className="text-xl sm:text-2xl font-bold text-amber-600">
-                        {Object.values(markedQuestions).filter(val => val === true).length}
+                        {
+                          Object.values(markedQuestions).filter(
+                            (val) => val === true
+                          ).length
+                        }
                       </div>
-                      <div className="text-xs sm:text-sm text-gray-600">Marked</div>
+                      <div className="text-xs sm:text-sm text-gray-600">
+                        Marked
+                      </div>
                     </div>
                     <div className="text-center">
                       <div className="text-xl sm:text-2xl font-bold text-orange-600">
                         {quizData.questions.length -
                           Object.keys(selectedAnswers).length}
                       </div>
-                      <div className="text-xs sm:text-sm text-gray-600">Remaining</div>
+                      <div className="text-xs sm:text-sm text-gray-600">
+                        Remaining
+                      </div>
                     </div>
                     <div className="text-center">
                       <div
@@ -1341,7 +1464,9 @@ const TakeTestPage: React.FC = () => {
                       >
                         {formatTime(timeRemaining)}
                       </div>
-                      <div className="text-xs sm:text-sm text-gray-600">Time Left</div>
+                      <div className="text-xs sm:text-sm text-gray-600">
+                        Time Left
+                      </div>
                     </div>
                   </div>
 
@@ -1425,15 +1550,19 @@ const TakeTestPage: React.FC = () => {
 
               {/* Message */}
               <p className="text-center text-gray-600 mb-6">
-                Are you sure you want to close the test? All your progress will be lost and cannot be recovered.
+                Are you sure you want to close the test? All your progress will
+                be lost and cannot be recovered.
               </p>
 
               {/* Current Progress Info */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-600">Questions Answered:</span>
+                  <span className="text-sm text-gray-600">
+                    Questions Answered:
+                  </span>
                   <span className="text-sm font-bold text-gray-900">
-                    {Object.keys(selectedAnswers).length} / {quizData?.questions.length}
+                    {Object.keys(selectedAnswers).length} /{" "}
+                    {quizData?.questions.length}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -1474,7 +1603,11 @@ const TakeTestPage: React.FC = () => {
                     <ClockIcon className="h-5 w-5" />
                     <span className="text-sm font-medium">Time Left</span>
                   </div>
-                  <span className={`text-sm font-bold ${timeRemaining < 300 ? 'text-red-600' : 'text-blue-600'}`}>
+                  <span
+                    className={`text-sm font-bold ${
+                      timeRemaining < 300 ? "text-red-600" : "text-blue-600"
+                    }`}
+                  >
                     {formatTime(timeRemaining)}
                   </span>
                 </div>
@@ -1495,7 +1628,8 @@ const TakeTestPage: React.FC = () => {
                     <span className="text-sm font-medium">Unattempted</span>
                   </div>
                   <span className="text-sm font-bold text-gray-900">
-                    {quizData.questions.length - Object.keys(selectedAnswers).length}
+                    {quizData.questions.length -
+                      Object.keys(selectedAnswers).length}
                   </span>
                 </div>
 
@@ -1505,7 +1639,11 @@ const TakeTestPage: React.FC = () => {
                     <span className="text-sm font-medium">Marked</span>
                   </div>
                   <span className="text-sm font-bold text-gray-900">
-                    {Object.values(markedQuestions).filter(val => val === true).length}
+                    {
+                      Object.values(markedQuestions).filter(
+                        (val) => val === true
+                      ).length
+                    }
                   </span>
                 </div>
               </div>
@@ -1564,7 +1702,13 @@ const TakeTestPage: React.FC = () => {
                     >
                       <p className="font-medium flex items-center justify-between">
                         <span>
-                          {index + 1}. {getQuestionText(q, language)}
+                          {" "}
+                          <span>{index + 1}.</span>
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: getQuestionText(q, language),
+                            }}
+                          ></span>
                         </span>
                         {isMarked && (
                           <span className="ml-2 text-yellow-600">(Marked)</span>
