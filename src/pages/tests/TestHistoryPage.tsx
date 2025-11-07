@@ -109,8 +109,8 @@ const TestHistoryPage: React.FC = () => {
     navigate(`/test-history/${sessionId}`);
   };
 
-  const handleViewSolutions = (sessionId: string) => {
-    navigate(`/test-history/${sessionId}/solutions`);
+  const handleViewSolutions = (testUuid: string, sessionId: string) => {
+    navigate(`/tests/solutions/${testUuid}?session=${sessionId}`);
   };
 
   const handleViewAllAttempts = (testId: number) => {
@@ -304,7 +304,7 @@ const TestHistoryPage: React.FC = () => {
                       <ChevronRightIcon className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => handleViewSolutions(item.latestSessionId)}
+                      onClick={() => handleViewSolutions(item.testUuid, item.latestSessionId)}
                       className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <span>Solutions</span>

@@ -176,7 +176,7 @@ const DashboardPage: React.FC = () => {
                         <div>
                           <p className="font-medium text-gray-900">{activity.title}</p>
                           <p className="text-sm text-gray-600">
-                            {new Date(activity.date).toLocaleDateString()}
+                            {new Date(activity.date).toLocaleDateString()} at {new Date(activity.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>
                       </div>

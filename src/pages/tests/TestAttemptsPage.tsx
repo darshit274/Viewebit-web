@@ -118,7 +118,11 @@ const TestAttemptsPage: React.FC = () => {
   };
 
   const handleViewSolutions = (sessionId: string) => {
-    navigate(`/test-history/${sessionId}/solutions`);
+    if (data?.testUuid) {
+      navigate(`/tests/solutions/${data.testUuid}?session=${sessionId}`);
+    } else {
+      navigate(`/test-history/${sessionId}/solutions`);
+    }
   };
 
   if (error) {

@@ -17,6 +17,7 @@ import { toast } from 'react-hot-toast';
 interface TestResultDetail {
   sessionId: string;
   testName: string;
+  testUuid?: string;
   categoryName: string;
   completedAt: string;
   totalQuestions: number;
@@ -261,7 +262,13 @@ const TestHistoryDetailPage: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={() => navigate(`/test-history/${sessionId}/solutions`)}
+              onClick={() => {
+                if (result.testUuid) {
+                  navigate(`/tests/solutions/${result.testUuid}?session=${sessionId}`);
+                } else {
+                  navigate(`/test-history/${sessionId}/solutions`);
+                }
+              }}
               className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
             >
               <DocumentTextIcon className="h-5 w-5" />
