@@ -341,7 +341,7 @@ const SolutionsPage: React.FC = () => {
         {/* Question Header */}
         <div className="flex items-start space-x-4 mb-6">
           <div className="flex-shrink-0">
-            {isCorrect ? (
+            {/* {isCorrect ? (
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                 <CheckCircleIcon className="h-6 w-6 text-green-600" />
               </div>
@@ -349,11 +349,11 @@ const SolutionsPage: React.FC = () => {
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
                 <XCircleIcon className="h-6 w-6 text-red-600" />
               </div>
-            )}
+            )} */}
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                   isCorrect
                     ? 'bg-green-100 text-green-800'
@@ -364,7 +364,7 @@ const SolutionsPage: React.FC = () => {
                 <span className="text-sm text-gray-500">
                   +{currentQuestion.marks} {currentQuestion.marks === 1 ? 'mark' : 'marks'}
                 </span>
-              </div>
+              </div> */}
               <ReportQuestionButton
                 questionId={currentQuestion.id}
                 questionNumber={currentQuestionIndex + 1}
