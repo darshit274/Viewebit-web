@@ -689,7 +689,7 @@ const TakeTestPage: React.FC = () => {
             </h2>
 
             {quizData.category.description && (
-              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-2">
+              <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 px-2 whitespace-pre-line">
                 {quizData.category.description}
               </p>
             )}

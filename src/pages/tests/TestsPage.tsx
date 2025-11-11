@@ -44,6 +44,7 @@ interface TestSeries {
   difficulty_level: 'beginner' | 'intermediate' | 'advanced';
   original_price?: number;
   discount_percentage?: number;
+  validity_days?: number;
 }
 
 // Component for individual test series card
@@ -133,8 +134,8 @@ const TestSeriesCard = ({
         </div>
         <div className="text-center p-3 bg-purple-50 rounded-lg">
           <ClockIcon className="h-5 w-5 text-purple-600 mx-auto mb-1" />
-          <p className="text-lg font-bold text-gray-900">12</p>
-          <p className="text-xs text-gray-500">Months</p>
+          <p className="text-lg font-bold text-gray-900">{series.validity_days}</p>
+          <p className="text-xs text-gray-500">Days</p>
         </div>
         <div className="text-center p-3 bg-emerald-50 rounded-lg">
           <CheckCircleIcon className="h-5 w-5 text-emerald-600 mx-auto mb-1" />

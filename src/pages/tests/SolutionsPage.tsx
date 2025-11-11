@@ -742,7 +742,7 @@ const SolutionsPage: React.FC = () => {
               </div>
 
               {/* Legend */}
-              <div className="mb-8">
+              {/* <div className="mb-8">
                 <h4 className="font-semibold text-gray-800 mb-4 text-sm">Legend:</h4>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
                   <div className="flex items-center space-x-3">
@@ -774,7 +774,7 @@ const SolutionsPage: React.FC = () => {
                     <span className="text-gray-700">Unanswered</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Progress Statistics */}
               <div className="bg-gray-50 rounded-xl p-6">
