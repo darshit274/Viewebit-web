@@ -414,8 +414,8 @@ const TakeTestPage: React.FC = () => {
   const handleSubmitQuiz = async () => {
     setIsSubmitting(true);
     try {
-      // Prepare answers for submission
-      const answers = Object.entries(selectedAnswers).map(
+      // Prepare answers for attempted questions
+      const attemptedAnswers = Object.entries(selectedAnswers).map(
         ([questionIndex, selectedOption]) => ({
           questionId: quizData?.questions[parseInt(questionIndex)]?.id,
           selectedOption: selectedOption,
@@ -423,8 +423,29 @@ const TakeTestPage: React.FC = () => {
             selectedOption ===
             quizData?.questions[parseInt(questionIndex)]?.correct_answer,
           timeSpent: 60, // Default time per question
+          markedForReview: markedQuestions[parseInt(questionIndex)] === true, // Add marked status
         })
       );
+
+      // Prepare entries for NOT attempted questions
+      const notAttemptedAnswers = quizData?.questions
+        .map((question, index) => {
+          // If question was not answered
+          if (!selectedAnswers[index]) {
+            return {
+              questionId: question.id,
+              selectedOption: null, // NULL means not attempted
+              isCorrect: false,
+              timeSpent: 0,
+              markedForReview: markedQuestions[index] === true,
+            };
+          }
+          return null;
+        })
+        .filter((answer) => answer !== null) || [];
+
+      // Combine all answers (attempted + not attempted)
+      const answers = [...attemptedAnswers, ...notAttemptedAnswers];
 
       // Submit to backend API
       console.log("Submitting quiz to backend...", {
@@ -980,6 +1001,7 @@ const TakeTestPage: React.FC = () => {
                   state: {
                     categoryName: quizData.category.name,
                     userAnswers: selectedAnswers,
+                    markedQuestions: markedQuestions, // Pass marked questions data
                     score,
                     percentage,
                     language: language,

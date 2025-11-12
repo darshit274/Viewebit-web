@@ -10,7 +10,9 @@ import {
   EyeSlashIcon,
   ArrowPathIcon,
   Squares2X2Icon,
-  XMarkIcon
+  XMarkIcon,
+  FlagIcon,
+  MinusCircleIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
@@ -55,25 +57,42 @@ const SolutionsPage: React.FC = () => {
   const { uuid } = useParams<{ uuid: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const [solutionsData, setSolutionsData] = useState<SolutionsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  
+
   // Expandable explanations state
   const [showExplanations, setShowExplanations] = useState<{[key: number]: boolean}>({});
   const [showAllExplanations, setShowAllExplanations] = useState(false);
-  
+
   // Retake/Practice mode state - ON by default
   const [practiceMode, setPracticeMode] = useState(true);
   const [reattemptAnswers, setReattemptAnswers] = useState<{[key: number]: string}>({});
   const [hasReattempted, setHasReattempted] = useState<{[key: number]: boolean}>({});
-  
+
   // Navigator modal state
   const [showNavigator, setShowNavigator] = useState(false);
 
-  // Get quiz result data from location state
-  const { categoryName, userAnswers, score, percentage, language = 'english' } = location.state || {};
+  // Get sessionId from URL query parameter (?session=xxx)
+  const searchParams = new URLSearchParams(location.search);
+  const sessionId = searchParams.get('session');
+
+  // Get quiz result data from location state (used for immediate solutions after submission)
+  const {
+    categoryName,
+    userAnswers: locationUserAnswers,
+    markedQuestions: locationMarkedQuestions = {},
+    score: locationScore,
+    percentage: locationPercentage,
+    language = 'english'
+  } = location.state || {};
+
+  // State to hold session-based data (when viewing from test history)
+  const [userAnswers, setUserAnswers] = useState<{[key: number]: string}>(locationUserAnswers || {});
+  const [markedQuestions, setMarkedQuestions] = useState<{[key: number]: boolean}>(locationMarkedQuestions || {});
+  const [score, setScore] = useState<number>(locationScore || 0);
+  const [percentage, setPercentage] = useState<number>(locationPercentage || 0);
 
   // Helper function to convert newlines to HTML br tags
   const formatTextWithLineBreaks = (text: string): string => {
@@ -83,11 +102,96 @@ const SolutionsPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (uuid) {
+    if (sessionId) {
+      // Viewing from test history - fetch session-based solutions
+      fetchSessionSolutions(sessionId);
+    } else if (uuid) {
+      // Immediate view after submission - fetch category-based solutions
       fetchSolutions();
     }
-  }, [uuid]);
+  }, [uuid, sessionId]);
 
+  // Fetch session-based solutions (from test history)
+  const fetchSessionSolutions = async (sessionId: string) => {
+    try {
+      console.log('📜 Fetching session-based solutions for sessionId:', sessionId);
+
+      const response = await api.get(`/test-history/${sessionId}/solutions`);
+
+      console.log('Session API Response:', response);
+
+      if (response.data.success) {
+        const data = response.data.data;
+
+        // Map the session solutions to our component format
+        const mappedSolutions = data.solutions.map((sol: any) => ({
+          id: sol.questionId,
+          uuid: sol.questionUuid || '',
+          question_text: sol.questionText,
+          question_text_gujarati: sol.questionTextGujarati,
+          options: sol.options,
+          correct_answer: sol.correctAnswer,
+          explanation: sol.explanation,
+          explanation_gujarati: sol.explanationGujarati,
+          marks: sol.marks
+        }));
+
+        setSolutionsData({
+          category: {
+            id: 0,
+            uuid: uuid || '',
+            name: data.categoryName || categoryName || 'Test',
+            name_gujarati: '',
+            description: '',
+            description_gujarati: ''
+          },
+          solutions: mappedSolutions,
+          metadata: {
+            total_questions: data.totalQuestions,
+            language: language
+          }
+        });
+
+        // Build userAnswers and markedQuestions from session data
+        const sessionUserAnswers: {[key: number]: string} = {};
+        const sessionMarkedQuestions: {[key: number]: boolean} = {};
+        let correctCount = 0;
+
+        data.solutions.forEach((sol: any, index: number) => {
+          if (sol.userAnswer) {
+            sessionUserAnswers[index] = sol.userAnswer;
+          }
+          if (sol.isMarked) {
+            sessionMarkedQuestions[index] = true;
+          }
+          if (sol.isCorrect) {
+            correctCount++;
+          }
+        });
+
+        setUserAnswers(sessionUserAnswers);
+        setMarkedQuestions(sessionMarkedQuestions);
+        setScore(correctCount);
+        setPercentage(Math.round((correctCount / data.totalQuestions) * 100));
+
+        console.log('✅ Session solutions loaded:', {
+          userAnswers: sessionUserAnswers,
+          markedQuestions: sessionMarkedQuestions,
+          score: correctCount
+        });
+      } else {
+        console.error('Session API returned success: false', response.data);
+        toast.error(response.data.message || 'Failed to load session solutions');
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch session solutions:', error);
+      toast.error('Failed to load solutions from test history');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch category-based solutions (immediate after submission)
   const fetchSolutions = async () => {
     try {
       console.log('Fetching solutions for UUID:', uuid);
@@ -99,10 +203,10 @@ const SolutionsPage: React.FC = () => {
           language: language || 'english'
         }
       });
-      
+
       console.log('API Response:', response);
       console.log('Response data:', response.data);
-      
+
       if (response.data.success) {
         setSolutionsData(response.data.data);
         console.log('Solutions data set:', response.data.data);
@@ -116,7 +220,7 @@ const SolutionsPage: React.FC = () => {
       console.error('Error message:', error.message);
       console.error('Error status:', error.response?.status);
       console.error('Error data:', error.response?.data);
-      
+
       const errorMessage = error.response?.data?.message || error.message || 'Failed to load solutions';
       toast.error(errorMessage);
     } finally {
@@ -153,8 +257,57 @@ const SolutionsPage: React.FC = () => {
 
   const currentQuestion = solutionsData.solutions[currentQuestionIndex];
   const userAnswer = userAnswers ? userAnswers[currentQuestionIndex] : null;
-  const isCorrect = userAnswer === currentQuestion.correct_answer;
-  
+  const isCorrect = userAnswer === currentQuestion?.correct_answer;
+
+  // Helper function to determine question status with badges
+  const getQuestionStatus = (questionIndex: number) => {
+    if (!solutionsData) return null;
+
+    const question = solutionsData.solutions[questionIndex];
+    const answer = userAnswers ? userAnswers[questionIndex] : null;
+    const isMarked = markedQuestions ? markedQuestions[questionIndex] === true : false;
+
+    // Not attempted
+    if (!answer) {
+      return {
+        type: 'not-attempted',
+        isCorrect: false,
+        isMarked: isMarked,
+        label: 'Not Attempted',
+        badgeClass: 'bg-gray-100 text-gray-700 border border-gray-300',
+        iconClass: 'text-gray-500',
+        iconBgClass: 'bg-gray-100'
+      };
+    }
+
+    // Correct
+    if (answer === question.correct_answer) {
+      return {
+        type: 'correct',
+        isCorrect: true,
+        isMarked: isMarked,
+        label: 'Correct',
+        badgeClass: 'bg-green-100 text-green-800 border border-green-300',
+        iconClass: 'text-green-600',
+        iconBgClass: 'bg-green-100'
+      };
+    }
+
+    // Incorrect
+    return {
+      type: 'incorrect',
+      isCorrect: false,
+      isMarked: isMarked,
+      label: 'Incorrect',
+      badgeClass: 'bg-red-100 text-red-800 border border-red-300',
+      iconClass: 'text-red-600',
+      iconBgClass: 'bg-red-100'
+    };
+  };
+
+  // Get current question status
+  const currentStatus = getQuestionStatus(currentQuestionIndex);
+
   // Helper functions
   const toggleExplanation = (questionIndex: number) => {
     setShowExplanations(prev => ({
@@ -338,44 +491,68 @@ const SolutionsPage: React.FC = () => {
 
       {/* Question Card */}
       <div className="bg-white rounded-xl border border-gray-100 p-8 mb-6">
-        {/* Question Header */}
+        {/* Question Header with Dynamic Status Badges */}
         <div className="flex items-start space-x-4 mb-6">
+          {/* Status Icon */}
           <div className="flex-shrink-0">
-            {/* {isCorrect ? (
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <CheckCircleIcon className="h-6 w-6 text-green-600" />
+            {currentStatus && currentStatus.type === 'correct' && (
+              <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
+                <CheckCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
               </div>
-            ) : (
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                <XCircleIcon className="h-6 w-6 text-red-600" />
+            )}
+            {currentStatus && currentStatus.type === 'incorrect' && (
+              <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
+                <XCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
               </div>
-            )} */}
+            )}
+            {currentStatus && currentStatus.type === 'not-attempted' && (
+              <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
+                <MinusCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
+              </div>
+            )}
           </div>
+
           <div className="flex-1">
+            {/* Status Badges Row */}
             <div className="flex items-center justify-between mb-2">
-              {/* <div className="flex items-center space-x-2">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  isCorrect
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {isCorrect ? 'Correct' : 'Incorrect'}
-                </span>
+              <div className="flex items-center space-x-2 flex-wrap gap-2">
+                {/* Main Status Badge */}
+                {currentStatus && (
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${currentStatus.badgeClass}`}>
+                    {currentStatus.label}
+                  </span>
+                )}
+
+                {/* Marked for Review Badge */}
+                {currentStatus && currentStatus.isMarked && (
+                  <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 border border-yellow-300">
+                    <span className="inline-flex items-center">
+                      <FlagIcon className="h-4 w-4 mr-1" />
+                      Marked for Review
+                    </span>
+                  </span>
+                )}
+
+                {/* Marks Display */}
                 <span className="text-sm text-gray-500">
-                  +{currentQuestion.marks} {currentQuestion.marks === 1 ? 'mark' : 'marks'}
+                  {currentStatus && currentStatus?.isCorrect ? '+' : ''}{currentQuestion?.marks} {currentQuestion?.marks === 1 ? 'mark' : 'marks'}
                 </span>
-              </div> */}
+              </div>
+
+              {/* Report Button */}
               <ReportQuestionButton
-                questionId={currentQuestion.id}
+                questionId={currentQuestion?.id}
                 questionNumber={currentQuestionIndex + 1}
                 userAnswer={userAnswer || undefined}
               />
             </div>
+
+            {/* Question Text */}
             <HTMLContent
               content={formatTextWithLineBreaks(
-                language === 'gujarati' && currentQuestion.question_text_gujarati
-                  ? currentQuestion.question_text_gujarati
-                  : currentQuestion.question_text
+                language === 'gujarati' && currentQuestion?.question_text_gujarati
+                  ? currentQuestion?.question_text_gujarati
+                  : currentQuestion?.question_text
               )}
               className="text-xl font-medium text-gray-900"
             />
@@ -385,9 +562,9 @@ const SolutionsPage: React.FC = () => {
         {/* Options */}
         <div className="space-y-3 mb-8">
           {['A', 'B', 'C', 'D'].map((option) => {
-            const optionText = currentQuestion.options[option as keyof typeof currentQuestion.options];
+            const optionText = currentQuestion?.options[option as keyof typeof currentQuestion.options];
             const isUserAnswer = userAnswer === option;
-            const isCorrectAnswer = currentQuestion.correct_answer === option;
+            const isCorrectAnswer = currentQuestion?.correct_answer === option;
             
             // Reattempt logic
             const reattemptAnswer = reattemptAnswers[currentQuestionIndex];
@@ -530,7 +707,7 @@ const SolutionsPage: React.FC = () => {
                     <>
                       <span>{userAnswer} - </span>
                       <HTMLContent
-                        content={formatTextWithLineBreaks(currentQuestion.options[userAnswer as keyof typeof currentQuestion.options])}
+                        content={formatTextWithLineBreaks(currentQuestion?.options[userAnswer as keyof typeof currentQuestion.options])}
                         className="inline"
                       />
                     </>
@@ -540,9 +717,9 @@ const SolutionsPage: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-1">Correct Answer</p>
                 <div className="text-lg font-semibold text-green-600">
-                  <span>{currentQuestion.correct_answer} - </span>
+                  <span>{currentQuestion?.correct_answer} - </span>
                   <HTMLContent
-                    content={formatTextWithLineBreaks(currentQuestion.options[currentQuestion.correct_answer as keyof typeof currentQuestion.options])}
+                    content={formatTextWithLineBreaks(currentQuestion?.options[currentQuestion?.correct_answer as keyof typeof currentQuestion.options])}
                     className="inline"
                   />
                 </div>
@@ -552,7 +729,7 @@ const SolutionsPage: React.FC = () => {
         )}
 
         {/* Explanation */}
-        {currentQuestion.explanation && (
+        {currentQuestion?.explanation && (
           <div className="bg-blue-50 rounded-lg border border-blue-200">
             {/* Explanation Header - Always Visible */}
             <button
@@ -590,9 +767,9 @@ const SolutionsPage: React.FC = () => {
               <div className="px-6 pb-6 border-t border-blue-200">
                 <div className="pt-4">
                   <HTMLContent
-                    content={language === 'gujarati' && currentQuestion.explanation_gujarati
-                      ? currentQuestion.explanation_gujarati
-                      : currentQuestion.explanation || ''}
+                    content={language === 'gujarati' && currentQuestion?.explanation_gujarati
+                      ? currentQuestion?.explanation_gujarati
+                      : currentQuestion?.explanation || ''}
                     className="text-blue-800 leading-relaxed"
                   />
                   
