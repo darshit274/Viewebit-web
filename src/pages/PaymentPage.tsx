@@ -82,18 +82,6 @@ const PaymentPage: React.FC = () => {
       description: 'Credit Card, Debit Card, Net Banking, UPI',
       icon: CreditCardIcon,
       recommended: true
-    },
-    {
-      id: 'upi',
-      name: 'UPI',
-      description: 'GooglePay, PhonePe, Paytm, BHIM',
-      icon: DevicePhoneMobileIcon
-    },
-    {
-      id: 'wallet',
-      name: 'Digital Wallet',
-      description: 'Paytm, Amazon Pay, Mobikwik',
-      icon: WalletIcon
     }
   ];
 
@@ -243,20 +231,6 @@ const PaymentPage: React.FC = () => {
     }
   };
 
-  const features = type === 'pdf' ? [
-    `Instant access to ${title}`,
-    'Download and offline viewing',
-    'High-quality PDF format',
-    'Lifetime access',
-    'Mobile and desktop compatible'
-  ] : [
-    `Full access to ${title}`,
-    'Detailed solutions and explanations',
-    'Performance analytics and insights',
-    'Multi-language support',
-    '1 year validity'
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -286,14 +260,6 @@ const PaymentPage: React.FC = () => {
                   <p className="text-sm text-gray-600 mb-4">{description}</p>
                 )}
                 
-                <div className="space-y-3 mb-6">
-                  {features.map((feature, index) => (
-                    <div key={index} className="flex items-start">
-                      <CheckCircleIcon className="h-4 w-4 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-gray-600">{feature}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
 
               <div className="border-t pt-4">
@@ -301,16 +267,7 @@ const PaymentPage: React.FC = () => {
                   <span className="text-base font-medium text-gray-900">Total Amount</span>
                   <span className="text-2xl font-bold text-blue-600">₹{price}</span>
                 </div>
-                
-                <div className="flex items-center text-sm text-green-600 mb-4">
-                  <CheckCircleIcon className="h-4 w-4 mr-1" />
-                  <span>
-                    {type === 'pdf'
-                      ? 'One-time payment, lifetime access'
-                      : 'One-time payment, 1 year access'
-                    }
-                  </span>
-                </div>
+           
               </div>
             </div>
           </div>
