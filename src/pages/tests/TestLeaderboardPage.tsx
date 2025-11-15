@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
+import { en } from 'zod/v4/locales';
 
 interface LeaderboardEntry {
   id: number;
@@ -96,7 +97,7 @@ const TestLeaderboardPage: React.FC = () => {
           time_taken_seconds: entry.timeTaken || 120,
           percentile: Math.max(10, 100 - (index * 10)),
           completion_date: entry.completionDate || new Date().toISOString(),
-          is_current_user: false,
+          is_current_user: entry.userId === JSON.parse(localStorage.getItem("mocktail_user")||"{}").uuid,
           user: {
             uuid: entry.userId?.toString() || `user-${index + 1}`,
             username: entry.name || `User ${index + 1}`,

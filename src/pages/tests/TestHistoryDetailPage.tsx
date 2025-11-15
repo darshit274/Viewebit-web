@@ -70,11 +70,10 @@ const TestHistoryDetailPage: React.FC = () => {
       }
       if (leaderboardResponse.data.success) {
         const data = leaderboardResponse?.data?.data;
-
+        const userUuid = leaderboardResponse?.data?.metadata?.currentUserData?.uuid||JSON.parse(localStorage.getItem("mocktail_user")||"{}").uuid;
         const myRank = data.find(
           (item) =>
-            item.userId ===
-            leaderboardResponse?.data?.metadata?.currentUserData?.uuid
+            item.userId ===userUuid
         );
 
         setMyRankData({
@@ -368,8 +367,7 @@ const TestHistoryDetailPage: React.FC = () => {
             <button
               onClick={() =>
                 navigate(
-                  `/tests/leaderboard/${
-                    categoryUuid ? categoryUuid : result?.sessionId
+                  `/tests/leaderboard/${categoryUuid ? categoryUuid : result?.sessionId
                   }`
                 )
               }
