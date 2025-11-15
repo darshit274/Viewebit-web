@@ -189,12 +189,12 @@ const LeaderboardPage: React.FC = () => {
                             {entry.percentage.toFixed(1)}% accuracy
                           </div>
                         )}
-                        {entry.correctAnswers && entry.totalQuestions && (
+                        {/* {entry.correctAnswers && entry.totalQuestions && (
                           <div className="text-xs text-green-600 flex items-center">
                             <CheckCircleIcon className="w-3 h-3 mr-1" />
                             {entry.correctAnswers}/{entry.totalQuestions} correct
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
