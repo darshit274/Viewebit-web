@@ -114,7 +114,7 @@ const TestAttemptsPage: React.FC = () => {
   };
 
   const handleViewDetails = (sessionId: string) => {
-    navigate(`/test-history/${sessionId}`);
+    navigate(`/test-history/${sessionId}`,{state:{categoryUuid:testId}});
   };
 
   const handleViewSolutions = (sessionId: string) => {

@@ -105,8 +105,8 @@ const TestHistoryPage: React.FC = () => {
     return '💪';
   };
 
-  const handleViewDetails = (sessionId: string) => {
-    navigate(`/test-history/${sessionId}`);
+  const handleViewDetails = (sessionId: string,testUuid: string) => {
+    navigate(`/test-history/${sessionId}`,{state: {categoryUuid: testUuid}});
   };
 
   const handleViewSolutions = (testUuid: string, sessionId: string) => {
@@ -294,7 +294,7 @@ const TestHistoryPage: React.FC = () => {
                       </button>
                     )}
                     <button
-                      onClick={() => handleViewDetails(item.latestSessionId)}
+                      onClick={() => handleViewDetails(item.latestSessionId,item.testUuid)}
                       className={cn(
                         "flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors",
                         item.totalAttempts > 1 ? "flex-1" : "flex-[2]"

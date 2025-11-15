@@ -447,16 +447,7 @@ const TakeTestPage: React.FC = () => {
       // Combine all answers (attempted + not attempted)
       const answers = [...attemptedAnswers, ...notAttemptedAnswers];
 
-      // Submit to backend API
-      console.log("Submitting quiz to backend...", {
-        testId: uuid,
-        answers: answers,
-        totalTimeSpent: Math.max(
-          0,
-          (quizData?.questions.length || 0) * 90 - timeRemaining
-        ),
-      });
-
+  
       // Use the simple quiz submission API
       const submitResponse = await api.post(`/quiz/submit`, {
         userId: localStorage.getItem("mocktail_user")
@@ -467,7 +458,7 @@ const TakeTestPage: React.FC = () => {
         totalQuestions: quizData?.questions.length || 0, // IMPORTANT: Send actual total for correct calculation
         totalTimeSpent: Math.max(
           0,
-          (quizData?.questions.length || 0) * 90 - timeRemaining
+          (((quizData?.category?.test_duration_minutes || 60) *60)- timeRemaining)
         ),
       });
 
