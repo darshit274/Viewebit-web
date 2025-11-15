@@ -371,7 +371,7 @@ const TestLeaderboardPage: React.FC = () => {
                       </p>
                       <p className="text-sm text-gray-500">
                         {/* {entry.correct_answers}/{entry.total_questions} correct • {entry.percentage}% • {entry.percentile}th percentile */}
-                        {entry.correct_answers}/{entry.total_questions} correct
+                        {entry.score}
                       </p>
                     </div>
                   </div>
@@ -380,10 +380,10 @@ const TestLeaderboardPage: React.FC = () => {
                 {/* Stats */}
                 <div className="text-right">
                   <div className="flex items-center justify-end space-x-4 text-sm text-gray-500">
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       <ClockIcon className="h-4 w-4 mr-1" />
                       <span>{formatTime(entry.time_taken_seconds)}</span>
-                    </div>
+                    </div> */}
                     <div className="flex items-center">
                       <StarIcon className={`h-4 w-4 mr-1 ${
                         entry.percentage >= 70 ? 'text-green-500' :
