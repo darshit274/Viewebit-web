@@ -447,7 +447,10 @@ const TakeTestPage: React.FC = () => {
       // Combine all answers (attempted + not attempted)
       const answers = [...attemptedAnswers, ...notAttemptedAnswers];
 
-  
+      const totalTimeSpent = Math.max(
+        0,
+        (((quizData?.category?.test_duration_minutes || 60) * 60) - timeRemaining)
+      )
       // Use the simple quiz submission API
       const submitResponse = await api.post(`/quiz/submit`, {
         userId: localStorage.getItem("mocktail_user")
@@ -456,10 +459,7 @@ const TakeTestPage: React.FC = () => {
         testSeriesId: uuid, // Treat uuid as test series ID (to match leaderboard expectation)
         answers: answers,
         totalQuestions: quizData?.questions.length || 0, // IMPORTANT: Send actual total for correct calculation
-        totalTimeSpent: Math.max(
-          0,
-          (((quizData?.category?.test_duration_minutes || 60) *60)- timeRemaining)
-        ),
+        totalTimeSpent: totalTimeSpent,
       });
 
       console.log("Quiz submission response:", submitResponse.data);
@@ -473,7 +473,35 @@ const TakeTestPage: React.FC = () => {
           finalScore: data.finalScore || data.score,
           negativeMarkingEnabled: data.negativeMarkingEnabled || false,
           negativeMarks: data.negativeMarksDeducted || 0,
+          totalTimeSpent:totalTimeSpent,
+
         });
+
+        try {
+          const leaderboardResponse = await api.get(`/leaderboard/test-series/${uuid}`);
+
+          if (leaderboardResponse.data.success) {
+            const dataLeaderboard = leaderboardResponse?.data?.data;
+            const userUuid = leaderboardResponse?.data?.metadata?.currentUserData?.uuid || JSON.parse(localStorage.getItem("mocktail_user") || "{}").uuid;
+            const myRank = dataLeaderboard.find(
+              (item) =>
+                item.userId === userUuid
+            );
+
+            setBackendResults({
+              score: data.correctAnswers,
+              percentage: data.percentage,
+              finalScore: data.finalScore || data.score,
+              negativeMarkingEnabled: data.negativeMarkingEnabled || false,
+              negativeMarks: data.negativeMarksDeducted || 0,
+              totalTimeSpent:totalTimeSpent,
+              myRank: myRank?.rank,
+              totalParticipants: leaderboardResponse?.data?.metadata?.total,
+            });
+          }
+        } catch (error) {
+
+        }
 
         console.log("✅ Using backend-calculated results:", {
           percentage: data.percentage,
@@ -733,21 +761,19 @@ const TakeTestPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md mx-auto">
                 <button
                   onClick={() => setLanguage("gujarati")}
-                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
-                    language === "gujarati"
-                      ? "bg-blue-600 text-white shadow-md"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${language === "gujarati"
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
                 >
                   ગુજરાતી (Gujarati)
                 </button>
                 <button
                   onClick={() => setLanguage("english")}
-                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
-                    language === "english"
-                      ? "bg-blue-600 text-white shadow-md"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${language === "english"
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
                 >
                   English
                 </button>
@@ -848,8 +874,8 @@ const TakeTestPage: React.FC = () => {
                   percentage >= 70
                     ? "text-green-600"
                     : percentage >= 50
-                    ? "text-yellow-600"
-                    : "text-red-600"
+                      ? "text-yellow-600"
+                      : "text-red-600"
                 }
               >
                 {percentage}%
@@ -859,12 +885,33 @@ const TakeTestPage: React.FC = () => {
               {percentage >= 70
                 ? "Excellent work!"
                 : percentage >= 50
-                ? "Good effort!"
-                : "Keep practicing!"}
+                  ? "Good effort!"
+                  : "Keep practicing!"}
             </p>
           </div>
 
           {/* Summary Statistics */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 mb-4">
+            {/* Rank */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+              <div className="text-xl sm:text-2xl font-bold text-blue-700">
+                {backendResults?.myRank ?? 1}/{backendResults?.totalParticipants ?? 1}
+              </div>
+              <div className="text-xs sm:text-sm text-blue-600 font-medium">
+                Rank
+              </div>
+            </div>
+
+            {/* Time Taken */}
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
+              <div className="text-xl sm:text-2xl font-bold text-purple-700">
+                {formatTime(backendResults?.totalTimeSpent)}
+              </div>
+              <div className="text-xs sm:text-sm text-purple-600 font-medium">
+                Time Taken
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 mb-4">
             {/* Total Questions */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
@@ -1176,9 +1223,8 @@ const TakeTestPage: React.FC = () => {
             <div
               className="bg-blue-600 h-1.5 sm:h-2 rounded-full transition-all duration-300"
               style={{
-                width: `${
-                  ((currentQuestionIndex + 1) / quizData.questions.length) * 100
-                }%`,
+                width: `${((currentQuestionIndex + 1) / quizData.questions.length) * 100
+                  }%`,
               }}
             />
           </div>
@@ -1195,11 +1241,10 @@ const TakeTestPage: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={handleMarkForReview}
-              className={`flex-1 sm:flex-none px-3 sm:px-6 py-2 rounded-lg border font-medium transition-colors text-xs sm:text-base ${
-                markedQuestions[currentQuestionIndex]
-                  ? "bg-yellow-100 border-yellow-400 text-yellow-700 hover:bg-yellow-200"
-                  : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-50"
-              }`}
+              className={`flex-1 sm:flex-none px-3 sm:px-6 py-2 rounded-lg border font-medium transition-colors text-xs sm:text-base ${markedQuestions[currentQuestionIndex]
+                ? "bg-yellow-100 border-yellow-400 text-yellow-700 hover:bg-yellow-200"
+                : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-50"
+                }`}
             >
               <span className="hidden sm:inline">
                 {markedQuestions[currentQuestionIndex]
@@ -1237,19 +1282,18 @@ const TakeTestPage: React.FC = () => {
               </div>
               {/* Language indicator - hidden on mobile */}
               <span
-                className={`hidden sm:inline-flex flex-shrink-0 px-3 py-1 text-xs font-medium rounded-full ${
-                  getLanguageIndicator(currentQuestion) === "both"
-                    ? "bg-purple-100 text-purple-800"
-                    : getLanguageIndicator(currentQuestion) === "gujarati"
+                className={`hidden sm:inline-flex flex-shrink-0 px-3 py-1 text-xs font-medium rounded-full ${getLanguageIndicator(currentQuestion) === "both"
+                  ? "bg-purple-100 text-purple-800"
+                  : getLanguageIndicator(currentQuestion) === "gujarati"
                     ? "bg-orange-100 text-orange-800"
                     : "bg-blue-100 text-blue-800"
-                }`}
+                  }`}
               >
                 {getLanguageIndicator(currentQuestion) === "both"
                   ? "Both"
                   : getLanguageIndicator(currentQuestion) === "gujarati"
-                  ? "Gujarati"
-                  : "English"}
+                    ? "Gujarati"
+                    : "English"}
               </span>
             </div>
           </div>
@@ -1268,19 +1312,17 @@ const TakeTestPage: React.FC = () => {
                 <button
                   key={option}
                   onClick={() => handleAnswerSelect(option)}
-                  className={`w-full text-left p-2.5 sm:p-3 lg:p-4 rounded-lg border transition-all ${
-                    isSelected
-                      ? "border-gray-800 bg-gray-100 text-gray-900"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                  }`}
+                  className={`w-full text-left p-2.5 sm:p-3 lg:p-4 rounded-lg border transition-all ${isSelected
+                    ? "border-gray-800 bg-gray-100 text-gray-900"
+                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                    }`}
                 >
                   <div className="flex items-start gap-2 sm:gap-3">
                     <span
-                      className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-full border-2 flex items-center justify-center text-xs font-medium flex-shrink-0 ${
-                        isSelected
-                          ? "border-gray-800 bg-gray-800 text-white"
-                          : "border-gray-300 text-gray-600"
-                      }`}
+                      className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 rounded-full border-2 flex items-center justify-center text-xs font-medium flex-shrink-0 ${isSelected
+                        ? "border-gray-800 bg-gray-800 text-white"
+                        : "border-gray-300 text-gray-600"
+                        }`}
                     >
                       {option}
                     </span>
@@ -1471,9 +1513,8 @@ const TakeTestPage: React.FC = () => {
                     </div>
                     <div className="text-center">
                       <div
-                        className={`text-xl sm:text-2xl font-bold ${
-                          timeRemaining < 300 ? "text-red-600" : "text-blue-600"
-                        }`}
+                        className={`text-xl sm:text-2xl font-bold ${timeRemaining < 300 ? "text-red-600" : "text-blue-600"
+                          }`}
                       >
                         {formatTime(timeRemaining)}
                       </div>
@@ -1491,7 +1532,7 @@ const TakeTestPage: React.FC = () => {
                         {Math.round(
                           (Object.keys(selectedAnswers).length /
                             quizData.questions.length) *
-                            100
+                          100
                         )}
                         %
                       </span>
@@ -1500,11 +1541,10 @@ const TakeTestPage: React.FC = () => {
                       <div
                         className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 sm:h-3 rounded-full transition-all duration-500"
                         style={{
-                          width: `${
-                            (Object.keys(selectedAnswers).length /
-                              quizData.questions.length) *
+                          width: `${(Object.keys(selectedAnswers).length /
+                            quizData.questions.length) *
                             100
-                          }%`,
+                            }%`,
                         }}
                       ></div>
                     </div>
@@ -1534,9 +1574,8 @@ const TakeTestPage: React.FC = () => {
                       )}
                       {isSubmitting
                         ? "Submitting..."
-                        : `Submit Quiz (${
-                            Object.keys(selectedAnswers).length
-                          }/${quizData.questions.length})`}
+                        : `Submit Quiz (${Object.keys(selectedAnswers).length
+                        }/${quizData.questions.length})`}
                     </button>
                   </div>
                 </div>
@@ -1617,9 +1656,8 @@ const TakeTestPage: React.FC = () => {
                     <span className="text-sm font-medium">Time Left</span>
                   </div>
                   <span
-                    className={`text-sm font-bold ${
-                      timeRemaining < 300 ? "text-red-600" : "text-blue-600"
-                    }`}
+                    className={`text-sm font-bold ${timeRemaining < 300 ? "text-red-600" : "text-blue-600"
+                      }`}
                   >
                     {formatTime(timeRemaining)}
                   </span>
@@ -1737,9 +1775,8 @@ const TakeTestPage: React.FC = () => {
                           }
                         >
                           {userAnswer
-                            ? `${userAnswer} - ${
-                                q.options[userAnswer as keyof typeof q.options]
-                              }`
+                            ? `${userAnswer} - ${q.options[userAnswer as keyof typeof q.options]
+                            }`
                             : "Not Answered"}
                         </span>
                       </p>
