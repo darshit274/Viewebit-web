@@ -98,7 +98,7 @@ const SolutionsPage: React.FC = () => {
   const formatTextWithLineBreaks = (text: string): string => {
     if (!text) return '';
     // Replace \n with <br> tags to preserve line breaks
-    return text.replace(/\n/g, '<br>');
+    return text?.replace(/\n/g, '<br>');
   };
 
   useEffect(() => {
