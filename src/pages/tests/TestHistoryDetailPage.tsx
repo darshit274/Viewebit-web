@@ -44,8 +44,9 @@ const TestHistoryDetailPage: React.FC = () => {
   const [myRankData, setMyRankData] = useState({
     myRank: 0,
     totalParticipants: 0,
+    percentile: 0,
   });
-  const { categoryUuid } = useLocation().state;
+  const { categoryUuid } = useLocation()?.state;
   useEffect(() => {
     if (sessionId) {
       fetchResultDetail();
@@ -79,6 +80,7 @@ const TestHistoryDetailPage: React.FC = () => {
         setMyRankData({
           myRank: myRank?.rank,
           totalParticipants: leaderboardResponse?.data?.metadata?.total,
+          percentile: myRank?.percentile
         });
       }
     } catch (error: any) {
@@ -226,9 +228,7 @@ const TestHistoryDetailPage: React.FC = () => {
             {/* percentile  */}
             <div className="bg-lime-50 border border-lime-200 rounded-lg p-3 text-center">
               <div className="text-xl sm:text-2xl font-bold text-lime-700">
-                {myRankData.myRank && myRankData.totalParticipants
-                  ? (
-                    (((myRankData.totalParticipants - myRankData.myRank + 1) / myRankData.totalParticipants) * 100)) || 0 : 0}
+                {myRankData.percentile}
               </div>
               <div className="text-xs sm:text-sm text-lime-600 font-medium">
                 My Percentile

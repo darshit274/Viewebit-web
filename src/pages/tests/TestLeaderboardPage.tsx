@@ -79,44 +79,45 @@ const TestLeaderboardPage: React.FC = () => {
 
         if (response.data.data.length > 0) {
           console.log('API returned participant data:', response.data);
+          const totalParticipants = response.data.data.length;
 
-        // Transform the real API data to match our interface
-        const realLeaderboard = response.data.data.map((entry: any, index: number) => ({
-          id: index + 1,
-          user_id: entry.userId?.toString() || `user-${index + 1}`,
-          username: entry.name || `User ${index + 1}`,
-          fullName: entry.name || `User ${index + 1}`,
-          avatarUrl: entry.avatar,
-          rank: entry.rank || (index + 1),
-          score: entry.totalScore || 0,
-          total_questions: entry.totalQuestions || 10,
-          correct_answers: entry.correctAnswers || 0,
-          wrong_answers: (entry.totalQuestions || 10) - (entry.correctAnswers || 0),
-          unanswered: 0,
-          percentage: entry.percentage || ((entry.correctAnswers || 0) / (entry.totalQuestions || 10)) * 100,
-          time_taken_seconds: entry.timeTaken || 120,
-          percentile: Math.max(10, 100 - (index * 10)),
-          completion_date: entry.completionDate || new Date().toISOString(),
-          is_current_user: entry.userId === JSON.parse(localStorage.getItem("mocktail_user")||"{}").uuid,
-          user: {
-            uuid: entry.userId?.toString() || `user-${index + 1}`,
+          // Transform the real API data to match our interface
+          const realLeaderboard = response.data.data.map((entry: any, index: number) => ({
+            id: index + 1,
+            user_id: entry.userId?.toString() || `user-${index + 1}`,
             username: entry.name || `User ${index + 1}`,
             fullName: entry.name || `User ${index + 1}`,
-            avatarUrl: entry.avatar
-          }
-        }));
+            avatarUrl: entry.avatar,
+            rank: entry.rank || (index + 1),
+            score: entry.totalScore || 0,
+            total_questions: entry.totalQuestions || 10,
+            correct_answers: entry.correctAnswers || 0,
+            wrong_answers: (entry.totalQuestions || 10) - (entry.correctAnswers || 0),
+            unanswered: 0,
+            percentage: entry.percentage || ((entry.correctAnswers || 0) / (entry.totalQuestions || 10)) * 100,
+            time_taken_seconds: entry.timeTaken || 120,
+            percentile: entry.percentile,
+            completion_date: entry.completionDate || new Date().toISOString(),
+            is_current_user: entry.userId === JSON.parse(localStorage.getItem("mocktail_user") || "{}").uuid,
+            user: {
+              uuid: entry.userId?.toString() || `user-${index + 1}`,
+              username: entry.name || `User ${index + 1}`,
+              fullName: entry.name || `User ${index + 1}`,
+              avatarUrl: entry.avatar
+            }
+          }));
 
-        const leaderboardData: LeaderboardData = {
-          category: {
-            id: 1,
-            uuid: uuid!,
-            name: categoryName || 'Quiz Category'
-          },
-          leaderboard: realLeaderboard,
-          user_rank: null,
-          total_participants: realLeaderboard.length,
-          dataSource: 'real'
-        };
+          const leaderboardData: LeaderboardData = {
+            category: {
+              id: 1,
+              uuid: uuid!,
+              name: categoryName || 'Quiz Category'
+            },
+            leaderboard: realLeaderboard,
+            user_rank: null,
+            total_participants: realLeaderboard.length,
+            dataSource: 'real'
+          };
 
           setLeaderboardData(leaderboardData);
           console.log('Using real leaderboard data successfully');
@@ -265,7 +266,7 @@ const TestLeaderboardPage: React.FC = () => {
         <div className="flex-1 text-center">
           <div className="flex items-center justify-center mb-2">
             <TrophyIcon className="h-8 w-8 text-purple-600 mr-2" />
-            <h1 className="text-2xl font-bold text-gray-900">Leaderboard</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Score Card</h1>
           </div>
           <p className="text-gray-600">{leaderboardData.category.name}</p>
           <div className="flex items-center justify-center space-x-3 mt-1">
@@ -297,8 +298,8 @@ const TestLeaderboardPage: React.FC = () => {
                 <p className="text-sm opacity-90">Rank {userEntry.rank}</p>
               </div>
               <div>
-                <p className="text-3xl font-bold">{userEntry.percentage}%</p>
-                <p className="text-sm opacity-90">Score</p>
+                <p className="text-3xl font-bold">{userEntry.percentile}</p>
+                <p className="text-sm opacity-90">Percentile</p>
               </div>
               <div>
                 <p className="text-3xl font-bold">{formatTime(userEntry.time_taken_seconds)}</p>
@@ -332,73 +333,68 @@ const TestLeaderboardPage: React.FC = () => {
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
-              {leaderboardData.leaderboard.map((entry, index) => (
+            {leaderboardData.leaderboard.map((entry, index) => (
               <div
-              key={entry.user_id}
-              className={`p-6 transition-colors ${
-                entry.is_current_user 
-                  ? 'bg-blue-50 border-l-4 border-blue-500' 
+                key={entry.user_id}
+                className={`p-6 transition-colors ${entry.is_current_user
+                  ? 'bg-blue-50 border-l-4 border-blue-500'
                   : 'hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  {/* Rank */}
-                  <div className="flex-shrink-0 w-12 text-center">
-                    <span className={`text-2xl font-bold ${getRankColor(entry.rank)}`}>
-                      {getRankIcon(entry.rank)}
-                    </span>
-                  </div>
-                  
-                  {/* User Info */}
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      entry.is_current_user ? 'bg-blue-100' : 'bg-gray-100'
-                    }`}>
-                      <UserIcon className={`h-5 w-5 ${
-                        entry.is_current_user ? 'text-blue-600' : 'text-gray-600'
-                      }`} />
+                  }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    {/* Rank */}
+                    <div className="flex-shrink-0 w-12 text-center">
+                      <span className={`text-2xl font-bold ${getRankColor(entry.rank)}`}>
+                        {getRankIcon(entry.rank)}
+                      </span>
                     </div>
-                    <div>
-                      <p className={`font-medium ${
-                        entry.is_current_user ? 'text-blue-900' : 'text-gray-900'
-                      }`}>
-                        {entry.username}
-                        {entry.is_current_user && (
-                          <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                            You
-                          </span>
-                        )}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {/* {entry.correct_answers}/{entry.total_questions} correct • {entry.percentage}% • {entry.percentile}th percentile */}
-                        {entry.score}
-                      </p>
+
+                    {/* User Info */}
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${entry.is_current_user ? 'bg-blue-100' : 'bg-gray-100'
+                        }`}>
+                        <UserIcon className={`h-5 w-5 ${entry.is_current_user ? 'text-blue-600' : 'text-gray-600'
+                          }`} />
+                      </div>
+                      <div>
+                        <p className={`font-medium ${entry.is_current_user ? 'text-blue-900' : 'text-gray-900'
+                          }`}>
+                          {entry.username}
+                          {entry.is_current_user && (
+                            <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                              You
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {/* {entry.correct_answers}/{entry.total_questions} correct • {entry.percentage}% • {entry.percentile}th percentile */}
+                          {entry.score}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Stats */}
-                <div className="text-right">
-                  <div className="flex items-center justify-end space-x-4 text-sm text-gray-500">
-                    {/* <div className="flex items-center">
+
+                  {/* Stats */}
+                  <div className="text-right">
+                    <div className="flex items-center justify-end space-x-4 text-sm text-gray-500">
+                      {/* <div className="flex items-center">
                       <ClockIcon className="h-4 w-4 mr-1" />
                       <span>{formatTime(entry.time_taken_seconds)}</span>
                     </div> */}
-                    <div className="flex items-center">
-                      <StarIcon className={`h-4 w-4 mr-1 ${
-                        entry.percentage >= 70 ? 'text-green-500' :
-                        entry.percentage >= 50 ? 'text-yellow-500' : 'text-red-500'
-                      }`} />
-                      <span>{entry.percentage}%</span>
+                      <div className="flex items-center">
+                        <StarIcon className={`h-4 w-4 mr-1 ${entry.percentage >= 70 ? 'text-green-500' :
+                          entry.percentage >= 50 ? 'text-yellow-500' : 'text-red-500'
+                          }`} />
+                        <span>{entry.percentile}</span>
+                      </div>
                     </div>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {new Date(entry.completion_date).toLocaleDateString()}
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {new Date(entry.completion_date).toLocaleDateString()}
-                  </p>
                 </div>
               </div>
-            </div>
             ))}
           </div>
         )}
