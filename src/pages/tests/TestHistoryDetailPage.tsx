@@ -70,10 +70,10 @@ const TestHistoryDetailPage: React.FC = () => {
       }
       if (leaderboardResponse.data.success) {
         const data = leaderboardResponse?.data?.data;
-        const userUuid = leaderboardResponse?.data?.metadata?.currentUserData?.uuid||JSON.parse(localStorage.getItem("mocktail_user")||"{}").uuid;
+        const userUuid = leaderboardResponse?.data?.metadata?.currentUserData?.uuid || JSON.parse(localStorage.getItem("mocktail_user") || "{}").uuid;
         const myRank = data.find(
           (item) =>
-            item.userId ===userUuid
+            item.userId === userUuid
         );
 
         setMyRankData({
@@ -213,7 +213,7 @@ const TestHistoryDetailPage: React.FC = () => {
           </div>
 
           {/* Summary Statistics */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-3 sm:grid-cols-3 gap-3 mb-6">
             {/* My Rank */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
               <div className="text-xl sm:text-2xl font-bold text-yellow-700">
@@ -221,6 +221,17 @@ const TestHistoryDetailPage: React.FC = () => {
               </div>
               <div className="text-xs sm:text-sm text-yellow-600 font-medium">
                 My Rank
+              </div>
+            </div>
+            {/* percentile  */}
+            <div className="bg-lime-50 border border-lime-200 rounded-lg p-3 text-center">
+              <div className="text-xl sm:text-2xl font-bold text-lime-700">
+                {myRankData.myRank && myRankData.totalParticipants
+                  ? (
+                    (((myRankData.totalParticipants - myRankData.myRank + 1) / myRankData.totalParticipants) * 100)) || 0 : 0}
+              </div>
+              <div className="text-xs sm:text-sm text-lime-600 font-medium">
+                My Percentile
               </div>
             </div>
 

@@ -473,7 +473,7 @@ const TakeTestPage: React.FC = () => {
           finalScore: data.finalScore || data.score,
           negativeMarkingEnabled: data.negativeMarkingEnabled || false,
           negativeMarks: data.negativeMarksDeducted || 0,
-          totalTimeSpent:totalTimeSpent,
+          totalTimeSpent: totalTimeSpent,
 
         });
 
@@ -494,7 +494,7 @@ const TakeTestPage: React.FC = () => {
               finalScore: data.finalScore || data.score,
               negativeMarkingEnabled: data.negativeMarkingEnabled || false,
               negativeMarks: data.negativeMarksDeducted || 0,
-              totalTimeSpent:totalTimeSpent,
+              totalTimeSpent: totalTimeSpent,
               myRank: myRank?.rank,
               totalParticipants: leaderboardResponse?.data?.metadata?.total,
             });
@@ -891,23 +891,34 @@ const TakeTestPage: React.FC = () => {
           </div>
 
           {/* Summary Statistics */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 mb-4">
+          <div className="grid grid-cols-3 sm:grid-cols-3 gap-3 mb-4">
             {/* Rank */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-blue-700">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
+              <div className="text-xl sm:text-2xl font-bold text-yellow-700">
                 {backendResults?.myRank ?? 1}/{backendResults?.totalParticipants ?? 1}
               </div>
-              <div className="text-xs sm:text-sm text-blue-600 font-medium">
+              <div className="text-xs sm:text-sm text-yellow-600 font-medium">
                 Rank
+              </div>
+            </div>
+            {/* percentile */}
+            <div className="bg-lime-50 border border-lime-200 rounded-lg p-3 text-center">
+              <div className="text-xl sm:text-2xl font-bold text-lime-700">
+                {backendResults?.myRank && backendResults?.totalParticipants
+                  ? (
+                    (((backendResults?.totalParticipants - backendResults?.myRank + 1) / backendResults?.totalParticipants) * 100)) || 0 : 0}
+              </div>
+              <div className="text-xs sm:text-sm text-lime-600 font-medium">
+                My Percentile
               </div>
             </div>
 
             {/* Time Taken */}
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
-              <div className="text-xl sm:text-2xl font-bold text-purple-700">
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-center">
+              <div className="text-xl sm:text-2xl font-bold text-orange-700">
                 {formatTime(backendResults?.totalTimeSpent)}
               </div>
-              <div className="text-xs sm:text-sm text-purple-600 font-medium">
+              <div className="text-xs sm:text-sm text-orange-600 font-medium">
                 Time Taken
               </div>
             </div>
