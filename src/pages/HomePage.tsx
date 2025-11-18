@@ -415,19 +415,6 @@ const HomePage: React.FC = () => {
               <p className="text-blue-600 font-semibold">mocktaleacademy@gmail.com</p>
             </a>
 
-            {/* WhatsApp */}
-            <a
-              href="https://wa.me/1234567890"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="card-hover p-8 text-center group bg-gradient-to-br from-green-50 to-green-100"
-            >
-              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <ChatBubbleLeftRightIcon className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">WhatsApp</h3>
-              <p className="text-green-600 font-semibold">Chat with us</p>
-            </a>
           </div>
         </div>
       </section>
@@ -466,7 +453,7 @@ const HomePage: React.FC = () => {
             {/* Logo & Description */}
             <div className="md:col-span-2">
               <div className="flex items-center mb-4">
-                <img src={MockTaleLogoPng} alt="MockTale Academy" className="h-16 rounded-xl" />
+                <img src={MockTaleLogoPng} alt="MockTale Academy" className="h-16 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500" />
                 <div className="ml-3">
                   <div className="text-lg font-bold text-white">MockTale Academy</div>
                   <div className="text-sm text-gray-400">Practice Relentlessly. Perform Flawlessly.</div>
@@ -495,10 +482,6 @@ const HomePage: React.FC = () => {
                 <li className="flex items-center">
                   <EnvelopeIcon className="w-4 h-4 mr-2" />
                   mocktaleacademy@gmail.com
-                </li>
-                <li className="flex items-center">
-                  <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
-                  WhatsApp Support
                 </li>
               </ul>
             </div>
