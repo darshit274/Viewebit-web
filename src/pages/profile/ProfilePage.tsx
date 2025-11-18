@@ -100,20 +100,13 @@ const ProfilePage: React.FC = () => {
     },
     {
       id: 2,
-      title: 'Downloaded PDFs',
-      icon: ArrowDownTrayIcon,
-      route: '/downloads',
-      description: 'Manage your downloaded content',
-    },
-    {
-      id: 3,
       title: 'Privacy & Security',
       icon: ShieldCheckIcon,
       route: '/privacy',
       description: 'Privacy settings and security',
     },
     {
-      id: 4,
+      id: 3,
       title: 'Help & Support',
       icon: QuestionMarkCircleIcon,
       route: '/help',
@@ -250,45 +243,6 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Stats Cards */}
-      <div className="px-6 py-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg p-4 shadow-sm border">
-            <div className="flex flex-col items-center text-center">
-              <BookOpenIcon className="w-6 h-6 text-primary-500 mb-2" />
-              <p className="text-lg font-bold text-gray-900">{userStats.testsCompleted}</p>
-              <p className="text-xs text-gray-600">Tests Completed</p>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg p-4 shadow-sm border">
-            <div className="flex flex-col items-center text-center">
-              <TrophyIcon className="w-6 h-6 text-yellow-500 mb-2" />
-              <p className="text-lg font-bold text-gray-900">#{userStats.rank}</p>
-              <p className="text-xs text-gray-600">Current Rank</p>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg p-4 shadow-sm border">
-            <div className="flex flex-col items-center text-center">
-              <ViewfinderCircleIcon className="w-6 h-6 text-green-500 mb-2" />
-              <p className="text-lg font-bold text-gray-900">{userStats.averageScore}%</p>
-              <p className="text-xs text-gray-600">Average Score</p>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg p-4 shadow-sm border">
-            <div className="flex flex-col items-center text-center">
-              <ClockIcon className="w-6 h-6 text-purple-500 mb-2" />
-              <p className="text-lg font-bold text-gray-900">{userStats.studyHours}h</p>
-              <p className="text-xs text-gray-600">Study Hours</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Achievements section removed for now */}
 
       {/* Quick Actions */}
       <div className="px-6 py-4">

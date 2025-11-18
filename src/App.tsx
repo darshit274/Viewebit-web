@@ -44,6 +44,8 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import ProfileEditPage from './pages/profile/ProfileEditPage';
 import PerformancePage from './pages/profile/PerformancePage';
+import PrivacySecurityPage from './pages/PrivacySecurityPage';
+import HelpSupportPage from './pages/HelpSupportPage';
 
 // Payment Pages
 import PaymentPage from './pages/PaymentPage';
@@ -158,6 +160,10 @@ function AppContent() {
             
             {/* Other Routes - Leaderboard removed from sidebar, now only accessible after tests */}
           </Route>
+
+          {/* Privacy & Support Routes */}
+          <Route path="/privacy" element={<PrivacySecurityPage />} />
+          <Route path="/help" element={<HelpSupportPage />} />
 
           {/* Error Routes */}
           <Route path="/404" element={<NotFoundPage />} />
