@@ -178,7 +178,6 @@ const HelpSupportPage: React.FC = () => {
                 <ChatBubbleLeftRightIcon className="h-8 w-8" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2">WhatsApp Chat</h3>
                 <p className="text-white/90 mb-2">Instant messaging support</p>
                 <p className="text-lg font-semibold">Quick & Easy</p>
                 <p className="text-sm text-white/70 mt-2">Chat with us anytime!</p>
@@ -394,18 +393,9 @@ const HelpSupportPage: React.FC = () => {
                 <EnvelopeIcon className="h-6 w-6" />
                 Email Us
               </a>
-              <a
-                href="https://wa.me/919876543210"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all hover:scale-105"
-              >
-                <ChatBubbleLeftRightIcon className="h-6 w-6" />
-                WhatsApp Chat
-              </a>
             </div>
             <p className="text-white/70 text-sm mt-6">
-              Email: We respond within 24-48 hours | WhatsApp: Instant replies during business hours
+              Email: We respond within 24-48 hours 
             </p>
           </div>
         </div>
