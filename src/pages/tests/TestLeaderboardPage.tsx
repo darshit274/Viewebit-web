@@ -89,7 +89,7 @@ const TestLeaderboardPage: React.FC = () => {
             fullName: entry.name || `User ${index + 1}`,
             avatarUrl: entry.avatar,
             rank: entry.rank || (index + 1),
-            score: entry.totalScore || 0,
+            score: entry.finalScore ?? (entry.totalScore || 0),
             total_questions: entry.totalQuestions || 10,
             correct_answers: entry.correctAnswers || 0,
             wrong_answers: (entry.totalQuestions || 10) - (entry.correctAnswers || 0),
