@@ -453,8 +453,8 @@ const TakeTestPage: React.FC = () => {
       )
       // Use the simple quiz submission API
       const submitResponse = await api.post(`/quiz/submit`, {
-        userId: localStorage.getItem("mocktail_user")
-          ? JSON.parse(localStorage.getItem("mocktail_user")!).uuid
+        userId: sessionStorage.getItem("mocktail_user")
+          ? JSON.parse(sessionStorage.getItem("mocktail_user")!).uuid
           : `quiz-user-${Date.now()}`,
         testSeriesId: uuid, // Treat uuid as test series ID (to match leaderboard expectation)
         answers: answers,
@@ -482,7 +482,7 @@ const TakeTestPage: React.FC = () => {
 
           if (leaderboardResponse.data.success) {
             const dataLeaderboard = leaderboardResponse?.data?.data;
-            const userUuid = leaderboardResponse?.data?.metadata?.currentUserData?.uuid || JSON.parse(localStorage.getItem("mocktail_user") || "{}").uuid;
+            const userUuid = leaderboardResponse?.data?.metadata?.currentUserData?.uuid || JSON.parse(sessionStorage.getItem("mocktail_user") || "{}").uuid;
             const myRank = dataLeaderboard.find(
               (item) =>
                 item.userId === userUuid

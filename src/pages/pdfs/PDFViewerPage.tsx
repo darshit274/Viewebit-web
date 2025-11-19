@@ -235,8 +235,8 @@ const PDFViewerPage: React.FC = () => {
       setSecurityWarning('');
       
       // Step 1: Check if user is authenticated (temporarily disabled for testing)
-      const authToken = localStorage.getItem('mocktail_token');
-      const userData = localStorage.getItem('mocktail_user');
+      const authToken = sessionStorage.getItem('mocktail_token');
+      const userData = sessionStorage.getItem('mocktail_user');
       
       console.log('Auth token exists:', !!authToken);
       console.log('User data exists:', !!userData);
@@ -338,8 +338,8 @@ const PDFViewerPage: React.FC = () => {
         setError('Authentication failed. Your session may have expired. Please log in again.');
         toast.error('Session expired - please log in again');
         // Clear invalid token
-        localStorage.removeItem('mocktail_token');
-        localStorage.removeItem('mocktail_user');
+        sessionStorage.removeItem('mocktail_token');
+        sessionStorage.removeItem('mocktail_user');
         setTimeout(() => {
           navigate('/login');
         }, 2000);

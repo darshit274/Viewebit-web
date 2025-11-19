@@ -30,11 +30,11 @@ const initialState: AuthState = {
   error: null,
 };
 
-// Helper function to load auth data from localStorage
+// Helper function to load auth data from sessionStorage
 const loadAuthFromStorage = (): Partial<AuthState> => {
   try {
-    const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
-    const userStr = localStorage.getItem(AUTH_CONFIG.USER_KEY);
+    const token = sessionStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
+    const userStr = sessionStorage.getItem(AUTH_CONFIG.USER_KEY);
     
     if (token && userStr) {
       const user = JSON.parse(userStr);
@@ -47,8 +47,8 @@ const loadAuthFromStorage = (): Partial<AuthState> => {
   } catch (error) {
     console.error('Error loading auth from storage:', error);
     // Clear corrupted data
-    localStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
-    localStorage.removeItem(AUTH_CONFIG.USER_KEY);
+    sessionStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
+    sessionStorage.removeItem(AUTH_CONFIG.USER_KEY);
   }
   
   return {
@@ -92,9 +92,9 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       
-      // Persist to localStorage
-      localStorage.setItem(AUTH_CONFIG.TOKEN_KEY, token);
-      localStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(user));
+      // Persist to sessionStorage
+      sessionStorage.setItem(AUTH_CONFIG.TOKEN_KEY, token);
+      sessionStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(user));
     },
     
     // Update user data
@@ -102,8 +102,8 @@ const authSlice = createSlice({
       if (state.user) {
         state.user = { ...state.user, ...action.payload };
         
-        // Update in localStorage
-        localStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(state.user));
+        // Update in sessionStorage
+        sessionStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(state.user));
       }
     },
     
@@ -115,9 +115,9 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       
-      // Clear from localStorage
-      localStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
-      localStorage.removeItem(AUTH_CONFIG.USER_KEY);
+      // Clear from sessionStorage
+      sessionStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
+      sessionStorage.removeItem(AUTH_CONFIG.USER_KEY);
     },
     
     // Restore session from storage (called on app init)

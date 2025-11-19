@@ -14,7 +14,7 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
+    const token = sessionStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -46,8 +46,8 @@ api.interceptors.response.use(
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
       // Clear stored auth data
-      localStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
-      localStorage.removeItem(AUTH_CONFIG.USER_KEY);
+      sessionStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
+      sessionStorage.removeItem(AUTH_CONFIG.USER_KEY);
       
       // Show error message
       toast.error('Session expired. Please login again.');

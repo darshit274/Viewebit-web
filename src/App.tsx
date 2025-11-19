@@ -74,7 +74,7 @@ function AppContent() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    // Restore user session from localStorage on app load
+    // Restore user session from sessionStorage on app load
     dispatch(restoreSession());
   }, [dispatch]);
 

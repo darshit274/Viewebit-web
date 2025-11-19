@@ -159,9 +159,9 @@ const ProfilePage: React.FC = () => {
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
       try {
-        // Clear localStorage
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        // Clear sessionStorage
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
         
         // Clear Redux state
         dispatch(logout());
