@@ -475,6 +475,17 @@ const HomePage: React.FC = () => {
               </ul>
             </div>
 
+            {/* Legal */}
+            <div>
+              <h3 className="text-white font-bold mb-4">Legal</h3>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
+                <li><Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
+                <li><Link to="/help" className="hover:text-white transition-colors">Help & Support</Link></li>
+              </ul>
+            </div>
+
             {/* Contact */}
             <div>
               <h3 className="text-white font-bold mb-4">Contact</h3>
@@ -490,6 +501,15 @@ const HomePage: React.FC = () => {
           {/* Copyright */}
           <div className="pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
             <p>© 2025 MockTale Academy. All rights reserved.</p>
+            <div className="mt-2 flex items-center justify-center gap-4 text-xs">
+              <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+              <span className="text-gray-600">•</span>
+              <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
+              <span className="text-gray-600">•</span>
+              <Link to="/refund-policy" className="hover:text-white transition-colors">Refunds</Link>
+              <span className="text-gray-600">•</span>
+              <Link to="/help" className="hover:text-white transition-colors">Help</Link>
+            </div>
           </div>
         </div>
       </footer>

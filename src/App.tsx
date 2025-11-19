@@ -46,6 +46,8 @@ import ProfileEditPage from './pages/profile/ProfileEditPage';
 import PerformancePage from './pages/profile/PerformancePage';
 import PrivacySecurityPage from './pages/PrivacySecurityPage';
 import HelpSupportPage from './pages/HelpSupportPage';
+import TermsConditionsPage from './pages/TermsConditionsPage';
+import RefundPolicyPage from './pages/RefundPolicyPage';
 
 // Payment Pages
 import PaymentPage from './pages/PaymentPage';
@@ -161,9 +163,11 @@ function AppContent() {
             {/* Other Routes - Leaderboard removed from sidebar, now only accessible after tests */}
           </Route>
 
-          {/* Privacy & Support Routes */}
+          {/* Privacy & Support Routes - Public Access */}
           <Route path="/privacy" element={<PrivacySecurityPage />} />
           <Route path="/help" element={<HelpSupportPage />} />
+          <Route path="/terms" element={<TermsConditionsPage />} />
+          <Route path="/refund-policy" element={<RefundPolicyPage />} />
 
           {/* Error Routes */}
           <Route path="/404" element={<NotFoundPage />} />
