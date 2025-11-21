@@ -22,6 +22,7 @@ import {
 } from '@heroicons/react/24/outline';
 import MockTaleLogoPng from './../assets/MockTale.png';
 import MockTaleLogoJpg from './../assets/MockTale.jpg';
+import ContactQueryForm from '../components/ContactQueryForm';
 
 const HomePage: React.FC = () => {
   return (
@@ -378,9 +379,12 @@ const HomePage: React.FC = () => {
             Download MockTale Academy on your phone or access it on your computer - study at your own pace, on your own schedule.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="btn btn-lg bg-white text-blue-600 hover:bg-gray-100 font-bold shadow-xl">
+            <Link
+              to="/app-coming-soon"
+              className="btn btn-lg bg-white text-blue-600 hover:bg-gray-100 font-bold shadow-xl"
+            >
               📱 Download App
-            </button>
+            </Link>
             <Link
               to="/tests"
               className="btn btn-lg bg-transparent border-2 border-white text-white hover:bg-white/10 font-bold"
@@ -391,30 +395,35 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="section-spacing bg-white">
+      {/* Contact Section with Form */}
+      <section id="contact" className="section-spacing bg-gradient-to-br from-blue-50 to-cyan-50">
         <div className="page-container">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Get in{' '}
-              <span className="gradient-text">Touch</span>
+              Have Questions?{' '}
+              <span className="gradient-text">Get in Touch</span>
             </h2>
-            <p className="text-xl text-gray-600">Have questions or feedback? Reach out to us anytime.</p>
+            <p className="text-xl text-gray-600">
+              We're here to help! Send us your queries and we'll respond within 24 hours.
+            </p>
           </div>
 
-          <div className="max-w-2xl mx-auto grid md:grid-cols-2 gap-6">
-            {/* Email */}
-            <a
-              href="mailto:mocktaleacademy@gmail.com"
-              className="card-hover p-8 text-center group bg-gradient-to-br from-blue-50 to-blue-100"
-            >
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <EnvelopeIcon className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Email Us</h3>
-              <p className="text-blue-600 font-semibold">mocktaleacademy@gmail.com</p>
-            </a>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+              <ContactQueryForm variant="compact" />
+            </div>
 
+            {/* Contact Info Below Form */}
+            <div className="mt-8 text-center">
+              <p className="text-gray-600 mb-4">Or reach us directly at:</p>
+              <a
+                href="mailto:mocktaleacademy@gmail.com"
+                className="inline-flex items-center justify-center text-blue-600 hover:text-blue-700 font-semibold"
+              >
+                <EnvelopeIcon className="w-5 h-5 mr-2" />
+                mocktaleacademy@gmail.com
+              </a>
+            </div>
           </div>
         </div>
       </section>

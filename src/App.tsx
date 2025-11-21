@@ -48,6 +48,8 @@ import PrivacySecurityPage from './pages/PrivacySecurityPage';
 import HelpSupportPage from './pages/HelpSupportPage';
 import TermsConditionsPage from './pages/TermsConditionsPage';
 import RefundPolicyPage from './pages/RefundPolicyPage';
+import ContactPage from './pages/ContactPage';
+import AppComingSoonPage from './pages/AppComingSoonPage';
 
 // Payment Pages
 import PaymentPage from './pages/PaymentPage';
@@ -168,6 +170,8 @@ function AppContent() {
           <Route path="/help" element={<HelpSupportPage />} />
           <Route path="/terms" element={<TermsConditionsPage />} />
           <Route path="/refund-policy" element={<RefundPolicyPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/app-coming-soon" element={<AppComingSoonPage />} />
 
           {/* Error Routes */}
           <Route path="/404" element={<NotFoundPage />} />
