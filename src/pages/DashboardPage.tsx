@@ -121,17 +121,20 @@ const DashboardPage: React.FC = () => {
         </div>
 
         {/* Active Subscriptions */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
+        <Link to="/enrolled-series" className="block bg-white border border-gray-200 rounded-lg p-5 hover:border-purple-300 hover:shadow-md transition-all duration-200 cursor-pointer group">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Active Subscriptions</p>
+              <p className="text-sm text-gray-600 mb-1 group-hover:text-purple-600 transition-colors">Active Subscriptions</p>
               <p className="text-2xl font-bold text-gray-900">{stats.activeSubscriptions}</p>
+              <p className="text-xs text-gray-500 mt-1 group-hover:text-purple-600 transition-colors flex items-center">
+                View All <ArrowRightIcon className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+              </p>
             </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
               <TrophyIcon className="w-6 h-6 text-purple-600" />
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

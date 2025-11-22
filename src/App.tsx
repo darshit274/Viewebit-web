@@ -40,6 +40,7 @@ import PreviousYearsPapersPage from './pages/tests/PreviousYearsPapersPage';
 import TestHistoryPage from './pages/tests/TestHistoryPage';
 import TestHistoryDetailPage from './pages/tests/TestHistoryDetailPage';
 import TestAttemptsPage from './pages/tests/TestAttemptsPage';
+import EnrolledSeriesPage from './pages/tests/EnrolledSeriesPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import ProfileEditPage from './pages/profile/ProfileEditPage';
@@ -123,6 +124,7 @@ function AppContent() {
             
             {/* Test Routes */}
             <Route path="/tests" element={<TestsPage />} />
+            <Route path="/enrolled-series" element={<EnrolledSeriesPage />} />
             <Route path="/tests/series/:uuid" element={<TestSeriesDetailPage />} />
             <Route path="/tests/category/:uuid" element={<CategoryDetailPage />} />
             <Route path="/tests/quiz/:uuid" element={<TakeTestPage />} />
