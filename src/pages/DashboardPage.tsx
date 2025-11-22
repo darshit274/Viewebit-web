@@ -95,30 +95,36 @@ const DashboardPage: React.FC = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         {/* Total Tests */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
+        <Link to="/tests" className="block bg-white border border-gray-200 rounded-lg p-5 hover:border-primary-300 hover:shadow-md transition-all duration-200 cursor-pointer group">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Total Tests</p>
+              <p className="text-sm text-gray-600 mb-1 group-hover:text-primary-600 transition-colors">Total Tests</p>
               <p className="text-2xl font-bold text-gray-900">{stats.totalTests}</p>
+              <p className="text-xs text-gray-500 mt-1 group-hover:text-primary-600 transition-colors flex items-center">
+                View All <ArrowRightIcon className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+              </p>
             </div>
-            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center group-hover:bg-primary-200 transition-colors">
               <AcademicCapIcon className="w-6 h-6 text-primary-600" />
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Completed Tests */}
-        <div className="bg-white border border-gray-200 rounded-lg p-5">
+        <Link to="/test-history" className="block bg-white border border-gray-200 rounded-lg p-5 hover:border-green-300 hover:shadow-md transition-all duration-200 cursor-pointer group">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Completed</p>
+              <p className="text-sm text-gray-600 mb-1 group-hover:text-green-600 transition-colors">Completed</p>
               <p className="text-2xl font-bold text-gray-900">{stats.completedTests}</p>
+              <p className="text-xs text-gray-500 mt-1 group-hover:text-green-600 transition-colors flex items-center">
+                View All <ArrowRightIcon className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+              </p>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
               <CheckCircleIcon className="w-6 h-6 text-green-600" />
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Active Subscriptions */}
         <Link to="/enrolled-series" className="block bg-white border border-gray-200 rounded-lg p-5 hover:border-purple-300 hover:shadow-md transition-all duration-200 cursor-pointer group">
