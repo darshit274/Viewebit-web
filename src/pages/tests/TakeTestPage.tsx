@@ -574,8 +574,9 @@ const TakeTestPage: React.FC = () => {
 
   const handleConfirmExit = () => {
     setShowExitConfirmation(false);
+
     // User confirmed exit - navigate back
-    navigate(-1);
+    navigate(-2);
   };
 
   const handleCancelExit = () => {
