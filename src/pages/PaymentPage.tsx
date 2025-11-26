@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
-import { 
+import {
   ArrowLeftIcon,
   CreditCardIcon,
   DevicePhoneMobileIcon,
@@ -34,6 +34,11 @@ interface PaymentOrder {
       price: number;
     };
     subscriptionId: string;
+    userDetails: {
+      name: string;
+      email: string;
+      contact: string;
+    };
   };
 }
 
@@ -165,7 +170,9 @@ const PaymentPage: React.FC = () => {
       const orderData = await createPaymentOrder();
       console.log('Payment order created:', orderData);
 
-      // Step 2: Initialize Razorpay
+      // Step 2: Initialize Razorpay with user details from API
+      console.log('🔐 Using user details for Razorpay prefill:', orderData.data.userDetails);
+
       const options = {
         key: orderData.data.keyId,
         amount: orderData.data.amount,
@@ -176,7 +183,7 @@ const PaymentPage: React.FC = () => {
         image: '/favicon.ico',
         handler: async function (response: any) {
           console.log('Payment successful:', response);
-          
+
           try {
             // Step 3: Verify payment
             const verifyResult = await verifyPayment(response, orderData.data.subscriptionId);
@@ -202,9 +209,9 @@ const PaymentPage: React.FC = () => {
           }
         },
         prefill: {
-          name: 'User',
-          email: 'user@example.com',
-          contact: '9999999999'
+          name: orderData?.data?.userDetails?.name || 'User',
+          email: orderData?.data?.userDetails?.email || 'user@example.com',
+          contact: orderData?.data?.userDetails?.contact || '9999999999'
         },
         notes: {
           series_id: seriesId,
@@ -214,7 +221,7 @@ const PaymentPage: React.FC = () => {
           color: '#2563eb'
         },
         modal: {
-          ondismiss: function() {
+          ondismiss: function () {
             console.log('Payment modal closed');
             setIsProcessing(false);
           }
@@ -250,7 +257,7 @@ const PaymentPage: React.FC = () => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl border border-gray-200 p-6 sticky top-8">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
-              
+
               <div className="mb-6">
                 <h3 className="font-medium text-gray-900 mb-2">{title}</h3>
                 <p className="text-sm text-gray-500 mb-4">
@@ -259,7 +266,7 @@ const PaymentPage: React.FC = () => {
                 {description && (
                   <p className="text-sm text-gray-600 mb-4">{description}</p>
                 )}
-                
+
               </div>
 
               <div className="border-t pt-4">
@@ -267,7 +274,7 @@ const PaymentPage: React.FC = () => {
                   <span className="text-base font-medium text-gray-900">Total Amount</span>
                   <span className="text-2xl font-bold text-blue-600">₹{price}</span>
                 </div>
-           
+
               </div>
             </div>
           </div>
@@ -276,31 +283,28 @@ const PaymentPage: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Select Payment Method</h2>
-              
+
               <div className="space-y-4 mb-8">
                 {paymentMethods.map((method) => (
                   <div
                     key={method.id}
-                    className={`border rounded-xl p-4 cursor-pointer transition-all duration-200 ${
-                      selectedPaymentMethod === method.id
-                        ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`border rounded-xl p-4 cursor-pointer transition-all duration-200 ${selectedPaymentMethod === method.id
+                      ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
+                      : 'border-gray-200 hover:border-gray-300'
+                      }`}
                     onClick={() => setSelectedPaymentMethod(method.id)}
                   >
                     <div className="flex items-center">
-                      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-4 ${
-                        selectedPaymentMethod === method.id
-                          ? 'bg-blue-100'
-                          : 'bg-gray-100'
-                      }`}>
-                        <method.icon className={`h-5 w-5 ${
-                          selectedPaymentMethod === method.id
-                            ? 'text-blue-600'
-                            : 'text-gray-600'
-                        }`} />
+                      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-4 ${selectedPaymentMethod === method.id
+                        ? 'bg-blue-100'
+                        : 'bg-gray-100'
+                        }`}>
+                        <method.icon className={`h-5 w-5 ${selectedPaymentMethod === method.id
+                          ? 'text-blue-600'
+                          : 'text-gray-600'
+                          }`} />
                       </div>
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center mb-1">
                           <h3 className="font-medium text-gray-900 mr-2">{method.name}</h3>
@@ -312,12 +316,11 @@ const PaymentPage: React.FC = () => {
                         </div>
                         <p className="text-sm text-gray-500">{method.description}</p>
                       </div>
-                      
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        selectedPaymentMethod === method.id
-                          ? 'border-blue-500'
-                          : 'border-gray-300'
-                      }`}>
+
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedPaymentMethod === method.id
+                        ? 'border-blue-500'
+                        : 'border-gray-300'
+                        }`}>
                         {selectedPaymentMethod === method.id && (
                           <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
                         )}
@@ -339,11 +342,10 @@ const PaymentPage: React.FC = () => {
               <button
                 onClick={handlePayment}
                 disabled={isProcessing || !isScriptLoaded}
-                className={`w-full py-3 px-6 rounded-lg font-medium text-white text-lg transition-all duration-200 ${
-                  isProcessing || !isScriptLoaded
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
-                }`}
+                className={`w-full py-3 px-6 rounded-lg font-medium text-white text-lg transition-all duration-200 ${isProcessing || !isScriptLoaded
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800'
+                  }`}
               >
                 {isProcessing ? (
                   <div className="flex items-center justify-center">
