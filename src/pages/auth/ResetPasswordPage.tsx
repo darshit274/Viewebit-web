@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
 const resetPasswordSchema = z.object({
-  token: z.string(),
+  // token: z.string(),
   newPassword: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
 }).refine((data) => data.newPassword === data.confirmPassword, {
