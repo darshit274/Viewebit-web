@@ -474,11 +474,12 @@ const TakeTestPage: React.FC = () => {
           negativeMarkingEnabled: data.negativeMarkingEnabled || false,
           negativeMarks: data.negativeMarksDeducted || 0,
           totalTimeSpent: totalTimeSpent,
+          sessionId: data?.sessionId
 
         });
 
         try {
-          const leaderboardResponse = await api.get(`/leaderboard/test-series/${uuid}`);
+          const leaderboardResponse = await api.get(`/leaderboard/test-series/${data?.sessionId}`);
 
           if (leaderboardResponse.data.success) {
             const dataLeaderboard = leaderboardResponse?.data?.data;
@@ -1080,7 +1081,7 @@ const TakeTestPage: React.FC = () => {
             <button
               onClick={() => {
                 // Navigate to leaderboard for this category
-                navigate(`/tests/leaderboard/${uuid}`, {
+                navigate(`/tests/leaderboard/${backendResults?.sessionId || uuid}`, {
                   state: {
                     categoryName: quizData.category.name,
                     userScore: score,

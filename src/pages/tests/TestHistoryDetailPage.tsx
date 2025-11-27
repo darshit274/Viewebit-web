@@ -63,7 +63,7 @@ const TestHistoryDetailPage: React.FC = () => {
 
       const response = await api.get(`/test-history/${sessionId}`);
       const leaderboardResponse = await api.get(
-        `/leaderboard/test-series/${categoryUuid}`
+        `/leaderboard/test-series/${sessionId}`
       );
 
       if (response.data.success) {
@@ -378,8 +378,7 @@ const TestHistoryDetailPage: React.FC = () => {
             <button
               onClick={() =>
                 navigate(
-                  `/tests/leaderboard/${categoryUuid ? categoryUuid : result?.sessionId
-                  }`
+                  `/tests/leaderboard/${result?.sessionId || sessionId}`
                 )
               }
               className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
