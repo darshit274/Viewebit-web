@@ -33,7 +33,12 @@ const ForgotPasswordPage: React.FC = () => {
 
       if (response.success) {
         toast.success('Password reset link sent to your email!');
-        navigate('/auth/reset-password', { state: { email: data.email } });
+        navigate('/verify-otp', {
+          state: {
+            email: data.email,
+            type: 'forgot-password'
+          }
+        });
       } else {
         toast.error(response.message);
       }

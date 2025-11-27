@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
 const resetPasswordSchema = z.object({
-  token: z.string().min(1, 'Reset token is required'),
+  token: z.string(),
   newPassword: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
 }).refine((data) => data.newPassword === data.confirmPassword, {
@@ -96,7 +96,7 @@ const ResetPasswordPage: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
         {/* Token Field */}
-        <div>
+        {/* <div>
           <label
             htmlFor="token"
             className="block text-sm font-medium text-gray-700 mb-2"
@@ -113,7 +113,7 @@ const ResetPasswordPage: React.FC = () => {
           {errors.token && (
             <p className="mt-1 text-sm text-red-600">{errors.token.message}</p>
           )}
-        </div>
+        </div> */}
 
         {/* New Password Field */}
         <div>
