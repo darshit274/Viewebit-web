@@ -378,7 +378,7 @@ const TestHistoryDetailPage: React.FC = () => {
             <button
               onClick={() =>
                 navigate(
-                  `/tests/leaderboard/${result?.sessionId || sessionId}`
+                  `/tests/leaderboard/${categoryUuid || result?.sessionId || sessionId}`
                 )
               }
               className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"

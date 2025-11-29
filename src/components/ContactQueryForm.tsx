@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { z } from 'zod';
 import axios from 'axios';
+import api from '../services/api';
 
 const contactQuerySchema = z.object({
   full_name: z.string()
@@ -79,7 +80,7 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
     // Submit
     setIsSubmitting(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/contact/submit', formData);
+      const response = await api.post('/contact/submit', formData);
       setSuccessMessage(response.data.message || 'Your query has been submitted successfully!');
       setFormData({ full_name: '', email: '', mobile_number: '', query_message: '' });
       if (onSuccess) onSuccess();

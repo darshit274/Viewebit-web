@@ -145,11 +145,10 @@ const TestSeriesDetailPage: React.FC = () => {
   const handlePurchase = () => {
     if (!series) return;
 
-    window.location.href = `/payment?seriesId=${
-      series.id
-    }&title=${encodeURIComponent(
-      series.name || series.title || "Test Series"
-    )}&price=${series.price}&type=test-series`;
+    window.location.href = `/payment?seriesId=${series.id
+      }&title=${encodeURIComponent(
+        series.name || series.title || "Test Series"
+      )}&price=${series.price}&type=test-series`;
   };
 
   const handleCategorySelect = (category: Category) => {
@@ -295,11 +294,10 @@ const TestSeriesDetailPage: React.FC = () => {
               <div className="mt-3">
                 <button
                   onClick={handleActionButtonClick}
-                  className={`action-button w-full px-4 py-2 rounded-lg font-medium transition-colors ${
-                    isCompleted
-                      ? "bg-green-600 hover:bg-green-700 text-white"
-                      : "bg-gray-600 hover:bg-gray-700 text-white"
-                  }`}
+                  className={`action-button w-full px-4 py-2 rounded-lg font-medium transition-colors ${isCompleted
+                    ? "bg-green-600 hover:bg-green-700 text-white"
+                    : "bg-gray-600 hover:bg-gray-700 text-white"
+                    }`}
                 >
                   {isCompleted ? "Result" : "Take Test"}
                 </button>
@@ -468,11 +466,11 @@ const TestSeriesDetailPage: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <span className="text-2xl font-bold text-gray-900">
-              {series.pricing_type === "free" ? "Free" : `₹${series.price}`}
+              {series.pricing_type === "free" || series.pricing_type === "previous_years_question_papers" ? "Free" : `₹${series.price}`}
             </span>
-            <span className="text-base text-gray-500">
+            {series.pricing_type === "free" || series.pricing_type === "previous_years_question_papers" ? <></> : <span className="text-base text-gray-500">
               {series.currency || "INR"}
-            </span>
+            </span>}
           </div>
 
           <div className="flex items-center space-x-3">
