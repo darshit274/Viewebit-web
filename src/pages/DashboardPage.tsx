@@ -145,7 +145,7 @@ const DashboardPage: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
-        {/* <div className="lg:col-span-2">
+        <div className="lg:col-span-2">
           <div className="bg-white border border-gray-200 rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
@@ -189,7 +189,7 @@ const DashboardPage: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                      {activity.percentage !== undefined && (
+                      {/* {activity.percentage !== undefined && (
                         <div className="text-right">
                           <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                             activity.percentage >= 75 ? 'bg-green-100 text-green-800' :
@@ -199,14 +199,14 @@ const DashboardPage: React.FC = () => {
                             {activity.percentage}%
                           </span>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   ))}
                 </div>
               )}
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* Quick Actions */}
         <div className="space-y-4">
