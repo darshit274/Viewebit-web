@@ -310,20 +310,19 @@ const CategoryDetailPage: React.FC = () => {
       !subscriptionAccess.hasAccess &&
       isQuestionHolder &&
       !isAccessible;
+    const isCompleted = testHistory.some(item => item?.categoryUuid === subcategory?.uuid);
 
     return (
       <div
-        className={`bg-white rounded-xl border p-4 hover:shadow-md transition-all duration-200 cursor-pointer ${
-          isLocked ? 'opacity-70 border-dashed border-gray-300 bg-gray-50' : 'border-gray-100'
-        }`}
+        className={`bg-white rounded-xl border p-4 hover:shadow-md transition-all duration-200 cursor-pointer ${isLocked ? 'opacity-70 border-dashed border-gray-300 bg-gray-50' : 'border-gray-100'
+          }`}
         onClick={() => handleSubcategorySelect(subcategory)}
       >
         <div className="flex items-center">
           {/* Icon */}
           <div
-            className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
-              isLocked ? 'bg-gray-200' : 'bg-blue-100'
-            }`}
+            className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 ${isLocked ? 'bg-gray-200' : 'bg-blue-100'
+              }`}
           >
             {isLocked ? (
               <LockClosedIcon className="h-5 w-5 text-gray-500" />
@@ -338,9 +337,8 @@ const CategoryDetailPage: React.FC = () => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3
-                className={`text-base font-medium truncate ${
-                  isLocked ? 'text-gray-500' : 'text-gray-900'
-                }`}
+                className={`text-base font-medium truncate ${isLocked ? 'text-gray-500' : 'text-gray-900'
+                  }`}
               >
                 {subcategory.name}
               </h3>
@@ -358,6 +356,12 @@ const CategoryDetailPage: React.FC = () => {
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold text-gray-600 bg-gray-100 border border-gray-200">
                   <LockClosedIcon className="h-3 w-3" />
                   LOCKED
+                </span>
+              )}
+              {isCompleted && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold text-cyan-600 bg-cyan-100 border border-cyan-200">
+                  <LockClosedIcon className="h-3 w-3" />
+                  COMPLATED
                 </span>
               )}
             </div>
@@ -379,9 +383,8 @@ const CategoryDetailPage: React.FC = () => {
 
           {/* Arrow */}
           <ChevronRightIcon
-            className={`h-5 w-5 flex-shrink-0 ${
-              isLocked ? 'text-gray-300' : 'text-gray-400'
-            }`}
+            className={`h-5 w-5 flex-shrink-0 ${isLocked ? 'text-gray-300' : 'text-gray-400'
+              }`}
           />
         </div>
       </div>
@@ -607,7 +610,7 @@ const CategoryDetailPage: React.FC = () => {
           </button>
           <h1 className="text-xl font-semibold text-gray-900">Error</h1>
         </div>
-        
+
         <div className="text-center py-12">
           <ExclamationTriangleIcon className="mx-auto h-16 w-16 text-red-500 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to load category</h3>
@@ -686,13 +689,13 @@ const CategoryDetailPage: React.FC = () => {
 
       {/* Empty State */}
       {(!category.subcategories || category.subcategories.length === 0) &&
-       (!category.questions || category.questions.length === 0) && (
-        <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
-          <BookOpenIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No content available</h3>
-          <p className="text-gray-600">This category doesn't have any subcategories or tests yet.</p>
-        </div>
-      )}
+        (!category.questions || category.questions.length === 0) && (
+          <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
+            <BookOpenIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No content available</h3>
+            <p className="text-gray-600">This category doesn't have any subcategories or tests yet.</p>
+          </div>
+        )}
 
       {/* Unlock All Tests Button */}
       {subscriptionAccess.isPaidSeries && !subscriptionAccess.hasAccess && (
