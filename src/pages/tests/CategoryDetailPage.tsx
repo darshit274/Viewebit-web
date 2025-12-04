@@ -361,7 +361,7 @@ const CategoryDetailPage: React.FC = () => {
               {isCompleted && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold text-cyan-600 bg-cyan-100 border border-cyan-200">
                   <LockClosedIcon className="h-3 w-3" />
-                  COMPLATED
+                  COMPLETED
                 </span>
               )}
             </div>
