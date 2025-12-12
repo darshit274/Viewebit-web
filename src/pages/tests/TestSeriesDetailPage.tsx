@@ -401,15 +401,15 @@ const TestSeriesDetailPage: React.FC = () => {
         </h2>
 
         {series?.description && (
-          <p className="text-gray-600 mb-6 leading-relaxed">
-            {series?.description?.split("\n").map((line, index) => (
+          <p className="text-gray-600 mb-6 leading-relaxed" dangerouslySetInnerHTML={{__html:series?.description}}>
+            {/* {series?.description?.split("\n").map((line, index) => (
               <React.Fragment key={index}>
                 {line}
                 {index !== series?.description?.split("\n")?.length - 1 && (
                   <br />
                 )}
               </React.Fragment>
-            ))}
+            ))} */}
           </p>
         )}
 

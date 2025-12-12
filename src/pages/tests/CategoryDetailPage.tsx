@@ -375,8 +375,8 @@ const CategoryDetailPage: React.FC = () => {
             </div>
 
             {subcategory.description && (
-              <p className="mt-2 text-sm text-gray-600 line-clamp-2 whitespace-pre-line">
-                {subcategory.description}
+              <p className="mt-2 text-sm text-gray-600 line-clamp-2 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: subcategory.description }}>
+                {/* {subcategory.description} */}
               </p>
             )}
           </div>
@@ -652,7 +652,9 @@ const CategoryDetailPage: React.FC = () => {
       {/* Category Description */}
       {category.description && (
         <div className="bg-white border border-gray-100 rounded-xl p-6 mb-8">
-          <p className="text-gray-700 leading-relaxed whitespace-pre-line">{category.description}</p>
+          <p className="text-gray-700 leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: category.description }}>
+            {/* {category.description} */}
+          </p>
         </div>
       )}
 
