@@ -120,8 +120,7 @@ const TestSeriesCard = ({
           WebkitLineClamp: 2,
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden'
-        }}>
-          {series.description}
+        }} dangerouslySetInnerHTML={{ __html: series.description }}>
         </div>
       )}
 
