@@ -149,7 +149,7 @@ const HelpSupportPage: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
 
         {/* Quick Contact Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid gap-6 mb-12">
           <a
             href="mailto:mocktaleacademy@gmail.com"
             className="group bg-gradient-to-br from-primary-500 to-cyan-500 rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all hover:scale-105"
@@ -167,7 +167,7 @@ const HelpSupportPage: React.FC = () => {
             </div>
           </a>
 
-          <a
+          {/* <a
             href="https://wa.me/919876543210"
             target="_blank"
             rel="noopener noreferrer"
@@ -183,7 +183,7 @@ const HelpSupportPage: React.FC = () => {
                 <p className="text-sm text-white/70 mt-2">Chat with us anytime!</p>
               </div>
             </div>
-          </a>
+          </a> */}
         </div>
 
         {/* FAQ Section */}
