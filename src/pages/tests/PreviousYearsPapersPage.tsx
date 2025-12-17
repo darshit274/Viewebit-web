@@ -167,7 +167,7 @@ const PreviousYearsPapersPage: React.FC = () => {
               </div>
             </div>
             {test.description && (
-              <p className="text-sm text-gray-600 line-clamp-2 mb-4">{test.description}</p>
+              <p className="text-sm text-gray-600 line-clamp-2 mb-4" dangerouslySetInnerHTML={{ __html: test.description }}></p>
             )}
           </div>
         </div>

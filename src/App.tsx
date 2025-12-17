@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { Provider } from 'react-redux';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import { store } from './store';
-import { useAppDispatch, useAppSelector } from './store';
+import { store, useAppDispatch, useAppSelector } from './store';
 import { restoreSession } from './store/slices/authSlice';
 
 // Layout Components
@@ -14,43 +13,42 @@ import MainLayout from './components/layout/MainLayout';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 
 // Auth Pages
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
-import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import VerifyOTPPage from './pages/auth/VerifyOTPPage';
 
 // Main Pages
-import HomePage from './pages/HomePage';
+import AppComingSoonPage from './pages/AppComingSoonPage';
+import ContactPage from './pages/ContactPage';
 import DashboardPage from './pages/DashboardPage';
-import TestsPage from './pages/tests/TestsPage';
-import TestSeriesPage from './pages/tests/TestSeriesPage';
-import TestSeriesDetailPage from './pages/tests/TestSeriesDetailPage';
-import CategoryDetailPage from './pages/tests/CategoryDetailPage';
-import TakeTestPage from './pages/tests/TakeTestPage';
-import TestResultsPage from './pages/tests/TestResultsPage';
-import TestSolutionsPage from './pages/tests/TestSolutionsPage';
-import SolutionsPage from './pages/tests/SolutionsPage';
-import TestLeaderboardPage from './pages/tests/TestLeaderboardPage';
+import HelpSupportPage from './pages/HelpSupportPage';
+import HomePage from './pages/HomePage';
 import PDFsPage from './pages/pdfs/PDFsPage';
 import PDFViewerPage from './pages/pdfs/PDFViewerPage';
-import FreeTestsPage from './pages/tests/FreeTestsPage';
-import FreeInPaidTestsPage from './pages/tests/FreeInPaidTestsPage';
-import PreviousYearsPapersPage from './pages/tests/PreviousYearsPapersPage';
-import TestHistoryPage from './pages/tests/TestHistoryPage';
-import TestHistoryDetailPage from './pages/tests/TestHistoryDetailPage';
-import TestAttemptsPage from './pages/tests/TestAttemptsPage';
-import EnrolledSeriesPage from './pages/tests/EnrolledSeriesPage';
-import LeaderboardPage from './pages/LeaderboardPage';
-import ProfilePage from './pages/profile/ProfilePage';
-import ProfileEditPage from './pages/profile/ProfileEditPage';
-import PerformancePage from './pages/profile/PerformancePage';
 import PrivacySecurityPage from './pages/PrivacySecurityPage';
-import HelpSupportPage from './pages/HelpSupportPage';
-import TermsConditionsPage from './pages/TermsConditionsPage';
+import PerformancePage from './pages/profile/PerformancePage';
+import ProfileEditPage from './pages/profile/ProfileEditPage';
+import ProfilePage from './pages/profile/ProfilePage';
 import RefundPolicyPage from './pages/RefundPolicyPage';
-import ContactPage from './pages/ContactPage';
-import AppComingSoonPage from './pages/AppComingSoonPage';
+import TermsConditionsPage from './pages/TermsConditionsPage';
+import CategoryDetailPage from './pages/tests/CategoryDetailPage';
+import EnrolledSeriesPage from './pages/tests/EnrolledSeriesPage';
+import FreeInPaidTestsPage from './pages/tests/FreeInPaidTestsPage';
+import FreeTestsPage from './pages/tests/FreeTestsPage';
+import PreviousYearsPapersPage from './pages/tests/PreviousYearsPapersPage';
+import SolutionsPage from './pages/tests/SolutionsPage';
+import TakeTestPage from './pages/tests/TakeTestPage';
+import TestAttemptsPage from './pages/tests/TestAttemptsPage';
+import TestHistoryDetailPage from './pages/tests/TestHistoryDetailPage';
+import TestHistoryPage from './pages/tests/TestHistoryPage';
+import TestLeaderboardPage from './pages/tests/TestLeaderboardPage';
+import TestResultsPage from './pages/tests/TestResultsPage';
+import TestSeriesDetailPage from './pages/tests/TestSeriesDetailPage';
+import TestSeriesPage from './pages/tests/TestSeriesPage';
+import TestSolutionsPage from './pages/tests/TestSolutionsPage';
+import TestsPage from './pages/tests/TestsPage';
 
 // Payment Pages
 import PaymentPage from './pages/PaymentPage';

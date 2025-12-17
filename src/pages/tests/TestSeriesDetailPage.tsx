@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeftIcon,
-  StarIcon,
-  UsersIcon,
-  GiftIcon,
-  TrophyIcon,
-  ClockIcon,
-  LockClosedIcon,
+  BookOpenIcon,
   CheckCircleIcon,
   ChevronRightIcon,
-  FolderIcon,
-  BookOpenIcon,
   ExclamationTriangleIcon,
+  FolderIcon,
+  GiftIcon,
+  LockClosedIcon,
+  TrophyIcon,
+  UsersIcon
 } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
-import { api } from "../../services/api";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import { api } from "../../services/api";
 
 interface TestSeries {
   id: number;
@@ -55,6 +53,7 @@ const TestSeriesDetailPage: React.FC = () => {
   const [testHistory, setTestHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [seriesExpanded, setSeriesExpanded] = useState(false); // ✅ ADD THIS
 
   useEffect(() => {
     if (uuid) {
@@ -285,8 +284,8 @@ const TestSeriesDetailPage: React.FC = () => {
               </p>
             </div>
             {category.description && (
-              <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                {category.description}
+              <p className="mt-2 text-sm text-gray-600 line-clamp-2" dangerouslySetInnerHTML={{ __html: category.description }}>
+
               </p>
             )}
             {/* Result / Take Test Button for Question Holders */}
@@ -401,17 +400,22 @@ const TestSeriesDetailPage: React.FC = () => {
         </h2>
 
         {series?.description && (
-          <p className="text-gray-600 mb-6 leading-relaxed" dangerouslySetInnerHTML={{__html:series?.description}}>
-            {/* {series?.description?.split("\n").map((line, index) => (
-              <React.Fragment key={index}>
-                {line}
-                {index !== series?.description?.split("\n")?.length - 1 && (
-                  <br />
-                )}
-              </React.Fragment>
-            ))} */}
-          </p>
+          <>
+            <p
+              className={`text-gray-600 mb-2 leading-relaxed ${seriesExpanded ? "" : "line-clamp-6"
+                }`}
+              dangerouslySetInnerHTML={{ __html: series.description }}
+            />
+
+            <button
+              onClick={() => setSeriesExpanded(!seriesExpanded)}
+              className="text-sm font-medium text-blue-600 hover:underline"
+            >
+              {seriesExpanded ? "Read Less" : "Read More"}
+            </button>
+          </>
         )}
+
 
         {/* Stats Row */}
         <div className="flex items-center space-x-6 mb-6">
@@ -536,7 +540,7 @@ const TestSeriesDetailPage: React.FC = () => {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 
