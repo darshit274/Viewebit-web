@@ -195,10 +195,10 @@ const SolutionsPage: React.FC = () => {
   const fetchSolutions = async () => {
     try {
       console.log('Fetching solutions for UUID:', uuid);
-      console.log('API URL:', `/dynamic/categories/${uuid}/solutions`);
+      console.log('API URL:', `/test-history/${uuid}/solutions`);
       console.log('Using language:', language);
 
-      const response = await api.get(`/dynamic/categories/${uuid}/solutions`, {
+      const response = await api.get(`/test-history/${uuid}/solutions`, {
         params: {
           language: language || 'english'
         }
