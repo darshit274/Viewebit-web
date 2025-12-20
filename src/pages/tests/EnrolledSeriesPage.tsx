@@ -93,15 +93,13 @@ const EnrolledSeriesCard = ({
       </div>
 
       {/* Description */}
-      {series.description && (
-        <div className="text-sm text-gray-600 mb-4 overflow-hidden" style={{
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden'
-        }}>
-          {series.description}
-        </div>
+      {series?.description && (
+        <>
+          <p
+            className={`text-gray-600 mb-2 leading-relaxed line-clamp-6`}
+            dangerouslySetInnerHTML={{ __html: series.description }}
+          />
+        </>
       )}
 
       {/* Stats */}

@@ -63,13 +63,13 @@ const SolutionsPage: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   // Expandable explanations state
-  const [showExplanations, setShowExplanations] = useState<{[key: number]: boolean}>({});
+  const [showExplanations, setShowExplanations] = useState<{ [key: number]: boolean }>({});
   const [showAllExplanations, setShowAllExplanations] = useState(false);
 
   // Retake/Practice mode state - ON by default
   const [practiceMode, setPracticeMode] = useState(true);
-  const [reattemptAnswers, setReattemptAnswers] = useState<{[key: number]: string}>({});
-  const [hasReattempted, setHasReattempted] = useState<{[key: number]: boolean}>({});
+  const [reattemptAnswers, setReattemptAnswers] = useState<{ [key: number]: string }>({});
+  const [hasReattempted, setHasReattempted] = useState<{ [key: number]: boolean }>({});
 
   // Navigator modal state
   const [showNavigator, setShowNavigator] = useState(false);
@@ -89,8 +89,8 @@ const SolutionsPage: React.FC = () => {
   } = location.state || {};
 
   // State to hold session-based data (when viewing from test history)
-  const [userAnswers, setUserAnswers] = useState<{[key: number]: string}>(locationUserAnswers || {});
-  const [markedQuestions, setMarkedQuestions] = useState<{[key: number]: boolean}>(locationMarkedQuestions || {});
+  const [userAnswers, setUserAnswers] = useState<{ [key: number]: string }>(locationUserAnswers || {});
+  const [markedQuestions, setMarkedQuestions] = useState<{ [key: number]: boolean }>(locationMarkedQuestions || {});
   const [score, setScore] = useState<number>(locationScore || 0);
   const [percentage, setPercentage] = useState<number>(locationPercentage || 0);
 
@@ -153,8 +153,8 @@ const SolutionsPage: React.FC = () => {
         });
 
         // Build userAnswers and markedQuestions from session data
-        const sessionUserAnswers: {[key: number]: string} = {};
-        const sessionMarkedQuestions: {[key: number]: boolean} = {};
+        const sessionUserAnswers: { [key: number]: string } = {};
+        const sessionMarkedQuestions: { [key: number]: boolean } = {};
         let correctCount = 0;
 
         data.solutions.forEach((sol: any, index: number) => {
@@ -315,53 +315,53 @@ const SolutionsPage: React.FC = () => {
       [questionIndex]: !prev[questionIndex]
     }));
   };
-  
+
   const toggleAllExplanations = () => {
     const newState = !showAllExplanations;
     setShowAllExplanations(newState);
-    
+
     if (solutionsData) {
-      const allExplanations: {[key: number]: boolean} = {};
+      const allExplanations: { [key: number]: boolean } = {};
       solutionsData.solutions.forEach((_, index) => {
         allExplanations[index] = newState;
       });
       setShowExplanations(allExplanations);
     }
   };
-  
+
   const handleReattempt = (questionIndex: number, selectedOption: string) => {
     const question = solutionsData?.solutions[questionIndex];
     if (!question) return;
-    
+
     setReattemptAnswers(prev => ({
       ...prev,
       [questionIndex]: selectedOption
     }));
-    
+
     setHasReattempted(prev => ({
       ...prev,
       [questionIndex]: true
     }));
-    
+
     // Show explanation after reattempt
     setShowExplanations(prev => ({
       ...prev,
       [questionIndex]: true
     }));
   };
-  
+
   const resetQuestion = (questionIndex: number) => {
     setReattemptAnswers(prev => {
       const newAnswers = { ...prev };
       delete newAnswers[questionIndex];
       return newAnswers;
     });
-    
+
     setHasReattempted(prev => ({
       ...prev,
       [questionIndex]: false
     }));
-    
+
     setShowExplanations(prev => ({
       ...prev,
       [questionIndex]: false
@@ -371,555 +371,548 @@ const SolutionsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-lg hover:bg-gray-100 mr-3"
-          >
-            <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
-          </button>
-          <div>
-            <h1 className="text-xl font-semibold text-gray-900">Solutions</h1>
-            <p className="text-sm text-gray-500">
-              {categoryName} • Question {currentQuestionIndex + 1} of {solutionsData.solutions.length}
-            </p>
-          </div>
-        </div>
-        
-        {/* Score Display and Navigator Button */}
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => setShowNavigator(true)}
-            className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors border border-gray-300"
-            title="Question Navigator"
-          >
-            <Squares2X2Icon className="h-5 w-5" />
-          </button>
-          <div className="text-right">
-            <p className="text-sm text-gray-500">Your Score</p>
-            <p className="text-lg font-semibold text-gray-900">
-              {score}/{solutionsData.solutions.length} ({percentage}%)
-            </p>
-          </div>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <TrophyIcon className={`h-6 w-6 ${
-              percentage >= 70 ? 'text-green-600' :
-              percentage >= 50 ? 'text-yellow-600' : 'text-red-600'
-            }`} />
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-lg hover:bg-gray-100 mr-3"
+            >
+              <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
+            </button>
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900">Solutions</h1>
+              <p className="text-sm text-gray-500">
+                {categoryName} • Question {currentQuestionIndex + 1} of {solutionsData.solutions.length}
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Controls */}
-      <div className="bg-white rounded-xl border border-gray-100 p-4 mb-6">
-        <div className="flex items-center justify-between">
+          {/* Score Display and Navigator Button */}
           <div className="flex items-center space-x-4">
-            {/* Practice Mode Toggle */}
-            <div className="flex items-center space-x-2">
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={practiceMode}
-                  onChange={(e) => setPracticeMode(e.target.checked)}
-                />
-                <div className={`w-11 h-6 rounded-full transition-colors ${
-                  practiceMode ? 'bg-blue-600' : 'bg-gray-200'
-                }`}>
-                  <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
-                    practiceMode ? 'translate-x-5' : 'translate-x-0.5'
-                  } mt-0.5`} />
-                </div>
-              </label>
-              <span className="text-sm font-medium text-gray-700">
-                Practice Mode {practiceMode ? 'ON' : 'OFF'}
-              </span>
-              <ArrowPathIcon className={`h-4 w-4 ${
-                practiceMode ? 'text-blue-600' : 'text-gray-400'
-              }`} />
+            <button
+              onClick={() => setShowNavigator(true)}
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors border border-gray-300"
+              title="Question Navigator"
+            >
+              <Squares2X2Icon className="h-5 w-5" />
+            </button>
+            <div className="text-right">
+              <p className="text-sm text-gray-500">Your Score</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {score}/{solutionsData.solutions.length} ({percentage}%)
+              </p>
+            </div>
+            <div className="flex items-center">
+              <TrophyIcon className={`h-6 w-6 ${percentage >= 70 ? 'text-green-600' :
+                percentage >= 50 ? 'text-yellow-600' : 'text-red-600'
+                }`} />
             </div>
           </div>
-          
-          {/* Show All/Hide All Explanations */}
-          <button
-            onClick={toggleAllExplanations}
-            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            {showAllExplanations ? (
-              <>
-                <EyeSlashIcon className="h-4 w-4" />
-                <span>Hide All Explanations</span>
-              </>
-            ) : (
-              <>
-                <EyeIcon className="h-4 w-4" />
-                <span>Show All Explanations</span>
-              </>
-            )}
-          </button>
         </div>
-        
-        {practiceMode && (
-          <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-sm text-blue-800">
-              <strong>Practice Mode:</strong> Click on any option to reattempt wrong answers. 
-              Explanations will be revealed after you make your choice.
-            </p>
-          </div>
-        )}
-      </div>
 
-      {/* Progress Indicator */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-500">Progress</span>
-          <span className="text-sm text-gray-500">
-            {currentQuestionIndex + 1} / {solutionsData.solutions.length}
-          </span>
-        </div>
-        <div className="bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-green-600 h-2 rounded-full transition-all duration-300"
-            style={{
-              width: `${((currentQuestionIndex + 1) / solutionsData.solutions.length) * 100}%`
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Question Card */}
-      <div className="bg-white rounded-xl border border-gray-100 p-8 mb-6">
-        {/* Question Header with Dynamic Status Badges */}
-        <div className="flex items-start space-x-4 mb-6">
-          {/* Status Icon */}
-          <div className="flex-shrink-0">
-            {currentStatus && currentStatus.type === 'correct' && (
-              <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
-                <CheckCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
-              </div>
-            )}
-            {currentStatus && currentStatus.type === 'incorrect' && (
-              <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
-                <XCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
-              </div>
-            )}
-            {currentStatus && currentStatus.type === 'not-attempted' && (
-              <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
-                <MinusCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
-              </div>
-            )}
-          </div>
-
-          <div className="flex-1">
-            {/* Status Badges Row */}
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center space-x-2 flex-wrap gap-2">
-                {/* Main Status Badge */}
-                {currentStatus && (
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${currentStatus.badgeClass}`}>
-                    {currentStatus.label}
-                  </span>
-                )}
-
-                {/* Marked for Review Badge */}
-                {currentStatus && currentStatus.isMarked && (
-                  <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 border border-yellow-300">
-                    <span className="inline-flex items-center">
-                      <FlagIcon className="h-4 w-4 mr-1" />
-                      Marked for Review
-                    </span>
-                  </span>
-                )}
-
-                {/* Marks Display */}
-                <span className="text-sm text-gray-500">
-                  {currentStatus && currentStatus?.isCorrect ? '+' : ''}{currentQuestion?.marks} {currentQuestion?.marks === 1 ? 'mark' : 'marks'}
+        {/* Controls */}
+        <div className="bg-white rounded-xl border border-gray-100 p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {/* Practice Mode Toggle */}
+              <div className="flex items-center space-x-2">
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={practiceMode}
+                    onChange={(e) => setPracticeMode(e.target.checked)}
+                  />
+                  <div className={`w-11 h-6 rounded-full transition-colors ${practiceMode ? 'bg-blue-600' : 'bg-gray-200'
+                    }`}>
+                    <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${practiceMode ? 'translate-x-5' : 'translate-x-0.5'
+                      } mt-0.5`} />
+                  </div>
+                </label>
+                <span className="text-sm font-medium text-gray-700">
+                  Practice Mode {practiceMode ? 'ON' : 'OFF'}
                 </span>
+                <ArrowPathIcon className={`h-4 w-4 ${practiceMode ? 'text-blue-600' : 'text-gray-400'
+                  }`} />
               </div>
-
-              {/* Report Button */}
-              <ReportQuestionButton
-                questionId={currentQuestion?.id}
-                questionNumber={currentQuestionIndex + 1}
-                userAnswer={userAnswer || undefined}
-              />
             </div>
 
-            {/* Question Text */}
-            <HTMLContent
-              content={formatTextWithLineBreaks(
-                language === 'gujarati' && currentQuestion?.question_text_gujarati
-                  ? currentQuestion?.question_text_gujarati
-                  : currentQuestion?.question_text
+            {/* Show All/Hide All Explanations */}
+            <button
+              onClick={toggleAllExplanations}
+              className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              {showAllExplanations ? (
+                <>
+                  <EyeSlashIcon className="h-4 w-4" />
+                  <span>Hide All Explanations</span>
+                </>
+              ) : (
+                <>
+                  <EyeIcon className="h-4 w-4" />
+                  <span>Show All Explanations</span>
+                </>
               )}
-              className="text-xl font-medium text-gray-900"
+            </button>
+          </div>
+
+          {practiceMode && (
+            <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-blue-800">
+                <strong>Practice Mode:</strong> Click on any option to reattempt wrong answers.
+                Explanations will be revealed after you make your choice.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-gray-500">Progress</span>
+            <span className="text-sm text-gray-500">
+              {currentQuestionIndex + 1} / {solutionsData.solutions.length}
+            </span>
+          </div>
+          <div className="bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-green-600 h-2 rounded-full transition-all duration-300"
+              style={{
+                width: `${((currentQuestionIndex + 1) / solutionsData.solutions.length) * 100}%`
+              }}
             />
           </div>
         </div>
 
-        {/* Options */}
-        <div className="space-y-3 mb-8">
-          {['A', 'B', 'C', 'D'].map((option) => {
-            const optionText = currentQuestion?.options[option as keyof typeof currentQuestion.options];
-            const isUserAnswer = userAnswer === option;
-            const isCorrectAnswer = currentQuestion?.correct_answer === option;
-            
-            // Reattempt logic
-            const reattemptAnswer = reattemptAnswers[currentQuestionIndex];
-            const isReattemptAnswer = reattemptAnswer === option;
-            const hasUserReattempted = hasReattempted[currentQuestionIndex];
-            const isReattemptCorrect = isReattemptAnswer && isCorrectAnswer;
-            const isReattemptIncorrect = isReattemptAnswer && !isCorrectAnswer;
-            
-            // Show original answers by default, or if user has reattempted in practice mode, or if originally correct
-            const showOriginalAnswers = !practiceMode || hasUserReattempted || isCorrect;
-            
-            let optionClass = 'border-gray-200 bg-white';
-            let labelClass = 'border-gray-300 text-gray-600';
-            
-            if (showOriginalAnswers) {
-              if (isCorrectAnswer) {
-                optionClass = 'border-green-500 bg-green-50 text-green-900';
-                labelClass = 'border-green-500 bg-green-500 text-white';
-              } else if (isUserAnswer && !isCorrectAnswer) {
-                optionClass = 'border-red-500 bg-red-50 text-red-900';
-                labelClass = 'border-red-500 bg-red-500 text-white';
-              }
-            }
-            
-            // Override with reattempt styling if applicable
-            if (practiceMode && hasUserReattempted) {
-              if (isReattemptCorrect) {
-                optionClass = 'border-green-500 bg-green-100 text-green-900';
-                labelClass = 'border-green-500 bg-green-600 text-white';
-              } else if (isReattemptIncorrect) {
-                optionClass = 'border-red-500 bg-red-100 text-red-900';  
-                labelClass = 'border-red-500 bg-red-600 text-white';
-              }
-            }
-            
-            const isClickable = practiceMode && !hasUserReattempted && !isCorrect;
-            
-            return (
-              <div
-                key={option}
-                className={`p-4 rounded-lg border transition-all ${optionClass} ${
-                  isClickable ? 'cursor-pointer hover:bg-blue-50 hover:border-blue-300' : ''
-                }`}
-                onClick={() => {
-                  if (isClickable) {
-                    handleReattempt(currentQuestionIndex, option);
-                  }
-                }}
-              >
-                <div className="flex items-start">
-                  <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-medium mr-3 flex-shrink-0 ${labelClass}`}>
-                    {option}
-                  </span>
-                  <div className="flex-1">
-                    <HTMLContent
-                      content={formatTextWithLineBreaks(optionText)}
-                      className=""
-                    />
-                  </div>
-                  
-                  {/* Original answer indicators */}
-                  {showOriginalAnswers && isCorrectAnswer && (
-                    <CheckCircleIcon className="h-5 w-5 text-green-600 ml-2" />
-                  )}
-                  {showOriginalAnswers && isUserAnswer && !isCorrectAnswer && (
-                    <XCircleIcon className="h-5 w-5 text-red-600 ml-2" />
-                  )}
-                  
-                  {/* Reattempt indicators */}
-                  {practiceMode && hasUserReattempted && isReattemptAnswer && (
-                    <>
-                      {isReattemptCorrect && (
-                        <div className="flex items-center ml-2">
-                          <CheckCircleIcon className="h-5 w-5 text-green-600" />
-                          <span className="text-xs text-green-600 ml-1 font-medium">Reattempt ✓</span>
-                        </div>
-                      )}
-                      {isReattemptIncorrect && (
-                        <div className="flex items-center ml-2">
-                          <XCircleIcon className="h-5 w-5 text-red-600" />
-                          <span className="text-xs text-red-600 ml-1 font-medium">Reattempt ✗</span>
-                        </div>
-                      )}
-                    </>
-                  )}
+        {/* Question Card */}
+        <div className="bg-white rounded-xl border border-gray-100 p-8 mb-6">
+          {/* Question Header with Dynamic Status Badges */}
+          <div className="flex items-start space-x-4 mb-6">
+            {/* Status Icon */}
+            <div className="flex-shrink-0">
+              {currentStatus && currentStatus.type === 'correct' && (
+                <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
+                  <CheckCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
                 </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Practice Mode Controls - Reattempt feedback */}
-        {practiceMode && hasReattempted[currentQuestionIndex] && (
-          <div className="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-medium text-blue-900">Reattempt Complete</h4>
-                <p className="text-sm text-blue-700">
-                  {reattemptAnswers[currentQuestionIndex] === currentQuestion.correct_answer
-                    ? '🎉 Great job! You got it right this time.'
-                    : '🤔 That\'s still not correct, but you can see the explanation below.'}
-                </p>
-              </div>
-              <button
-                onClick={() => resetQuestion(currentQuestionIndex)}
-                className="flex items-center space-x-1 px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
-              >
-                <ArrowPathIcon className="h-3 w-3" />
-                <span>Try Again</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Practice Mode Info - Already Correct */}
-        {practiceMode && isCorrect && !hasReattempted[currentQuestionIndex] && (
-          <div className="bg-green-50 rounded-lg p-4 mb-6 border border-green-200">
-            <div className="flex items-center">
-              <CheckCircleIcon className="h-5 w-5 text-green-600 mr-2" />
-              <div>
-                <h4 className="text-sm font-medium text-green-900">Already Correct!</h4>
-                <p className="text-sm text-green-700">
-                  You answered this question correctly. No need to reattempt. View the explanation below.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Answer Summary - Hide when Practice Mode is ON unless user has reattempted or answer is correct */}
-        {(!practiceMode || hasReattempted[currentQuestionIndex] || isCorrect) && (
-          <div className="bg-gray-50 rounded-lg p-6 mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium text-gray-700 mb-1">Your Answer</p>
-                <div className={`text-lg font-semibold ${
-                  isCorrect ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {userAnswer ? (
-                    <>
-                      <span>{userAnswer} - </span>
-                      <HTMLContent
-                        content={formatTextWithLineBreaks(currentQuestion?.options[userAnswer as keyof typeof currentQuestion.options])}
-                        className="inline"
-                      />
-                    </>
-                  ) : 'Not answered'}
+              )}
+              {currentStatus && currentStatus.type === 'incorrect' && (
+                <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
+                  <XCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
                 </div>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-700 mb-1">Correct Answer</p>
-                <div className="text-lg font-semibold text-green-600">
-                  <span>{currentQuestion?.correct_answer} - </span>
-                  <HTMLContent
-                    content={formatTextWithLineBreaks(currentQuestion?.options[currentQuestion?.correct_answer as keyof typeof currentQuestion.options])}
-                    className="inline"
-                  />
+              )}
+              {currentStatus && currentStatus.type === 'not-attempted' && (
+                <div className={`w-12 h-12 ${currentStatus.iconBgClass} rounded-full flex items-center justify-center`}>
+                  <MinusCircleIcon className={`h-6 w-6 ${currentStatus.iconClass}`} />
                 </div>
-              </div>
+              )}
             </div>
-          </div>
-        )}
 
-        {/* Explanation */}
-        {currentQuestion?.explanation && (
-          <div className="bg-blue-50 rounded-lg border border-blue-200">
-            {/* Explanation Header - Always Visible */}
-            <button
-              onClick={() => toggleExplanation(currentQuestionIndex)}
-              className="w-full p-4 flex items-center justify-between hover:bg-blue-100 transition-colors rounded-t-lg"
-            >
-              <div className="flex items-center space-x-3">
-                <LightBulbIcon className="h-6 w-6 text-blue-600 flex-shrink-0" />
-                <h3 className="text-lg font-medium text-blue-900">
-                  View Explanation
-                  {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && (
-                    <span className="text-sm font-normal text-blue-600 ml-2">
-                      (Available after reattempt)
+            <div className="flex-1">
+              {/* Status Badges Row */}
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2 flex-wrap gap-2">
+                  {/* Main Status Badge */}
+                  {currentStatus && (
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${currentStatus.badgeClass}`}>
+                      {currentStatus.label}
                     </span>
                   )}
-                </h3>
-              </div>
-              <div className="flex items-center space-x-2">
-                {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && (
-                  <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
-                    Locked
-                  </span>
-                )}
-                {showExplanations[currentQuestionIndex] ? (
-                  <EyeSlashIcon className="h-5 w-5 text-blue-600" />
-                ) : (
-                  <EyeIcon className="h-5 w-5 text-blue-600" />
-                )}
-              </div>
-            </button>
-            
-            {/* Explanation Content - Expandable */}
-            {showExplanations[currentQuestionIndex] &&
-             (!practiceMode || hasReattempted[currentQuestionIndex] || isCorrect) && (
-              <div className="px-6 pb-6 border-t border-blue-200">
-                <div className="pt-4">
-                  <HTMLContent
-                    content={language === 'gujarati' && currentQuestion?.explanation_gujarati
-                      ? currentQuestion?.explanation_gujarati
-                      : currentQuestion?.explanation || ''}
-                    className="text-blue-800 leading-relaxed"
-                  />
-                  
-                  {/* Show additional context for practice mode */}
-                  {practiceMode && hasReattempted[currentQuestionIndex] && (
-                    <div className="mt-4 p-3 bg-blue-100 rounded-lg">
-                      <div className="text-sm text-blue-700">
-                        <strong>Practice Summary:</strong>
-                        <ul className="mt-2 space-y-1">
-                          <li>• Original answer: {userAnswer || 'Not answered'}</li>
-                          <li>• Your reattempt: {reattemptAnswers[currentQuestionIndex]}</li>
-                          <li>• Correct answer: {currentQuestion.correct_answer}</li>
-                        </ul>
-                      </div>
-                    </div>
+
+                  {/* Marked for Review Badge */}
+                  {currentStatus && currentStatus.isMarked && (
+                    <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 border border-yellow-300">
+                      <span className="inline-flex items-center">
+                        <FlagIcon className="h-4 w-4 mr-1" />
+                        Marked for Review
+                      </span>
+                    </span>
                   )}
+
+                  {/* Marks Display */}
+                  <span className="text-sm text-gray-500">
+                    {currentStatus && currentStatus?.isCorrect ? '+' : ''}{currentQuestion?.marks} {currentQuestion?.marks === 1 ? 'mark' : 'marks'}
+                  </span>
                 </div>
+
+                {/* Report Button */}
+                <ReportQuestionButton
+                  questionId={currentQuestion?.id}
+                  questionNumber={currentQuestionIndex + 1}
+                  userAnswer={userAnswer || undefined}
+                />
               </div>
-            )}
-            
-            {/* Locked state message for practice mode - only for wrong answers */}
-            {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && showExplanations[currentQuestionIndex] && (
-              <div className="px-6 pb-6 border-t border-blue-200">
-                <div className="pt-4 text-center">
-                  <div className="text-blue-600 mb-2">
-                    <LightBulbIcon className="h-8 w-8 mx-auto opacity-50" />
+
+              {/* Question Text */}
+              <HTMLContent
+                content={formatTextWithLineBreaks(
+                  language === 'gujarati' && (currentQuestion?.question_text_gujarati || currentQuestion?.questionTextGujarati)
+                    ? (currentQuestion?.question_text_gujarati || currentQuestion?.questionTextGujarati)
+                    : (currentQuestion?.question_text || currentQuestion?.questionText)
+                )}
+                className="text-xl font-medium text-gray-900"
+              />
+            </div>
+          </div>
+
+          {/* Options */}
+          <div className="space-y-3 mb-8">
+            {['A', 'B', 'C', 'D'].map((option) => {
+              const optionText = currentQuestion?.options[option as keyof typeof currentQuestion.options];
+              const isUserAnswer = userAnswer === option;
+              const isCorrectAnswer = currentQuestion?.correct_answer === option;
+
+              // Reattempt logic
+              const reattemptAnswer = reattemptAnswers[currentQuestionIndex];
+              const isReattemptAnswer = reattemptAnswer === option;
+              const hasUserReattempted = hasReattempted[currentQuestionIndex];
+              const isReattemptCorrect = isReattemptAnswer && isCorrectAnswer;
+              const isReattemptIncorrect = isReattemptAnswer && !isCorrectAnswer;
+
+              // Show original answers by default, or if user has reattempted in practice mode, or if originally correct
+              const showOriginalAnswers = !practiceMode || hasUserReattempted || isCorrect;
+
+              let optionClass = 'border-gray-200 bg-white';
+              let labelClass = 'border-gray-300 text-gray-600';
+
+              if (showOriginalAnswers) {
+                if (isCorrectAnswer) {
+                  optionClass = 'border-green-500 bg-green-50 text-green-900';
+                  labelClass = 'border-green-500 bg-green-500 text-white';
+                } else if (isUserAnswer && !isCorrectAnswer) {
+                  optionClass = 'border-red-500 bg-red-50 text-red-900';
+                  labelClass = 'border-red-500 bg-red-500 text-white';
+                }
+              }
+
+              // Override with reattempt styling if applicable
+              if (practiceMode && hasUserReattempted) {
+                if (isReattemptCorrect) {
+                  optionClass = 'border-green-500 bg-green-100 text-green-900';
+                  labelClass = 'border-green-500 bg-green-600 text-white';
+                } else if (isReattemptIncorrect) {
+                  optionClass = 'border-red-500 bg-red-100 text-red-900';
+                  labelClass = 'border-red-500 bg-red-600 text-white';
+                }
+              }
+
+              const isClickable = practiceMode && !hasUserReattempted && !isCorrect;
+
+              return (
+                <div
+                  key={option}
+                  className={`p-4 rounded-lg border transition-all ${optionClass} ${isClickable ? 'cursor-pointer hover:bg-blue-50 hover:border-blue-300' : ''
+                    }`}
+                  onClick={() => {
+                    if (isClickable) {
+                      handleReattempt(currentQuestionIndex, option);
+                    }
+                  }}
+                >
+                  <div className="flex items-start">
+                    <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-medium mr-3 flex-shrink-0 ${labelClass}`}>
+                      {option}
+                    </span>
+                    <div className="flex-1">
+                      <HTMLContent
+                        content={formatTextWithLineBreaks(optionText)}
+                        className=""
+                      />
+                    </div>
+
+                    {/* Original answer indicators */}
+                    {showOriginalAnswers && isCorrectAnswer && (
+                      <CheckCircleIcon className="h-5 w-5 text-green-600 ml-2" />
+                    )}
+                    {showOriginalAnswers && isUserAnswer && !isCorrectAnswer && (
+                      <XCircleIcon className="h-5 w-5 text-red-600 ml-2" />
+                    )}
+
+                    {/* Reattempt indicators */}
+                    {practiceMode && hasUserReattempted && isReattemptAnswer && (
+                      <>
+                        {isReattemptCorrect && (
+                          <div className="flex items-center ml-2">
+                            <CheckCircleIcon className="h-5 w-5 text-green-600" />
+                            <span className="text-xs text-green-600 ml-1 font-medium">Reattempt ✓</span>
+                          </div>
+                        )}
+                        {isReattemptIncorrect && (
+                          <div className="flex items-center ml-2">
+                            <XCircleIcon className="h-5 w-5 text-red-600" />
+                            <span className="text-xs text-red-600 ml-1 font-medium">Reattempt ✗</span>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
-                  <p className="text-blue-700 text-sm">
-                    Reattempt the question above to unlock the explanation
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Practice Mode Controls - Reattempt feedback */}
+          {practiceMode && hasReattempted[currentQuestionIndex] && (
+            <div className="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm font-medium text-blue-900">Reattempt Complete</h4>
+                  <p className="text-sm text-blue-700">
+                    {reattemptAnswers[currentQuestionIndex] === currentQuestion.correct_answer
+                      ? '🎉 Great job! You got it right this time.'
+                      : '🤔 That\'s still not correct, but you can see the explanation below.'}
+                  </p>
+                </div>
+                <button
+                  onClick={() => resetQuestion(currentQuestionIndex)}
+                  className="flex items-center space-x-1 px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
+                >
+                  <ArrowPathIcon className="h-3 w-3" />
+                  <span>Try Again</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Practice Mode Info - Already Correct */}
+          {practiceMode && isCorrect && !hasReattempted[currentQuestionIndex] && (
+            <div className="bg-green-50 rounded-lg p-4 mb-6 border border-green-200">
+              <div className="flex items-center">
+                <CheckCircleIcon className="h-5 w-5 text-green-600 mr-2" />
+                <div>
+                  <h4 className="text-sm font-medium text-green-900">Already Correct!</h4>
+                  <p className="text-sm text-green-700">
+                    You answered this question correctly. No need to reattempt. View the explanation below.
                   </p>
                 </div>
               </div>
-            )}
-          </div>
-        )}
-      </div>
+            </div>
+          )}
 
-      {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
-          disabled={currentQuestionIndex === 0}
-          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Previous
-        </button>
-        
-        {/* Question Numbers */}
-        <div className="flex space-x-2 max-w-xs overflow-x-auto">
-          {solutionsData.solutions.map((_, index) => {
-            const questionUserAnswer = userAnswers ? userAnswers[index] : null;
-            const questionIsCorrect = questionUserAnswer === solutionsData.solutions[index].correct_answer;
-            
-            return (
+          {/* Answer Summary - Hide when Practice Mode is ON unless user has reattempted or answer is correct */}
+          {(!practiceMode || hasReattempted[currentQuestionIndex] || isCorrect) && (
+            <div className="bg-gray-50 rounded-lg p-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-1">Your Answer</p>
+                  <div className={`text-lg font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                    {userAnswer ? (
+                      <>
+                        <span>{userAnswer} - </span>
+                        <HTMLContent
+                          content={formatTextWithLineBreaks(currentQuestion?.options[userAnswer as keyof typeof currentQuestion.options])}
+                          className="inline"
+                        />
+                      </>
+                    ) : 'Not answered'}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-1">Correct Answer</p>
+                  <div className="text-lg font-semibold text-green-600">
+                    <span>{currentQuestion?.correct_answer} - </span>
+                    <HTMLContent
+                      content={formatTextWithLineBreaks(currentQuestion?.options[currentQuestion?.correct_answer as keyof typeof currentQuestion.options])}
+                      className="inline"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Explanation */}
+          {currentQuestion?.explanation && (
+            <div className="bg-blue-50 rounded-lg border border-blue-200">
+              {/* Explanation Header - Always Visible */}
               <button
-                key={index}
-                onClick={() => setCurrentQuestionIndex(index)}
-                className={`w-10 h-10 rounded text-sm font-medium flex-shrink-0 ${
-                  index === currentQuestionIndex
-                    ? 'bg-blue-600 text-white'
-                    : questionIsCorrect
-                    ? 'bg-green-100 text-green-800 border border-green-300'
-                    : questionUserAnswer
-                    ? 'bg-red-100 text-red-800 border border-red-300'
-                    : 'bg-gray-100 text-gray-600 border border-gray-300'
-                }`}
+                onClick={() => toggleExplanation(currentQuestionIndex)}
+                className="w-full p-4 flex items-center justify-between hover:bg-blue-100 transition-colors rounded-t-lg"
               >
-                {index + 1}
+                <div className="flex items-center space-x-3">
+                  <LightBulbIcon className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                  <h3 className="text-lg font-medium text-blue-900">
+                    View Explanation
+                    {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && (
+                      <span className="text-sm font-normal text-blue-600 ml-2">
+                        (Available after reattempt)
+                      </span>
+                    )}
+                  </h3>
+                </div>
+                <div className="flex items-center space-x-2">
+                  {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && (
+                    <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                      Locked
+                    </span>
+                  )}
+                  {showExplanations[currentQuestionIndex] ? (
+                    <EyeSlashIcon className="h-5 w-5 text-blue-600" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5 text-blue-600" />
+                  )}
+                </div>
               </button>
-            );
-          })}
+
+              {/* Explanation Content - Expandable */}
+              {showExplanations[currentQuestionIndex] &&
+                (!practiceMode || hasReattempted[currentQuestionIndex] || isCorrect) && (
+                  <div className="px-6 pb-6 border-t border-blue-200">
+                    <div className="pt-4">
+                      <HTMLContent
+                        content={language === 'gujarati' && currentQuestion?.explanation_gujarati
+                          ? currentQuestion?.explanation_gujarati
+                          : currentQuestion?.explanation || ''}
+                        className="text-blue-800 leading-relaxed"
+                      />
+
+                      {/* Show additional context for practice mode */}
+                      {practiceMode && hasReattempted[currentQuestionIndex] && (
+                        <div className="mt-4 p-3 bg-blue-100 rounded-lg">
+                          <div className="text-sm text-blue-700">
+                            <strong>Practice Summary:</strong>
+                            <ul className="mt-2 space-y-1">
+                              <li>• Original answer: {userAnswer || 'Not answered'}</li>
+                              <li>• Your reattempt: {reattemptAnswers[currentQuestionIndex]}</li>
+                              <li>• Correct answer: {currentQuestion.correct_answer}</li>
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              {/* Locked state message for practice mode - only for wrong answers */}
+              {practiceMode && !hasReattempted[currentQuestionIndex] && !isCorrect && showExplanations[currentQuestionIndex] && (
+                <div className="px-6 pb-6 border-t border-blue-200">
+                  <div className="pt-4 text-center">
+                    <div className="text-blue-600 mb-2">
+                      <LightBulbIcon className="h-8 w-8 mx-auto opacity-50" />
+                    </div>
+                    <p className="text-blue-700 text-sm">
+                      Reattempt the question above to unlock the explanation
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        <button
-          onClick={() => setCurrentQuestionIndex(Math.min(solutionsData.solutions.length - 1, currentQuestionIndex + 1))}
-          disabled={currentQuestionIndex === solutionsData.solutions.length - 1}
-          className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {currentQuestionIndex === solutionsData.solutions.length - 1 ? 'Finish' : 'Next'}
-        </button>
-      </div>
+        {/* Navigation */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
+            disabled={currentQuestionIndex === 0}
+            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
 
-      {/* Question Navigator Modal */}
-      {showNavigator && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h3 className="text-xl font-semibold text-gray-900">
-                Question Navigator
-              </h3>
-              <button
-                onClick={() => setShowNavigator(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <XMarkIcon className="h-6 w-6" />
-              </button>
-            </div>
+          {/* Question Numbers */}
+          <div className="flex space-x-2 max-w-xs overflow-x-auto">
+            {solutionsData.solutions.map((_, index) => {
+              const questionUserAnswer = userAnswers ? userAnswers[index] : null;
+              const questionIsCorrect = questionUserAnswer === solutionsData.solutions[index].correct_answer;
 
-            {/* Modal Content */}
-            <div className="p-6">
-              {/* Question Grid */}
-              <div className="grid grid-cols-6 md:grid-cols-8 gap-3 mb-8">
-                {solutionsData && solutionsData.solutions.map((question, index) => {
-                  const isCurrentQuestion = index === currentQuestionIndex;
-                  const originalUserAnswer = userAnswers ? userAnswers[index] : null;
-                  const isOriginalCorrect = originalUserAnswer === question.correct_answer;
-                  const hasReattemptedThis = hasReattempted[index];
-                  const reattemptAnswer = reattemptAnswers[index];
-                  const isReattemptCorrect = reattemptAnswer === question.correct_answer;
+              return (
+                <button
+                  key={index}
+                  onClick={() => setCurrentQuestionIndex(index)}
+                  className={`w-10 h-10 rounded text-sm font-medium flex-shrink-0 ${index === currentQuestionIndex
+                    ? 'bg-blue-600 text-white'
+                    : questionIsCorrect
+                      ? 'bg-green-100 text-green-800 border border-green-300'
+                      : questionUserAnswer
+                        ? 'bg-red-100 text-red-800 border border-red-300'
+                        : 'bg-gray-100 text-gray-600 border border-gray-300'
+                    }`}
+                >
+                  {index + 1}
+                </button>
+              );
+            })}
+          </div>
 
-                  // Determine question status
-                  let statusClass = '';
+          <button
+            onClick={() => setCurrentQuestionIndex(Math.min(solutionsData.solutions.length - 1, currentQuestionIndex + 1))}
+            disabled={currentQuestionIndex === solutionsData.solutions.length - 1}
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {currentQuestionIndex === solutionsData.solutions.length - 1 ? 'Finish' : 'Next'}
+          </button>
+        </div>
 
-                  if (isCurrentQuestion) {
-                    statusClass = 'border-blue-500 border-3 bg-blue-100 text-blue-800 ring-2 ring-blue-200';
-                  } else if (practiceMode && hasReattemptedThis) {
-                    if (isReattemptCorrect) {
-                      statusClass = 'bg-green-100 text-green-800 border-2 border-green-300 hover:bg-green-200';
-                    } else {
-                      statusClass = 'bg-orange-100 text-orange-800 border-2 border-orange-300 hover:bg-orange-200';
-                    }
-                  } else if (originalUserAnswer) {
-                    if (isOriginalCorrect) {
-                      statusClass = 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100';
-                    } else {
-                      statusClass = 'bg-red-50 text-red-700 border-2 border-red-200 hover:bg-red-100';
-                    }
-                  } else {
-                    statusClass = 'bg-gray-50 text-gray-500 border-2 border-gray-200 hover:bg-gray-100';
-                  }
-
-                  return (
-                    <button
-                      key={question.id}
-                      onClick={() => {
-                        setCurrentQuestionIndex(index);
-                        setShowNavigator(false);
-                      }}
-                      className={`w-14 h-14 rounded-xl flex items-center justify-center text-sm font-bold transition-all hover:scale-110 transform ${statusClass}`}
-                      title={`Question ${index + 1}`}
-                    >
-                      {index + 1}
-                    </button>
-                  );
-                })}
+        {/* Question Navigator Modal */}
+        {showNavigator && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Question Navigator
+                </h3>
+                <button
+                  onClick={() => setShowNavigator(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
               </div>
 
-              {/* Legend */}
-              {/* <div className="mb-8">
+              {/* Modal Content */}
+              <div className="p-6">
+                {/* Question Grid */}
+                <div className="grid grid-cols-6 md:grid-cols-8 gap-3 mb-8">
+                  {solutionsData && solutionsData.solutions.map((question, index) => {
+                    const isCurrentQuestion = index === currentQuestionIndex;
+                    const originalUserAnswer = userAnswers ? userAnswers[index] : null;
+                    const isOriginalCorrect = originalUserAnswer === question.correct_answer;
+                    const hasReattemptedThis = hasReattempted[index];
+                    const reattemptAnswer = reattemptAnswers[index];
+                    const isReattemptCorrect = reattemptAnswer === question.correct_answer;
+
+                    // Determine question status
+                    let statusClass = '';
+
+                    if (isCurrentQuestion) {
+                      statusClass = 'border-blue-500 border-3 bg-blue-100 text-blue-800 ring-2 ring-blue-200';
+                    } else if (practiceMode && hasReattemptedThis) {
+                      if (isReattemptCorrect) {
+                        statusClass = 'bg-green-100 text-green-800 border-2 border-green-300 hover:bg-green-200';
+                      } else {
+                        statusClass = 'bg-orange-100 text-orange-800 border-2 border-orange-300 hover:bg-orange-200';
+                      }
+                    } else if (originalUserAnswer) {
+                      if (isOriginalCorrect) {
+                        statusClass = 'bg-green-50 text-green-700 border-2 border-green-200 hover:bg-green-100';
+                      } else {
+                        statusClass = 'bg-red-50 text-red-700 border-2 border-red-200 hover:bg-red-100';
+                      }
+                    } else {
+                      statusClass = 'bg-gray-50 text-gray-500 border-2 border-gray-200 hover:bg-gray-100';
+                    }
+
+                    return (
+                      <button
+                        key={question.id}
+                        onClick={() => {
+                          setCurrentQuestionIndex(index);
+                          setShowNavigator(false);
+                        }}
+                        className={`w-14 h-14 rounded-xl flex items-center justify-center text-sm font-bold transition-all hover:scale-110 transform ${statusClass}`}
+                        title={`Question ${index + 1}`}
+                      >
+                        {index + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Legend */}
+                {/* <div className="mb-8">
                 <h4 className="font-semibold text-gray-800 mb-4 text-sm">Legend:</h4>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
                   <div className="flex items-center space-x-3">
@@ -953,66 +946,65 @@ const SolutionsPage: React.FC = () => {
                 </div>
               </div> */}
 
-              {/* Progress Statistics */}
-              <div className="bg-gray-50 rounded-xl p-6">
-                <h4 className="font-semibold text-gray-800 mb-4 text-base">
-                  Solution Progress
-                </h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-900">
-                      {solutionsData?.solutions.length || 0}
+                {/* Progress Statistics */}
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h4 className="font-semibold text-gray-800 mb-4 text-base">
+                    Solution Progress
+                  </h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-gray-900">
+                        {solutionsData?.solutions.length || 0}
+                      </div>
+                      <div className="text-sm text-gray-600">Total</div>
                     </div>
-                    <div className="text-sm text-gray-600">Total</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">
-                      {score || 0}
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-green-600">
+                        {score || 0}
+                      </div>
+                      <div className="text-sm text-gray-600">Correct</div>
                     </div>
-                    <div className="text-sm text-gray-600">Correct</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600">
-                      {(solutionsData?.solutions.length || 0) - (score || 0)}
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-red-600">
+                        {(solutionsData?.solutions.length || 0) - (score || 0)}
+                      </div>
+                      <div className="text-sm text-gray-600">Wrong</div>
                     </div>
-                    <div className="text-sm text-gray-600">Wrong</div>
-                  </div>
-                  <div className="text-center">
-                    <div className={`text-2xl font-bold ${
-                      (percentage || 0) >= 70 ? 'text-green-600' :
-                      (percentage || 0) >= 50 ? 'text-yellow-600' : 'text-red-600'
-                    }`}>
-                      {percentage || 0}%
+                    <div className="text-center">
+                      <div className={`text-2xl font-bold ${(percentage || 0) >= 70 ? 'text-green-600' :
+                        (percentage || 0) >= 50 ? 'text-yellow-600' : 'text-red-600'
+                        }`}>
+                        {percentage || 0}%
+                      </div>
+                      <div className="text-sm text-gray-600">Score</div>
                     </div>
-                    <div className="text-sm text-gray-600">Score</div>
                   </div>
-                </div>
 
-                {practiceMode && Object.keys(hasReattempted).length > 0 && (
-                  <div className="pt-4 border-t border-gray-200">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Questions Reattempted:</span>
-                      <span className="text-lg font-bold text-blue-600">
-                        {Object.values(hasReattempted).filter(Boolean).length}
-                      </span>
+                  {practiceMode && Object.keys(hasReattempted).length > 0 && (
+                    <div className="pt-4 border-t border-gray-200">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Questions Reattempted:</span>
+                        <span className="text-lg font-bold text-blue-600">
+                          {Object.values(hasReattempted).filter(Boolean).length}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Action Button */}
-                <div className="mt-6">
-                  <button
-                    onClick={() => setShowNavigator(false)}
-                    className="w-full px-6 py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors"
-                  >
-                    Continue Review
-                  </button>
+                  {/* Action Button */}
+                  <div className="mt-6">
+                    <button
+                      onClick={() => setShowNavigator(false)}
+                      className="w-full px-6 py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors"
+                    >
+                      Continue Review
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </div>
   );
