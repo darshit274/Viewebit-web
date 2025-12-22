@@ -489,16 +489,12 @@ const TakeTestPage: React.FC = () => {
                 item.userId === userUuid
             );
 
-            setBackendResults({
-              score: data.correctAnswers,
-              percentage: data.percentage,
-              finalScore: data.finalScore || data.score,
-              negativeMarkingEnabled: data.negativeMarkingEnabled || false,
-              negativeMarks: data.negativeMarksDeducted || 0,
-              totalTimeSpent: totalTimeSpent,
+            setBackendResults(prev => ({
+              ...prev,
               myRank: myRank?.rank,
               totalParticipants: leaderboardResponse?.data?.metadata?.total,
-            });
+            }));
+
           }
         } catch (error) {
 
@@ -1048,7 +1044,7 @@ const TakeTestPage: React.FC = () => {
             <button
               onClick={() => {
                 // Navigate to solutions page
-                navigate(`/tests/solutions/${uuid}`, {
+                navigate(`/tests/solutions/${uuid}${backendResults?.sessionId ? `?session=${backendResults.sessionId}` : ''}`, {
                   state: {
                     categoryName: quizData.category.name,
                     userAnswers: selectedAnswers,
