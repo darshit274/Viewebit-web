@@ -296,7 +296,7 @@ const FreeTestsPage: React.FC = () => {
               </div>
             </div>
             {test.description && (
-              <p className="text-sm text-gray-600 line-clamp-2">{test.description}</p>
+              <p className="text-sm text-gray-600 line-clamp-2" dangerouslySetInnerHTML={{ __html: test.description }}></p>
             )}
           </div>
         </div>
