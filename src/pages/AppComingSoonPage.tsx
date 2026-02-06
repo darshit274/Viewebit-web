@@ -115,7 +115,7 @@ const AppComingSoonPage: React.FC = () => {
           </h1>
 
           <p className="text-lg md:text-xl lg:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Your ultimate companion for Gujarat Government Exam preparation.
+            Your ultimate companion for Gujarat competitive Exam preparation.
             <br />Practice on-the-go with our powerful mobile app!
           </p>
 

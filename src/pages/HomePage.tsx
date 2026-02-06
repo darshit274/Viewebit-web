@@ -114,7 +114,7 @@ const HomePage: React.FC = () => {
               <span className="gradient-text">
                 Your Smart Companion
               </span>{' '}
-              for Gujarat Government Exam Preparation
+              for Gujarat competitive Exam Preparation
             </p>
 
             {/* Key Features List */}
@@ -184,7 +184,7 @@ const HomePage: React.FC = () => {
             <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 md:p-12 shadow-lg">
               <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
                 MockTale Academy is a powerful <strong className="text-blue-600">mock test platform</strong> built for aspirants preparing for various{' '}
-                <strong className="text-purple-600">Gujarat government exams</strong> like GPSC, GSSSB, GPSSB, Police-constable Bharti, PSI, Talati, Junior Clerk and more.
+                <strong className="text-purple-600">Gujarat competitive Exams</strong> like GPSC, GSSSB, GPSSB, Police-constable Bharti, PSI, Talati, Junior Clerk and more.
               </p>
               <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
                 We provide <strong>full-length tests</strong>, <strong>subject-wise practice</strong>, <strong>topic-wise revision</strong>,{' '}
@@ -320,7 +320,7 @@ const HomePage: React.FC = () => {
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">Are the mock tests based on the latest exam pattern?</h3>
                   <p className="text-gray-700">
-                    Yes, all mock tests are designed to reflect the <strong>latest pattern and difficulty level</strong> of Gujarat government exams.
+                    Yes, all mock tests are designed to reflect the <strong>latest pattern and difficulty level</strong> of Gujarat competitive Exams.
                   </p>
                 </div>
               </div>
@@ -469,7 +469,7 @@ const HomePage: React.FC = () => {
                 </div>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Your trusted platform for Gujarat Government Exam preparation. Comprehensive mock tests, study materials, and analytics to help you succeed.
+                Your trusted platform for Gujarat competitive Exam preparation. Comprehensive mock tests, study materials, and analytics to help you succeed.
               </p>
             </div>
 

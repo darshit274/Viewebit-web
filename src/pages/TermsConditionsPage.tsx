@@ -53,7 +53,7 @@ const TermsConditionsPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Welcome to <strong className="text-primary-600">MockTale Academy</strong>. These Terms and Conditions ("Terms") govern your access to and use of our online educational platform for Gujarat Government Exam preparation. By registering, accessing, or using our services, you agree to be bound by these Terms.
+              Welcome to <strong className="text-primary-600">MockTale Academy</strong>. These Terms and Conditions ("Terms") govern your access to and use of our online educational platform for Gujarat competitive Exam preparation. By registering, accessing, or using our services, you agree to be bound by these Terms.
             </p>
             <p className="text-gray-700 leading-relaxed">
               <strong>IMPORTANT:</strong> If you do not agree to these Terms, please do not use our platform. Your continued use constitutes acceptance of any modifications to these Terms.
@@ -438,6 +438,23 @@ const TermsConditionsPage: React.FC = () => {
                 <p className="mt-3">
                   Continued use after changes constitutes acceptance of the modified Terms.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 11 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-red-600 to-rose-700 p-6">
+              <h2 className="text-2xl font-bold text-white">11. Disclaimer</h2>
+            </div>
+            <div className="p-8">
+              <div className="text-gray-700 space-y-3">
+                <p>
+                  MockTale Academy does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
+                </p>
+                <p className="mt-3">
+                  This platform is an independent educational service created solely for practice and self-assessment purposes.
+                  All exam-related information is collected from publicly available official websites for reference only.                </p>
               </div>
             </div>
           </div>

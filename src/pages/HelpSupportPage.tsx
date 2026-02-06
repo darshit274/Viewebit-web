@@ -33,13 +33,13 @@ const HelpSupportPage: React.FC = () => {
     {
       id: 1,
       question: 'How do I start taking practice tests?',
-      answer: 'Navigate to the "Tests" section from the sidebar menu. Browse available test series or categories for Gujarat Government Exams (GPSC, GSSSB, etc.). Click on any test to view details, then click "Start Test". Choose your preferred language (English or Gujarati) and begin!',
+      answer: 'Navigate to the "Tests" section from the sidebar menu. Browse available test series or categories for Gujarat competitive Exams (GPSC, GSSSB, etc.). Click on any test to view details, then click "Start Test". Choose your preferred language (English or Gujarati) and begin!',
       category: 'general',
     },
     {
       id: 2,
       question: 'What exams does MockTale Academy cover?',
-      answer: 'We provide comprehensive preparation for Gujarat Government Exams including GPSC (Gujarat Public Service Commission), GSSSB (Gujarat Subordinate Service Selection Board), GPSSB (Gujarat Panchayat Service Selection Board), Police Constable Bharti, PSI (Police Sub Inspector), Talati, and Junior Clerk examinations.',
+      answer: 'We provide comprehensive preparation for Gujarat competitive Exams including GPSC (Gujarat Public Service Commission), GSSSB (Gujarat Subordinate Service Selection Board), GPSSB (Gujarat Panchayat Service Selection Board), Police Constable Bharti, PSI (Police Sub Inspector), Talati, and Junior Clerk examinations.',
       category: 'general',
     },
     {
@@ -93,7 +93,7 @@ const HelpSupportPage: React.FC = () => {
     {
       id: 11,
       question: 'What is negative marking and how is it calculated?',
-      answer: 'Negative marking mirrors actual Gujarat Government Exam patterns. Typically, wrong answers deduct 0.25 to 0.33 marks per question (varies by exam type). Your final score = (Correct answers × Marks per question) - (Wrong answers × Negative marks per question). The results page shows your score breakdown clearly.',
+      answer: 'Negative marking mirrors actual Gujarat competitive Exam patterns. Typically, wrong answers deduct 0.25 to 0.33 marks per question (varies by exam type). Your final score = (Correct answers × Marks per question) - (Wrong answers × Negative marks per question). The results page shows your score breakdown clearly.',
       category: 'tests',
     },
     {
@@ -352,7 +352,7 @@ const HelpSupportPage: React.FC = () => {
             <DocumentTextIcon className="h-12 w-12 text-primary-600 mb-4" />
             <h3 className="text-2xl font-bold text-gray-900 mb-3">Study Materials</h3>
             <p className="text-gray-700 mb-4">
-              Access free PDFs, previous year papers, and study notes for all Gujarat Government Exams.
+              Access free PDFs, previous year papers, and study notes for all Gujarat competitive Exams.
             </p>
             <button
               onClick={() => navigate('/pdfs')}

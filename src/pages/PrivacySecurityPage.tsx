@@ -53,7 +53,7 @@ const PrivacySecurityPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Welcome to <strong className="text-primary-600">MockTale Academy</strong>. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our educational platform for Gujarat Government Exam preparation.
+              Welcome to <strong className="text-primary-600">MockTale Academy</strong>. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our educational platform for Gujarat competitive exam preparation.
             </p>
             <p className="text-gray-700 leading-relaxed">
               By accessing or using MockTale Academy, you agree to this Privacy Policy. If you do not agree with the terms, please discontinue use of our services.
@@ -300,6 +300,21 @@ const PrivacySecurityPage: React.FC = () => {
               <p className="text-gray-700">
                 Your continued use of MockTale Academy after changes become effective constitutes acceptance of the updated policy.
               </p>
+            </div>
+          </div>
+
+          {/* Section 8 */}
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-red-600 to-rose-700 p-6">
+              <h2 className="text-2xl font-bold text-white">Disclaimer</h2>
+            </div>
+            <div className="p-8">
+              <p className="text-gray-700 leading-relaxed mb-4">
+                MockTale Academy does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
+              </p>
+              <p className="text-gray-700">
+                This platform is an independent educational service created solely for practice and self-assessment purposes.
+                All exam-related information is collected from publicly available official websites for reference only.</p>
             </div>
           </div>
 
