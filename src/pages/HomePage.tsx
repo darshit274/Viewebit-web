@@ -492,6 +492,7 @@ const HomePage: React.FC = () => {
                 <li><Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
                 <li><Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
                 <li><Link to="/help" className="hover:text-white transition-colors">Help & Support</Link></li>
+                <li><Link to="/source" className="hover:text-white transition-colors">Sources & Disclaimer</Link></li>
               </ul>
             </div>
 
