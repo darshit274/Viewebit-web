@@ -28,6 +28,7 @@ import HomePage from './pages/HomePage';
 import PDFsPage from './pages/pdfs/PDFsPage';
 import PDFViewerPage from './pages/pdfs/PDFViewerPage';
 import PrivacySecurityPage from './pages/PrivacySecurityPage';
+import SourcesDisclaimer from './pages/SourcesDisclaimer';
 import PerformancePage from './pages/profile/PerformancePage';
 import ProfileEditPage from './pages/profile/ProfileEditPage';
 import ProfilePage from './pages/profile/ProfilePage';
@@ -170,6 +171,7 @@ function AppContent() {
           <Route path="/help" element={<HelpSupportPage />} />
           <Route path="/terms" element={<TermsConditionsPage />} />
           <Route path="/refund-policy" element={<RefundPolicyPage />} />
+          <Route path="/source" element={<SourcesDisclaimer />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/app-coming-soon" element={<AppComingSoonPage />} />
 
