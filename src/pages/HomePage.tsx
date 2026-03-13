@@ -380,7 +380,7 @@ const HomePage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              to="/app-coming-soon"
+              to="https://play.google.com/store/apps/details?id=com.mocktale.mocktaleacademy"
               className="btn btn-lg bg-white text-blue-600 hover:bg-gray-100 font-bold shadow-xl"
             >
               📱 Download App
