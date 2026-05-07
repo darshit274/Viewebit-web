@@ -12,7 +12,8 @@ import {
   Squares2X2Icon,
   XMarkIcon,
   FlagIcon,
-  MinusCircleIcon
+  MinusCircleIcon,
+  LanguageIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
@@ -26,6 +27,12 @@ interface Question {
   question_text: string;
   question_text_gujarati?: string;
   options: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+  };
+  options_gujarati?: {
     A: string;
     B: string;
     C: string;
@@ -85,14 +92,45 @@ const SolutionsPage: React.FC = () => {
     markedQuestions: locationMarkedQuestions = {},
     score: locationScore,
     percentage: locationPercentage,
-    language = 'english'
+    language: initialLanguage = 'english'
   } = location.state || {};
+
+  // Language is now switchable in this screen — initialised from the language used during the test
+  const [language, setLanguage] = useState<'english' | 'gujarati'>(
+    (initialLanguage === 'gujarati' ? 'gujarati' : 'english') as 'english' | 'gujarati'
+  );
 
   // State to hold session-based data (when viewing from test history)
   const [userAnswers, setUserAnswers] = useState<{ [key: number]: string }>(locationUserAnswers || {});
   const [markedQuestions, setMarkedQuestions] = useState<{ [key: number]: boolean }>(locationMarkedQuestions || {});
   const [score, setScore] = useState<number>(locationScore || 0);
   const [percentage, setPercentage] = useState<number>(locationPercentage || 0);
+
+  // Bilingual helpers — fall back to the other language when one is missing
+  const getQuestionText = (q?: Question): string => {
+    if (!q) return '';
+    if (language === 'gujarati') return q.question_text_gujarati || q.question_text || '';
+    return q.question_text || q.question_text_gujarati || '';
+  };
+
+  const getOptionText = (q: Question | undefined, opt: 'A' | 'B' | 'C' | 'D'): string => {
+    if (!q) return '';
+    const englishOpt = q.options?.[opt];
+    const gujaratiOpt = q.options_gujarati?.[opt];
+    if (language === 'gujarati') return gujaratiOpt || englishOpt || '';
+    return englishOpt || gujaratiOpt || '';
+  };
+
+  const getExplanationText = (q?: Question): string => {
+    if (!q) return '';
+    if (language === 'gujarati') return q.explanation_gujarati || q.explanation || '';
+    return q.explanation || q.explanation_gujarati || '';
+  };
+
+  const hasBothLanguages = (q?: Question): boolean => {
+    if (!q) return false;
+    return Boolean(q.question_text_gujarati || q.options_gujarati?.A || q.explanation_gujarati);
+  };
 
   // Helper function to convert newlines to HTML br tags
   const formatTextWithLineBreaks = (text: string): string => {
@@ -124,12 +162,14 @@ const SolutionsPage: React.FC = () => {
         const data = response.data.data;
 
         // Map the session solutions to our component format
+        // Prefer raw English/Gujarati versions when present so the language toggle can switch client-side
         const mappedSolutions = data.solutions.map((sol: any) => ({
           id: sol.questionId,
           uuid: sol.questionUuid || '',
           question_text: sol.questionText,
           question_text_gujarati: sol.questionTextGujarati,
-          options: sol.options,
+          options: sol.optionsEnglish || sol.options,
+          options_gujarati: sol.optionsGujarati,
           correct_answer: sol.correctAnswer,
           explanation: sol.explanation,
           explanation_gujarati: sol.explanationGujarati,
@@ -198,18 +238,44 @@ const SolutionsPage: React.FC = () => {
       console.log('API URL:', `/test-history/${uuid}/solutions`);
       console.log('Using language:', language);
 
-      const response = await api.get(`/test-history/${uuid}/solutions`, {
-        params: {
-          language: language || 'english'
-        }
-      });
+      // Don't pass `language` — backend defaults to returning English in `questionText`/`options`
+      // and raw Gujarati separately, so we can switch languages client-side without re-fetching
+      const response = await api.get(`/test-history/${uuid}/solutions`);
 
       console.log('API Response:', response);
       console.log('Response data:', response.data);
 
       if (response.data.success) {
-        setSolutionsData(response.data.data);
-        console.log('Solutions data set:', response.data.data);
+        const data = response.data.data;
+        const mappedSolutions = (data.solutions || []).map((sol: any) => ({
+          id: sol.questionId,
+          uuid: sol.questionUuid || '',
+          question_text: sol.questionText,
+          question_text_gujarati: sol.questionTextGujarati,
+          options: sol.optionsEnglish || sol.options,
+          options_gujarati: sol.optionsGujarati,
+          correct_answer: sol.correctAnswer,
+          explanation: sol.explanation,
+          explanation_gujarati: sol.explanationGujarati,
+          marks: sol.marks
+        }));
+
+        setSolutionsData({
+          category: {
+            id: 0,
+            uuid: uuid || '',
+            name: data.categoryName || categoryName || 'Test',
+            name_gujarati: '',
+            description: '',
+            description_gujarati: ''
+          },
+          solutions: mappedSolutions,
+          metadata: {
+            total_questions: data.totalQuestions ?? mappedSolutions.length,
+            language
+          }
+        });
+        console.log('Solutions data set:', data);
       } else {
         console.error('API returned success: false', response.data);
         toast.error(response.data.message || 'Failed to load solutions');
@@ -413,8 +479,8 @@ const SolutionsPage: React.FC = () => {
 
         {/* Controls */}
         <div className="bg-white rounded-xl border border-gray-100 p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {/* Practice Mode Toggle */}
               <div className="flex items-center space-x-2">
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -436,6 +502,36 @@ const SolutionsPage: React.FC = () => {
                 <ArrowPathIcon className={`h-4 w-4 ${practiceMode ? 'text-blue-600' : 'text-gray-400'
                   }`} />
               </div>
+
+              {/* Language Switcher — shown when any solution has Gujarati content */}
+              {solutionsData.solutions.some(hasBothLanguages) && (
+                <div className="flex items-center space-x-2">
+                  <LanguageIcon className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-medium text-gray-700 hidden sm:inline">Language:</span>
+                  <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setLanguage('english')}
+                      className={`px-3 py-1.5 text-sm font-medium transition-colors ${language === 'english'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                        }`}
+                    >
+                      English
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLanguage('gujarati')}
+                      className={`px-3 py-1.5 text-sm font-medium transition-colors border-l border-gray-200 ${language === 'gujarati'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                        }`}
+                    >
+                      ગુજરાતી
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Show All/Hide All Explanations */}
@@ -545,11 +641,7 @@ const SolutionsPage: React.FC = () => {
 
               {/* Question Text */}
               <HTMLContent
-                content={formatTextWithLineBreaks(
-                  language === 'gujarati' && (currentQuestion?.question_text_gujarati || currentQuestion?.questionTextGujarati)
-                    ? (currentQuestion?.question_text_gujarati || currentQuestion?.questionTextGujarati)
-                    : (currentQuestion?.question_text || currentQuestion?.questionText)
-                )}
+                content={formatTextWithLineBreaks(getQuestionText(currentQuestion))}
                 className="text-xl font-medium text-gray-900"
               />
             </div>
@@ -558,7 +650,7 @@ const SolutionsPage: React.FC = () => {
           {/* Options */}
           <div className="space-y-3 mb-8">
             {['A', 'B', 'C', 'D'].map((option) => {
-              const optionText = currentQuestion?.options[option as keyof typeof currentQuestion.options];
+              const optionText = getOptionText(currentQuestion, option as 'A' | 'B' | 'C' | 'D');
               const isUserAnswer = userAnswer === option;
               const isCorrectAnswer = currentQuestion?.correct_answer === option;
 
@@ -701,7 +793,7 @@ const SolutionsPage: React.FC = () => {
                       <>
                         <span>{userAnswer} - </span>
                         <HTMLContent
-                          content={formatTextWithLineBreaks(currentQuestion?.options[userAnswer as keyof typeof currentQuestion.options])}
+                          content={formatTextWithLineBreaks(getOptionText(currentQuestion, userAnswer as 'A' | 'B' | 'C' | 'D'))}
                           className="inline"
                         />
                       </>
@@ -713,7 +805,7 @@ const SolutionsPage: React.FC = () => {
                   <div className="text-lg font-semibold text-green-600">
                     <span>{currentQuestion?.correct_answer} - </span>
                     <HTMLContent
-                      content={formatTextWithLineBreaks(currentQuestion?.options[currentQuestion?.correct_answer as keyof typeof currentQuestion.options])}
+                      content={formatTextWithLineBreaks(getOptionText(currentQuestion, currentQuestion?.correct_answer as 'A' | 'B' | 'C' | 'D'))}
                       className="inline"
                     />
                   </div>
@@ -723,7 +815,7 @@ const SolutionsPage: React.FC = () => {
           )}
 
           {/* Explanation */}
-          {currentQuestion?.explanation && (
+          {(currentQuestion?.explanation || currentQuestion?.explanation_gujarati) && (
             <div className="bg-blue-50 rounded-lg border border-blue-200">
               {/* Explanation Header - Always Visible */}
               <button
@@ -761,9 +853,7 @@ const SolutionsPage: React.FC = () => {
                   <div className="px-6 pb-6 border-t border-blue-200">
                     <div className="pt-4">
                       <HTMLContent
-                        content={language === 'gujarati' && currentQuestion?.explanation_gujarati
-                          ? currentQuestion?.explanation_gujarati
-                          : currentQuestion?.explanation || ''}
+                        content={getExplanationText(currentQuestion)}
                         className="text-blue-800 leading-relaxed"
                       />
 
