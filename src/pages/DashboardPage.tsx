@@ -226,18 +226,6 @@ const DashboardPage: React.FC = () => {
                 <ArrowRightIcon className="w-4 h-4 text-gray-400" />
               </Link>
 
-              <Link
-                to="/pdfs"
-                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-colors"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <BookOpenIcon className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <span className="font-medium text-gray-900">Study Materials</span>
-                </div>
-                <ArrowRightIcon className="w-4 h-4 text-gray-400" />
-              </Link>
             </div>
           </div>
         </div>

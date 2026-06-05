@@ -22,7 +22,6 @@ const Dashboard: React.FC = () => {
   const stats = {
     totalTests: 12,
     completedTests: 8,
-    totalPdfs: 24,
     rank: 156,
     totalStudents: 10234,
     studyStreak: 15
@@ -36,13 +35,6 @@ const Dashboard: React.FC = () => {
       score: 87,
       timestamp: '2 hours ago',
       status: 'completed'
-    },
-    {
-      id: 2,
-      type: 'pdf',
-      title: 'Physics Chapter 5 Notes',
-      timestamp: '1 day ago',
-      status: 'downloaded'
     },
     {
       id: 3,
@@ -147,21 +139,6 @@ const Dashboard: React.FC = () => {
                 <div className="text-gray-600 text-sm">Completed Tests</div>
               </div>
 
-              {/* PDFs Downloaded */}
-              <div className="card p-6 group hover:shadow-lg transition-all duration-200">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                    <DocumentTextIcon className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div className="flex items-center text-green-600 text-sm font-medium">
-                    <ArrowUpIcon className="w-4 h-4 mr-1" />
-                    15%
-                  </div>
-                </div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">{stats.totalPdfs}</div>
-                <div className="text-gray-600 text-sm">PDFs Downloaded</div>
-              </div>
-
               {/* Rank */}
               <div className="card p-6 group hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center justify-between mb-4">
@@ -214,11 +191,9 @@ const Dashboard: React.FC = () => {
                   <div key={activity.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       activity.type === 'test' ? 'bg-blue-100' :
-                      activity.type === 'pdf' ? 'bg-purple-100' :
                       'bg-green-100'
                     }`}>
                       {activity.type === 'test' && <AcademicCapIcon className="w-5 h-5 text-blue-600" />}
-                      {activity.type === 'pdf' && <DocumentTextIcon className="w-5 h-5 text-purple-600" />}
                       {activity.type === 'achievement' && <TrophyIcon className="w-5 h-5 text-green-600" />}
                     </div>
 
@@ -256,13 +231,6 @@ const Dashboard: React.FC = () => {
                 >
                   <PlayIcon className="w-4 h-4 mr-2" />
                   Take a Test
-                </Link>
-                <Link
-                  to="/pdfs"
-                  className="w-full btn btn-outline justify-start"
-                >
-                  <BookOpenIcon className="w-4 h-4 mr-2" />
-                  Browse PDFs
                 </Link>
                 <Link
                   to="/profile/performance"

@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   HomeIcon,
   AcademicCapIcon,
-  DocumentIcon,
   TrophyIcon,
   UserIcon,
   ChartBarIcon,
@@ -16,7 +15,6 @@ const Navigation: React.FC = () => {
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Test Series', href: '/tests', icon: AcademicCapIcon },
-    { name: 'PDFs', href: '/pdfs', icon: DocumentIcon },
     { name: 'Free Tests', href: '/free-tests', icon: ChartBarIcon },
     { name: 'Previous Years Papers', href: '/previous-years-papers', icon: DocumentTextIcon },
     { name: 'Profile', href: '/profile', icon: UserIcon },

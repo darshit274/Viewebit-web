@@ -85,12 +85,6 @@ const HelpSupportPage: React.FC = () => {
       category: 'features',
     },
     {
-      id: 10,
-      question: 'Can I download study materials and PDFs?',
-      answer: 'Yes! Visit the "PDFs" section from the sidebar menu. You can view and download: previous year question papers, topic-wise study notes, important formulas and shortcuts, current affairs updates, and exam pattern guides. All materials are available in both English and Gujarati.',
-      category: 'general',
-    },
-    {
       id: 11,
       question: 'What is negative marking and how is it calculated?',
       answer: 'Negative marking mirrors actual Gujarat competitive Exam patterns. Typically, wrong answers deduct 0.25 to 0.33 marks per question (varies by exam type). Your final score = (Correct answers × Marks per question) - (Wrong answers × Negative marks per question). The results page shows your score breakdown clearly.',
@@ -347,21 +341,7 @@ const HelpSupportPage: React.FC = () => {
         </div>
 
         {/* Additional Resources */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow">
-            <DocumentTextIcon className="h-12 w-12 text-primary-600 mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Study Materials</h3>
-            <p className="text-gray-700 mb-4">
-              Access free PDFs, previous year papers, and study notes for all Gujarat competitive Exams.
-            </p>
-            <button
-              onClick={() => navigate('/pdfs')}
-              className="text-primary-600 font-semibold hover:underline flex items-center gap-2"
-            >
-              Browse PDFs →
-            </button>
-          </div>
-
+        <div className="grid md:grid-cols-1 gap-6 mb-12">
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow">
             <ClockIcon className="h-12 w-12 text-purple-600 mb-4" />
             <h3 className="text-2xl font-bold text-gray-900 mb-3">Test History</h3>

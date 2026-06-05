@@ -25,8 +25,7 @@ import ContactPage from './pages/ContactPage';
 import DashboardPage from './pages/DashboardPage';
 import HelpSupportPage from './pages/HelpSupportPage';
 import HomePage from './pages/HomePage';
-import PDFsPage from './pages/pdfs/PDFsPage';
-import PDFViewerPage from './pages/pdfs/PDFViewerPage';
+// PDFs are available only in the mobile app — web routes intentionally removed.
 import PrivacySecurityPage from './pages/PrivacySecurityPage';
 import SourcesDisclaimer from './pages/SourcesDisclaimer';
 import PerformancePage from './pages/profile/PerformancePage';
@@ -150,11 +149,8 @@ function AppContent() {
             <Route path="/test-history/:sessionId" element={<TestHistoryDetailPage />} />
             <Route path="/test-history/:sessionId/solutions" element={<TestSolutionsPage />} />
 
-            {/* PDF Routes */}
-            <Route path="/pdfs" element={<PDFsPage />} />
-            <Route path="/pdfs/view/:id" element={<PDFViewerPage />} />
-            <Route path="/pdfs/:id" element={<PDFViewerPage />} />
-            
+            {/* PDF routes removed — PDFs are available only in the mobile app. */}
+
             {/* Profile Routes */}
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<ProfileEditPage />} />

@@ -60,12 +60,6 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       iconSolid: AcademicCapIconSolid,
     },
     {
-      name: 'Study Materials',
-      href: '/pdfs',
-      icon: DocumentTextIcon,
-      iconSolid: DocumentTextIconSolid,
-    },
-    {
       name: 'Free Tests',
       href: '/free-tests',
       icon: BookOpenIcon,
