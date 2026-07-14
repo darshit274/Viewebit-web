@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   AcademicCapIcon,
@@ -112,8 +112,8 @@ const Dashboard: React.FC = () => {
               {/* Total Tests */}
               <div className="card p-6 group hover:shadow-lg transition-all duration-200">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <AcademicCapIcon className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                    <AcademicCapIcon className="w-6 h-6 text-primary-600" />
                   </div>
                   <div className="flex items-center text-green-600 text-sm font-medium">
                     <ArrowUpIcon className="w-4 h-4 mr-1" />
@@ -167,7 +167,7 @@ const Dashboard: React.FC = () => {
               </div>
 
               {/* Simple Chart Placeholder */}
-              <div className="h-64 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-200">
+              <div className="h-64 bg-gradient-to-r from-primary-50 to-purple-50 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-200">
                 <div className="text-center">
                   <ChartBarIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                   <p className="text-gray-500">Performance chart will be displayed here</p>
@@ -180,7 +180,7 @@ const Dashboard: React.FC = () => {
             <div className="card p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-900">Recent Activity</h2>
-                <Link to="/activity" className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center">
+                <Link to="/activity" className="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center">
                   View All
                   <ArrowRightIcon className="w-4 h-4 ml-1" />
                 </Link>
@@ -190,10 +190,10 @@ const Dashboard: React.FC = () => {
                 {recentActivity.map((activity) => (
                   <div key={activity.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      activity.type === 'test' ? 'bg-blue-100' :
+                      activity.type === 'test' ? 'bg-primary-100' :
                       'bg-green-100'
                     }`}>
-                      {activity.type === 'test' && <AcademicCapIcon className="w-5 h-5 text-blue-600" />}
+                      {activity.type === 'test' && <AcademicCapIcon className="w-5 h-5 text-primary-600" />}
                       {activity.type === 'achievement' && <TrophyIcon className="w-5 h-5 text-green-600" />}
                     </div>
 
@@ -247,7 +247,7 @@ const Dashboard: React.FC = () => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">Upcoming Tests</h3>
               <div className="space-y-4">
                 {upcomingTests.map((test) => (
-                  <div key={test.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                  <div key={test.id} className="border border-gray-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
                     <h4 className="font-medium text-gray-900 mb-2">{test.title}</h4>
                     <div className="space-y-1 text-sm text-gray-600">
                       <div className="flex items-center">
@@ -266,7 +266,7 @@ const Dashboard: React.FC = () => {
                         }`}>
                           {test.difficulty}
                         </span>
-                        <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                        <button className="text-primary-600 hover:text-primary-700 text-sm font-medium">
                           Start Test
                         </button>
                       </div>
@@ -306,7 +306,7 @@ const Dashboard: React.FC = () => {
                     }`}>
                       {rank}
                     </div>
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                    <div className="w-8 h-8 bg-gradient-to-r from-primary-400 to-purple-400 rounded-full"></div>
                     <div className="flex-1">
                       <div className="text-sm font-medium text-gray-900">Student {rank}</div>
                       <div className="text-xs text-gray-600">
@@ -321,7 +321,7 @@ const Dashboard: React.FC = () => {
               </div>
               <Link
                 to="/leaderboard"
-                className="block text-center text-blue-600 hover:text-blue-700 text-sm font-medium mt-4"
+                className="block text-center text-primary-600 hover:text-primary-700 text-sm font-medium mt-4"
               >
                 View Full Leaderboard
               </Link>

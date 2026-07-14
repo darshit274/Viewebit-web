@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -72,7 +72,7 @@ const RegisterPage: React.FC = () => {
           Create Account
         </h2>
         <p className="text-gray-600 text-sm">
-          Sign up to get started with MockTale
+          Sign up to get started with Viewebit
         </p>
       </div>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   HomeIcon,
@@ -32,7 +32,7 @@ const Navigation: React.FC = () => {
             <span className="text-white font-bold text-lg">M</span>
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">Mocktail</h1>
+            <h1 className="text-xl font-bold text-gray-800">Viewebit</h1>
             <p className="text-sm text-gray-500">Academy</p>
           </div>
         </div>

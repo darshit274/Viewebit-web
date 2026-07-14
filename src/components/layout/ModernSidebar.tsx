@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../store';
 import { logout } from '../../store/slices/authSlice';
-import MockTaleLogo from '../../assets/MockTale.jpg';
+import ViewebitLogo from '../../assets/Viewebit.jpg';
 import {
   HomeIcon,
   AcademicCapIcon,
@@ -124,12 +124,12 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
           <div className="flex items-center space-x-3">
             <div className="w-9 h-9 rounded-lg overflow-hidden">
               <img
-                src={MockTaleLogo}
-                alt="MockTale"
+                src={ViewebitLogo}
+                alt="Viewebit"
                 className="w-full h-full object-cover"
               />
             </div>
-            <h1 className="text-lg font-bold text-gray-900">MockTale</h1>
+            <h1 className="text-lg font-bold text-gray-900">Viewebit</h1>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -170,7 +170,7 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
         {/* User section */}
         <div className="border-t border-gray-200 p-4">
           <div className="flex items-center space-x-3 mb-3">
-            <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-secondary-500 rounded-full flex items-center justify-center">
               <span className="text-sm font-semibold text-white">
                 {user?.username?.charAt(0).toUpperCase() || 'U'}
               </span>
@@ -212,7 +212,7 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
             {/* Page title placeholder */}
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-gray-900 hidden lg:block">
-                {navigation.find(item => isActive(item.href))?.name || 'MockTale'}
+                {navigation.find(item => isActive(item.href))?.name || 'Viewebit'}
               </h2>
             </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+﻿import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, ShieldCheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
@@ -235,8 +235,8 @@ const PDFViewerPage: React.FC = () => {
       setSecurityWarning('');
       
       // Step 1: Check if user is authenticated (temporarily disabled for testing)
-      const authToken = sessionStorage.getItem('mocktail_token');
-      const userData = sessionStorage.getItem('mocktail_user');
+      const authToken = sessionStorage.getItem('viewebit_token');
+      const userData = sessionStorage.getItem('viewebit_user');
       
       console.log('Auth token exists:', !!authToken);
       console.log('User data exists:', !!userData);
@@ -338,8 +338,8 @@ const PDFViewerPage: React.FC = () => {
         setError('Authentication failed. Your session may have expired. Please log in again.');
         toast.error('Session expired - please log in again');
         // Clear invalid token
-        sessionStorage.removeItem('mocktail_token');
-        sessionStorage.removeItem('mocktail_user');
+        sessionStorage.removeItem('viewebit_token');
+        sessionStorage.removeItem('viewebit_user');
         setTimeout(() => {
           navigate('/login');
         }, 2000);
@@ -434,7 +434,7 @@ const PDFViewerPage: React.FC = () => {
                   const url = URL.createObjectURL(blob);
                   window.open(url, '_blank');
                 }}
-                className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                className="px-3 py-1 bg-primary-600 text-white text-sm rounded hover:bg-primary-700 transition-colors"
               >
                 Open in New Tab
               </button>
@@ -472,14 +472,14 @@ const PDFViewerPage: React.FC = () => {
       {!accessGranted && !isLoading && !error && (
         <div className="bg-gray-800 text-gray-300 p-6 text-center">
           <div className="max-w-md mx-auto">
-            <ShieldCheckIcon className="w-12 h-12 text-blue-400 mx-auto mb-4" />
+            <ShieldCheckIcon className="w-12 h-12 text-primary-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-white mb-2">Secure Access Required</h3>
             <p className="text-sm mb-4">
               Generating secure access token to protect this PDF from unauthorized access...
             </p>
             <button
               onClick={loadPDF}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Generate Secure Access
             </button>

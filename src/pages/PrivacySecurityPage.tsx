@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheckIcon,
@@ -17,7 +17,7 @@ const PrivacySecurityPage: React.FC = () => {
   const lastUpdated = "January 2025";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-primary-50 to-purple-50">
       {/* Hero Header */}
       <div className="bg-gradient-to-r from-primary-600 to-purple-600 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
@@ -53,17 +53,17 @@ const PrivacySecurityPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Welcome to <strong className="text-primary-600">MockTale Academy</strong>. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our educational platform for Gujarat competitive exam preparation.
+              Welcome to <strong className="text-primary-600">Viewebit Academy</strong>. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our educational platform for Gujarat competitive exam preparation.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              By accessing or using MockTale Academy, you agree to this Privacy Policy. If you do not agree with the terms, please discontinue use of our services.
+              By accessing or using Viewebit Academy, you agree to this Privacy Policy. If you do not agree with the terms, please discontinue use of our services.
             </p>
           </div>
         </div>
 
         {/* Key Points Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-2xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-primary-500 to-cyan-500 text-white rounded-2xl p-6 shadow-lg">
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4">
               <LockClosedIcon className="h-7 w-7" />
             </div>
@@ -93,7 +93,7 @@ const PrivacySecurityPage: React.FC = () => {
 
           {/* Section 1 */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-6">
+            <div className="bg-gradient-to-r from-primary-500 to-cyan-500 p-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <ServerIcon className="h-7 w-7" />
                 Information We Collect
@@ -153,8 +153,8 @@ const PrivacySecurityPage: React.FC = () => {
                   <li><strong>Security:</strong> Protect against fraud, abuse, and unauthorized access</li>
                   <li><strong>Legal Compliance:</strong> Meet legal obligations and enforce our terms of service</li>
                 </ul>
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mt-6">
-                  <p className="text-blue-900 font-medium">
+                <div className="bg-primary-50 border-l-4 border-primary-500 p-4 mt-6">
+                  <p className="text-primary-900 font-medium">
                     <strong>Note:</strong> We will never use your information for purposes not disclosed in this policy without your explicit consent.
                   </p>
                 </div>
@@ -175,7 +175,7 @@ const PrivacySecurityPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">We DO NOT sell your data</h3>
                   <p className="text-gray-700 mb-4">
-                    MockTale Academy does not sell, rent, or trade your personal information to third parties for marketing purposes.
+                    Viewebit Academy does not sell, rent, or trade your personal information to third parties for marketing purposes.
                   </p>
                 </div>
 
@@ -240,7 +240,7 @@ const PrivacySecurityPage: React.FC = () => {
 
           {/* Section 5 */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-indigo-500 to-blue-500 p-6">
+            <div className="bg-gradient-to-r from-secondary-500 to-primary-500 p-6">
               <h2 className="text-2xl font-bold text-white">Data Security & Retention</h2>
             </div>
             <div className="p-8">
@@ -275,7 +275,7 @@ const PrivacySecurityPage: React.FC = () => {
             </div>
             <div className="p-8">
               <p className="text-gray-700 leading-relaxed">
-                MockTale Academy is intended for users preparing for government exams. While we do not specifically target children under 13,
+                Viewebit Academy is intended for users preparing for government exams. While we do not specifically target children under 13,
                 if we learn that we have collected personal information from a child under 13 without parental consent, we will take steps to
                 delete that information promptly. Parents or guardians who believe their child has provided us with information should contact us immediately.
               </p>
@@ -298,7 +298,7 @@ const PrivacySecurityPage: React.FC = () => {
                 <li>Displaying a prominent notice on our platform</li>
               </ul>
               <p className="text-gray-700">
-                Your continued use of MockTale Academy after changes become effective constitutes acceptance of the updated policy.
+                Your continued use of Viewebit Academy after changes become effective constitutes acceptance of the updated policy.
               </p>
             </div>
           </div>
@@ -310,7 +310,7 @@ const PrivacySecurityPage: React.FC = () => {
             </div>
             <div className="p-8">
               <p className="text-gray-700 leading-relaxed mb-4">
-                MockTale Academy does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
+                Viewebit Academy does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
               </p>
               <p className="text-gray-700">
                 This platform is an independent educational service created solely for practice and self-assessment purposes.
@@ -330,11 +330,11 @@ const PrivacySecurityPage: React.FC = () => {
               please don't hesitate to contact us.
             </p>
             <a
-              href="mailto:mocktaleacademy@gmail.com"
+              href="mailto:viewebit@gmail.com"
               className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all hover:scale-105"
             >
               <EnvelopeIcon className="h-6 w-6" />
-              mocktaleacademy@gmail.com
+              viewebit@gmail.com
             </a>
             <p className="text-white/70 text-sm mt-6">
               We typically respond within 24-48 hours
@@ -344,7 +344,7 @@ const PrivacySecurityPage: React.FC = () => {
 
         {/* Footer Note */}
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>© 2025 MockTale Academy. All rights reserved.</p>
+          <p>© 2025 Viewebit Academy. All rights reserved.</p>
           <p className="mt-2">Your trust is important to us. We are committed to protecting your privacy.</p>
         </div>
 

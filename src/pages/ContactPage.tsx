@@ -1,17 +1,17 @@
-import React from 'react';
+﻿import React from 'react';
 import { EnvelopeIcon, ChatBubbleLeftRightIcon, ClockIcon } from '@heroicons/react/24/outline';
 import ContactQueryForm from '../components/ContactQueryForm';
 
 const ContactPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-primary-50 to-purple-50">
       {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600">
+      <section className="pt-20 pb-16 bg-gradient-to-r from-primary-600 via-cyan-500 to-primary-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Get in Touch
           </h1>
-          <p className="text-xl text-blue-100">
+          <p className="text-xl text-primary-100">
             Have a question? We're here to help!
           </p>
         </div>
@@ -35,22 +35,22 @@ const ContactPage: React.FC = () => {
               {/* Email Card */}
               <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <EnvelopeIcon className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                    <EnvelopeIcon className="w-6 h-6 text-primary-600" />
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                    <a href="mailto:mocktaleacademy@gmail.com" className="text-blue-600 hover:underline">
-                      mocktaleacademy@gmail.com
+                    <a href="mailto:viewebit@gmail.com" className="text-primary-600 hover:underline">
+                      viewebit@gmail.com
                     </a>
                   </div>
                 </div>
               </div>
 
               {/* Support Hours */}
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100">
+              <div className="bg-gradient-to-br from-primary-50 to-cyan-50 rounded-xl p-6 border border-primary-100">
                 <div className="flex items-center mb-3">
-                  <ClockIcon className="w-6 h-6 text-blue-600 mr-2" />
+                  <ClockIcon className="w-6 h-6 text-primary-600 mr-2" />
                   <h3 className="text-lg font-semibold text-gray-900">Support Hours</h3>
                 </div>
                 <p className="text-gray-700 font-medium">Monday - Saturday: 9:00 AM - 6:00 PM</p>
@@ -59,14 +59,14 @@ const ContactPage: React.FC = () => {
 
               {/* FAQ Link */}
               <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                <ChatBubbleLeftRightIcon className="w-8 h-8 text-blue-600 mb-3" />
+                <ChatBubbleLeftRightIcon className="w-8 h-8 text-primary-600 mb-3" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Looking for quick answers?
                 </h3>
                 <p className="text-gray-600 mb-4">
                   Check out our FAQ page for instant answers to common questions.
                 </p>
-                <a href="/#faqs" className="text-blue-600 hover:underline font-medium inline-flex items-center">
+                <a href="/#faqs" className="text-primary-600 hover:underline font-medium inline-flex items-center">
                   Visit FAQs
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -127,11 +127,11 @@ const ContactPage: React.FC = () => {
             You can also reach us directly at our email address
           </p>
           <a
-            href="mailto:mocktaleacademy@gmail.com"
+            href="mailto:viewebit@gmail.com"
             className="inline-flex items-center justify-center px-8 py-3 text-lg font-semibold text-gray-900 bg-white rounded-full hover:bg-gray-100 transition-colors shadow-lg"
           >
             <EnvelopeIcon className="w-5 h-5 mr-2" />
-            mocktaleacademy@gmail.com
+            viewebit@gmail.com
           </a>
         </div>
       </section>

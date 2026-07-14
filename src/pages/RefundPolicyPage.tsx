@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CurrencyRupeeIcon,
@@ -53,11 +53,11 @@ const RefundPolicyPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              At <strong className="text-green-600">MockTale Academy</strong>, all subscription purchases are final. This Cancellation & Refund Policy explains the terms and conditions for cancelling subscriptions and the limited circumstances under which refunds may be granted.
+              At <strong className="text-green-600">Viewebit Academy</strong>, all subscription purchases are final. This Cancellation & Refund Policy explains the terms and conditions for cancelling subscriptions and the limited circumstances under which refunds may be granted.
             </p>
             <div className="bg-red-50 border-l-4 border-red-500 p-4 my-4">
               <p className="text-red-900 font-semibold">
-                <strong>Important:</strong> We do NOT offer money-back guarantees or refunds for change of mind. Refunds are ONLY provided in cases of system errors, billing mistakes, or technical failures caused by MockTale Academy.
+                <strong>Important:</strong> We do NOT offer money-back guarantees or refunds for change of mind. Refunds are ONLY provided in cases of system errors, billing mistakes, or technical failures caused by Viewebit Academy.
               </p>
             </div>
             <p className="text-gray-700 leading-relaxed">
@@ -80,7 +80,7 @@ const RefundPolicyPage: React.FC = () => {
             <p className="text-white/90 text-sm">Refunds only for billing/technical errors by us</p>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-2xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-primary-500 to-cyan-500 text-white rounded-2xl p-6 shadow-lg">
             <ArrowPathIcon className="h-12 w-12 mb-3 opacity-90" />
             <h3 className="font-bold text-lg mb-2">5-7 Business Days</h3>
             <p className="text-white/90 text-sm">Processing time if refund is approved</p>
@@ -92,7 +92,7 @@ const RefundPolicyPage: React.FC = () => {
 
           {/* Section 1 */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6">
+            <div className="bg-gradient-to-r from-primary-500 to-purple-500 p-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <CurrencyRupeeIcon className="h-7 w-7" />
                 1. When Refunds Are Granted
@@ -103,14 +103,14 @@ const RefundPolicyPage: React.FC = () => {
                 <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
                   <h3 className="text-xl font-semibold text-red-900 mb-2">No General Refunds</h3>
                   <p className="text-red-800">
-                    <strong>Important:</strong> MockTale Academy does NOT provide refunds for change of mind, dissatisfaction with content, or personal reasons. All subscription purchases are final.
+                    <strong>Important:</strong> Viewebit Academy does NOT provide refunds for change of mind, dissatisfaction with content, or personal reasons. All subscription purchases are final.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Refunds Only for System Errors</h3>
                   <p className="text-gray-700 mb-3">
-                    Refunds will ONLY be issued in the following situations where <strong>MockTale Academy is at fault:</strong>
+                    Refunds will ONLY be issued in the following situations where <strong>Viewebit Academy is at fault:</strong>
                   </p>
                   <div className="bg-green-50 rounded-lg p-4 space-y-2">
                     <div className="flex items-start gap-2">
@@ -217,7 +217,7 @@ const RefundPolicyPage: React.FC = () => {
 
           {/* Section 3 */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-purple-500 to-indigo-500 p-6">
+            <div className="bg-gradient-to-r from-purple-500 to-secondary-500 p-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <ArrowPathIcon className="h-7 w-7" />
                 3. Refund Process & Timeline
@@ -228,7 +228,7 @@ const RefundPolicyPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">How to Request a Refund</h3>
                   <ol className="list-decimal list-inside space-y-2 text-gray-700 ml-4">
-                    <li>Send an email to <strong>mocktaleacademy@gmail.com</strong> with subject "Refund Request"</li>
+                    <li>Send an email to <strong>viewebit@gmail.com</strong> with subject "Refund Request"</li>
                     <li>Include: Your registered email, order/transaction ID, reason for refund</li>
                     <li>Our team will review your request within <strong>24-48 hours</strong></li>
                     <li>You will receive an email confirming approval or denial</li>
@@ -248,10 +248,10 @@ const RefundPolicyPage: React.FC = () => {
 
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Processing Timeline</h3>
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
+                  <div className="bg-gradient-to-r from-primary-50 to-purple-50 rounded-lg p-4">
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                        <div className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
                         <p className="text-gray-700"><strong>24-48 hours:</strong> Request review and approval</p>
                       </div>
                       <div className="flex items-center gap-3">
@@ -304,7 +304,7 @@ const RefundPolicyPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
+                <div className="bg-primary-50 border-l-4 border-primary-500 p-4">
                   <h4 className="font-semibold text-gray-900 mb-2">Free Trial Recommended</h4>
                   <p>
                     We strongly recommend using our free tests and trial content before purchasing a subscription. This allows you to evaluate the platform and content quality before making a commitment.
@@ -316,20 +316,20 @@ const RefundPolicyPage: React.FC = () => {
 
           {/* Section 5 */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-6">
+            <div className="bg-gradient-to-r from-cyan-500 to-primary-500 p-6">
               <h2 className="text-2xl font-bold text-white">5. Technical Issues & Service Disruptions</h2>
             </div>
             <div className="p-8">
               <div className="space-y-4 text-gray-700">
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
-                  <p className="text-blue-900">
-                    <strong>Our Commitment:</strong> If you experience technical issues caused by MockTale Academy's systems, we will work to resolve them quickly.
+                <div className="bg-primary-50 border-l-4 border-primary-500 p-4 mb-4">
+                  <p className="text-primary-900">
+                    <strong>Our Commitment:</strong> If you experience technical issues caused by Viewebit Academy's systems, we will work to resolve them quickly.
                   </p>
                 </div>
 
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">If You Experience Technical Issues:</h3>
                 <ol className="list-decimal list-inside space-y-2 ml-4">
-                  <li>Contact our support team immediately at <strong>mocktaleacademy@gmail.com</strong></li>
+                  <li>Contact our support team immediately at <strong>viewebit@gmail.com</strong></li>
                   <li>Provide detailed information about the issue (screenshots, error messages, etc.)</li>
                   <li>Our team will investigate within <strong>24-48 hours</strong></li>
                   <li>If the issue is on our end, we will fix it as soon as possible</li>
@@ -384,11 +384,11 @@ const RefundPolicyPage: React.FC = () => {
               If you believe you were charged incorrectly due to a technical error on our end, contact our support team immediately.
             </p>
             <a
-              href="mailto:mocktaleacademy@gmail.com?subject=Billing%20Error%20Report"
+              href="mailto:viewebit@gmail.com?subject=Billing%20Error%20Report"
               className="inline-flex items-center gap-2 bg-white text-red-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all hover:scale-105"
             >
               <EnvelopeIcon className="h-6 w-6" />
-              mocktaleacademy@gmail.com
+              viewebit@gmail.com
             </a>
             <p className="text-white/70 text-sm mt-6">
               Include: Transaction ID, registered email, and detailed description of the error
@@ -403,7 +403,7 @@ const RefundPolicyPage: React.FC = () => {
 
         {/* Footer Note */}
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>© 2025 MockTale Academy. All rights reserved.</p>
+          <p>© 2025 Viewebit Academy. All rights reserved.</p>
           <p className="mt-2">All subscriptions are final. We provide refunds only for system errors and billing mistakes.</p>
           <p className="mt-1 font-semibold text-red-600">Think before you buy. Try our free tests first!</p>
         </div>

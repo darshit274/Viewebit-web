@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   QuestionMarkCircleIcon,
@@ -38,14 +38,14 @@ const HelpSupportPage: React.FC = () => {
     },
     {
       id: 2,
-      question: 'What exams does MockTale Academy cover?',
+      question: 'What exams does Viewebit Academy cover?',
       answer: 'We provide comprehensive preparation for Gujarat competitive Exams including GPSC (Gujarat Public Service Commission), GSSSB (Gujarat Subordinate Service Selection Board), GPSSB (Gujarat Panchayat Service Selection Board), Police Constable Bharti, PSI (Police Sub Inspector), Talati, and Junior Clerk examinations.',
       category: 'general',
     },
     {
       id: 3,
       question: 'Can I switch between English and Gujarati during tests?',
-      answer: 'Yes! MockTale Academy offers bilingual support. You can switch between English and Gujarati at any time during the test using the language toggle button. Your progress is automatically saved, and all questions, options, and explanations are available in both languages.',
+      answer: 'Yes! Viewebit Academy offers bilingual support. You can switch between English and Gujarati at any time during the test using the language toggle button. Your progress is automatically saved, and all questions, options, and explanations are available in both languages.',
       category: 'features',
     },
     {
@@ -69,7 +69,7 @@ const HelpSupportPage: React.FC = () => {
     {
       id: 7,
       question: 'Are there really free tests available?',
-      answer: 'Yes! MockTale Academy offers numerous free resources including: free practice quizzes (especially for Maths and Reasoning), free Previous Year Question Papers (PYQPs) for all major Gujarat exams, free topic-wise tests, and sample full-length mock tests. Premium test series require a subscription for complete access.',
+      answer: 'Yes! Viewebit Academy offers numerous free resources including: free practice quizzes (especially for Maths and Reasoning), free Previous Year Question Papers (PYQPs) for all major Gujarat exams, free topic-wise tests, and sample full-length mock tests. Premium test series require a subscription for complete access.',
       category: 'general',
     },
     {
@@ -81,7 +81,7 @@ const HelpSupportPage: React.FC = () => {
     {
       id: 9,
       question: 'How do test analytics and performance tracking work?',
-      answer: 'MockTale Academy provides detailed analytics including: overall accuracy percentage, subject-wise performance breakdown, time management analysis, comparison with top performers, strength and weakness identification, and progress tracking over time. Access your analytics from the Dashboard or Profile sections.',
+      answer: 'Viewebit Academy provides detailed analytics including: overall accuracy percentage, subject-wise performance breakdown, time management analysis, comparison with top performers, strength and weakness identification, and progress tracking over time. Access your analytics from the Dashboard or Profile sections.',
       category: 'features',
     },
     {
@@ -99,11 +99,11 @@ const HelpSupportPage: React.FC = () => {
   ];
 
   const categories = [
-    { id: 'all', name: 'All FAQs', icon: BookOpenIcon, color: 'from-blue-500 to-cyan-500' },
+    { id: 'all', name: 'All FAQs', icon: BookOpenIcon, color: 'from-primary-500 to-cyan-500' },
     { id: 'general', name: 'General', icon: QuestionMarkCircleIcon, color: 'from-purple-500 to-pink-500' },
     { id: 'tests', name: 'Tests & Exams', icon: AcademicCapIcon, color: 'from-green-500 to-emerald-500' },
     { id: 'features', name: 'Features', icon: SparklesIcon, color: 'from-orange-500 to-red-500' },
-    { id: 'technical', name: 'Technical', icon: DocumentTextIcon, color: 'from-indigo-500 to-blue-500' },
+    { id: 'technical', name: 'Technical', icon: DocumentTextIcon, color: 'from-secondary-500 to-primary-500' },
   ];
 
   const toggleFaq = (id: number) => {
@@ -115,9 +115,9 @@ const HelpSupportPage: React.FC = () => {
     : faqs.filter(faq => faq.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-primary-50">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+      <div className="bg-gradient-to-r from-purple-600 to-primary-600 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
           <button
             onClick={() => navigate(-1)}
@@ -133,7 +133,7 @@ const HelpSupportPage: React.FC = () => {
             </div>
             <h1 className="text-5xl font-bold mb-4">Help & Support Center</h1>
             <p className="text-white/90 text-xl max-w-2xl mx-auto">
-              Find answers, get help, and learn everything about MockTale Academy
+              Find answers, get help, and learn everything about Viewebit Academy
             </p>
           </div>
         </div>
@@ -145,7 +145,7 @@ const HelpSupportPage: React.FC = () => {
         {/* Quick Contact Cards */}
         <div className="grid gap-6 mb-12">
           <a
-            href="mailto:mocktaleacademy@gmail.com"
+            href="mailto:viewebit@gmail.com"
             className="group bg-gradient-to-br from-primary-500 to-cyan-500 rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all hover:scale-105"
           >
             <div className="flex items-start gap-4">
@@ -155,7 +155,7 @@ const HelpSupportPage: React.FC = () => {
               <div>
                 <h3 className="text-2xl font-bold mb-2">Email Support</h3>
                 <p className="text-white/90 mb-2">Get detailed help via email</p>
-                <p className="text-lg font-semibold">mocktaleacademy@gmail.com</p>
+                <p className="text-lg font-semibold">viewebit@gmail.com</p>
                 <p className="text-sm text-white/70 mt-2">Response time: 24-48 hours</p>
               </div>
             </div>
@@ -182,7 +182,7 @@ const HelpSupportPage: React.FC = () => {
 
         {/* FAQ Section */}
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden mb-12">
-          <div className="bg-gradient-to-r from-purple-500 to-blue-500 p-8 text-white">
+          <div className="bg-gradient-to-r from-purple-500 to-primary-500 p-8 text-white">
             <div className="flex items-center gap-4 mb-4">
               <BookOpenIcon className="h-10 w-10" />
               <div>
@@ -247,7 +247,7 @@ const HelpSupportPage: React.FC = () => {
                   </button>
 
                   {expandedFaq === faq.id && (
-                    <div className="px-6 pb-6 bg-gradient-to-br from-blue-50 to-purple-50">
+                    <div className="px-6 pb-6 bg-gradient-to-br from-primary-50 to-purple-50">
                       <div className="pl-14">
                         <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
                       </div>
@@ -261,7 +261,7 @@ const HelpSupportPage: React.FC = () => {
 
         {/* Quick Tips Grid */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-2xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-primary-500 to-cyan-500 text-white rounded-2xl p-6 shadow-lg">
             <LightBulbIcon className="h-12 w-12 mb-4 opacity-90" />
             <h3 className="text-xl font-bold mb-2">Pro Tip</h3>
             <p className="text-white/90">
@@ -298,7 +298,7 @@ const HelpSupportPage: React.FC = () => {
           <div className="p-8">
             <div className="space-y-6">
               <div className="flex gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
                   1
                 </div>
                 <div>
@@ -358,7 +358,7 @@ const HelpSupportPage: React.FC = () => {
         </div>
 
         {/* Still Need Help Section */}
-        <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl shadow-2xl overflow-hidden">
+        <div className="bg-gradient-to-br from-purple-600 to-primary-600 rounded-3xl shadow-2xl overflow-hidden">
           <div className="p-12 text-white text-center">
             <EnvelopeIcon className="h-20 w-20 mx-auto mb-6 opacity-90" />
             <h2 className="text-4xl font-bold mb-4">Still Need Help?</h2>
@@ -367,7 +367,7 @@ const HelpSupportPage: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
-                href="mailto:mocktaleacademy@gmail.com"
+                href="mailto:viewebit@gmail.com"
                 className="inline-flex items-center gap-3 bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all hover:scale-105"
               >
                 <EnvelopeIcon className="h-6 w-6" />
@@ -382,7 +382,7 @@ const HelpSupportPage: React.FC = () => {
 
         {/* Footer Note */}
         <div className="mt-12 text-center text-gray-600">
-          <p className="text-lg">© 2025 MockTale Academy. All rights reserved.</p>
+          <p className="text-lg">© 2025 Viewebit Academy. All rights reserved.</p>
           <p className="mt-2">Practice Relentlessly. Perform Flawlessly.</p>
         </div>
 

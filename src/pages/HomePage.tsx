@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   AcademicCapIcon,
@@ -20,50 +20,50 @@ import {
   ChatBubbleLeftRightIcon,
   QuestionMarkCircleIcon
 } from '@heroicons/react/24/outline';
-import MockTaleLogoPng from './../assets/MockTale.png';
-import MockTaleLogoJpg from './../assets/MockTale.jpg';
+import ViewebitLogoPng from './../assets/Viewebit.png';
+import ViewebitLogoJpg from './../assets/Viewebit.jpg';
 import ContactQueryForm from '../components/ContactQueryForm';
 
 const HomePage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-primary-50 to-purple-50">
       {/* Navigation Header - Premium Design */}
-      <header className="sticky top-0 z-50 bg-gradient-to-r from-cyan-50 via-blue-50 to-indigo-50 backdrop-blur-xl border-b border-white/20 shadow-lg shadow-blue-500/5">
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-cyan-50 via-primary-50 to-secondary-50 backdrop-blur-xl border-b border-white/20 shadow-lg shadow-primary-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-24">
             {/* Logo - Left */}
             <Link to="/" className="flex items-center relative group">
-              <div className="absolute bg-gradient-to-r from-cyan-400 to-blue-500 rounded-2xl group-hover:opacity-30 transition-opacity p-0 w-full h-3/4"></div>
+              <div className="absolute bg-gradient-to-r from-cyan-400 to-primary-500 rounded-2xl group-hover:opacity-30 transition-opacity p-0 w-full h-3/4"></div>
               <img
-                src={MockTaleLogoPng}
-                alt="MockTale Academy"
+                src={ViewebitLogoPng}
+                alt="Viewebit Academy"
                 className="relative h-20 sm:h-24 w-auto drop-shadow-lg transition-transform group-hover:scale-105"
               />
             </Link>
 
             {/* Navigation - Center */}
-            <nav className="hidden lg:flex items-center space-x-2 bg-white/60 backdrop-blur-md rounded-full px-3 py-2 shadow-lg shadow-blue-500/10 border border-white/50">
+            <nav className="hidden lg:flex items-center space-x-2 bg-white/60 backdrop-blur-md rounded-full px-3 py-2 shadow-lg shadow-primary-500/10 border border-white/50">
               <a
                 href="#about"
-                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-primary-600 hover:bg-white rounded-full transition-all duration-200"
               >
                 About
               </a>
               <a
                 href="#features"
-                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-primary-600 hover:bg-white rounded-full transition-all duration-200"
               >
                 Features
               </a>
               <a
                 href="#faqs"
-                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-primary-600 hover:bg-white rounded-full transition-all duration-200"
               >
                 FAQs
               </a>
               <a
                 href="#contact"
-                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 hover:bg-white rounded-full transition-all duration-200"
+                className="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-primary-600 hover:bg-white rounded-full transition-all duration-200"
               >
                 Contact
               </a>
@@ -73,13 +73,13 @@ const HomePage: React.FC = () => {
             <div className="flex items-center gap-3">
               <Link
                 to="/login"
-                className="hidden sm:inline-flex items-center px-6 py-2.5 text-sm font-semibold text-gray-700 hover:text-blue-600 bg-white/60 hover:bg-white backdrop-blur-md rounded-full transition-all duration-200 shadow-md hover:shadow-lg border border-white/50"
+                className="hidden sm:inline-flex items-center px-6 py-2.5 text-sm font-semibold text-gray-700 hover:text-primary-600 bg-white/60 hover:bg-white backdrop-blur-md rounded-full transition-all duration-200 shadow-md hover:shadow-lg border border-white/50"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
-                className="group inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-full shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105 border border-blue-400/50"
+                className="group inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-bold text-white bg-gradient-to-r from-primary-600 via-cyan-500 to-primary-600 bg-size-200 bg-pos-0 hover:bg-pos-100 rounded-full shadow-xl shadow-primary-500/30 hover:shadow-2xl hover:shadow-primary-500/40 transition-all duration-300 hover:scale-105 border border-primary-400/50"
               >
                 <span>Get Started</span>
                 <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -93,21 +93,21 @@ const HomePage: React.FC = () => {
       <section className="relative pt-20 pb-32 overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-32 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute -top-40 -right-32 w-96 h-96 bg-gradient-to-r from-primary-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-40 -left-32 w-96 h-96 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
         </div>
 
         <div className="page-container relative">
           <div className="max-w-5xl mx-auto text-center">
             {/* Tagline Badge */}
-            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 text-blue-900 text-sm font-semibold mb-8 animate-fade-in shadow-md">
+            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-primary-100 to-purple-100 text-primary-900 text-sm font-semibold mb-8 animate-fade-in shadow-md">
               <SparklesIcon className="w-5 h-5 mr-2" />
               Practice Relentlessly. Perform Flawlessly.
             </div>
 
             {/* Main Heading */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 animate-slide-up leading-tight">
-              MockTale Academy
+              Viewebit Academy
             </h1>
 
             <p className="text-2xl md:text-3xl font-bold mb-6 animate-slide-up">
@@ -160,7 +160,7 @@ const HomePage: React.FC = () => {
               <p className="text-sm text-gray-600 mb-3 font-medium">Exams Covered:</p>
               <div className="flex flex-wrap justify-center gap-2 text-xs md:text-sm">
                 {['GPSC', 'GSSSB', 'GPSSB', 'Police Constable', 'PSI', 'Talati', 'Junior Clerk', 'More...'].map((exam) => (
-                  <span key={exam} className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full font-semibold">
+                  <span key={exam} className="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full font-semibold">
                     {exam}
                   </span>
                 ))}
@@ -177,13 +177,13 @@ const HomePage: React.FC = () => {
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 What is{' '}
-                <span className="gradient-text">MockTale Academy</span>?
+                <span className="gradient-text">Viewebit Academy</span>?
               </h2>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 md:p-12 shadow-lg">
+            <div className="bg-gradient-to-br from-primary-50 to-purple-50 rounded-3xl p-8 md:p-12 shadow-lg">
               <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
-                MockTale Academy is a powerful <strong className="text-blue-600">mock test platform</strong> built for aspirants preparing for various{' '}
+                Viewebit Academy is a powerful <strong className="text-primary-600">mock test platform</strong> built for aspirants preparing for various{' '}
                 <strong className="text-purple-600">Gujarat competitive Exams</strong> like GPSC, GSSSB, GPSSB, Police-constable Bharti, PSI, Talati, Junior Clerk and more.
               </p>
               <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
@@ -197,12 +197,12 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="section-spacing bg-gradient-to-br from-gray-50 to-blue-50">
+      <section id="features" className="section-spacing bg-gradient-to-br from-gray-50 to-primary-50">
         <div className="page-container">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Why Choose{' '}
-              <span className="gradient-text">MockTale Academy</span>?
+              <span className="gradient-text">Viewebit Academy</span>?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Comprehensive features designed to give you the edge in your exam preparation
@@ -212,7 +212,7 @@ const HomePage: React.FC = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1: Bilingual Support */}
             <div className="card-hover p-8 group bg-white">
-              <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-14 h-14 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <LanguageIcon className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bilingual Language Support</h3>
@@ -267,7 +267,7 @@ const HomePage: React.FC = () => {
 
             {/* Feature 6: Full Syllabus Coverage */}
             <div className="card-hover p-8 group bg-white">
-              <div className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-14 h-14 bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <AcademicCapIcon className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Full Syllabus Coverage</h3>
@@ -309,14 +309,14 @@ const HomePage: React.FC = () => {
               Frequently Asked{' '}
               <span className="gradient-text">Questions</span>
             </h2>
-            <p className="text-xl text-gray-600">Everything you need to know about MockTale Academy</p>
+            <p className="text-xl text-gray-600">Everything you need to know about Viewebit Academy</p>
           </div>
 
           <div className="max-w-3xl mx-auto space-y-4">
             {/* FAQ 1 */}
-            <div className="card-hover p-6 bg-gradient-to-r from-blue-50 to-purple-50">
+            <div className="card-hover p-6 bg-gradient-to-r from-primary-50 to-purple-50">
               <div className="flex items-start">
-                <QuestionMarkCircleIcon className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0" />
+                <QuestionMarkCircleIcon className="w-6 h-6 text-primary-600 mt-1 mr-4 flex-shrink-0" />
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">Are the mock tests based on the latest exam pattern?</h3>
                   <p className="text-gray-700">
@@ -369,19 +369,19 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Download App Section */}
-      <section className="section-spacing bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 text-white">
+      <section className="section-spacing bg-gradient-to-br from-primary-600 via-purple-600 to-secondary-600 text-white">
         <div className="page-container text-center">
           <DevicePhoneMobileIcon className="w-16 h-16 mx-auto mb-6" />
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Prepare Anytime, Anywhere
           </h2>
-          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl mx-auto">
-            Download MockTale Academy on your phone or access it on your computer - study at your own pace, on your own schedule.
+          <p className="text-xl md:text-2xl mb-8 text-primary-100 max-w-2xl mx-auto">
+            Download Viewebit Academy on your phone or access it on your computer - study at your own pace, on your own schedule.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              to="https://play.google.com/store/apps/details?id=com.mocktale.mocktaleacademy"
-              className="btn btn-lg bg-white text-blue-600 hover:bg-gray-100 font-bold shadow-xl"
+              to="https://play.google.com/store/apps/details?id=com.viewebit.viewebitacademy"
+              className="btn btn-lg bg-white text-primary-600 hover:bg-gray-100 font-bold shadow-xl"
             >
               📱 Download App
             </Link>
@@ -396,7 +396,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Contact Section with Form */}
-      <section id="contact" className="section-spacing bg-gradient-to-br from-blue-50 to-cyan-50">
+      <section id="contact" className="section-spacing bg-gradient-to-br from-primary-50 to-cyan-50">
         <div className="page-container">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -417,11 +417,11 @@ const HomePage: React.FC = () => {
             <div className="mt-8 text-center">
               <p className="text-gray-600 mb-4">Or reach us directly at:</p>
               <a
-                href="mailto:mocktaleacademy@gmail.com"
-                className="inline-flex items-center justify-center text-blue-600 hover:text-blue-700 font-semibold"
+                href="mailto:viewebit@gmail.com"
+                className="inline-flex items-center justify-center text-primary-600 hover:text-primary-700 font-semibold"
               >
                 <EnvelopeIcon className="w-5 h-5 mr-2" />
-                mocktaleacademy@gmail.com
+                viewebit@gmail.com
               </a>
             </div>
           </div>
@@ -436,7 +436,7 @@ const HomePage: React.FC = () => {
             <span className="gradient-text">Gujarat Govt Exams</span>?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of students who have transformed their exam preparation with MockTale Academy
+            Join thousands of students who have transformed their exam preparation with Viewebit Academy
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
@@ -462,9 +462,9 @@ const HomePage: React.FC = () => {
             {/* Logo & Description */}
             <div className="md:col-span-2">
               <div className="flex items-center mb-4">
-                <img src={MockTaleLogoPng} alt="MockTale Academy" className="h-16 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500" />
+                <img src={ViewebitLogoPng} alt="Viewebit Academy" className="h-16 rounded-xl bg-gradient-to-r from-cyan-400 to-primary-500" />
                 <div className="ml-3">
-                  <div className="text-lg font-bold text-white">MockTale Academy</div>
+                  <div className="text-lg font-bold text-white">Viewebit Academy</div>
                   <div className="text-sm text-gray-400">Practice Relentlessly. Perform Flawlessly.</div>
                 </div>
               </div>
@@ -502,7 +502,7 @@ const HomePage: React.FC = () => {
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li className="flex items-center">
                   <EnvelopeIcon className="w-4 h-4 mr-2" />
-                  mocktaleacademy@gmail.com
+                  viewebit@gmail.com
                 </li>
               </ul>
             </div>
@@ -510,7 +510,7 @@ const HomePage: React.FC = () => {
 
           {/* Copyright */}
           <div className="pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
-            <p>© 2025 MockTale Academy. All rights reserved.</p>
+            <p>© 2025 Viewebit Academy. All rights reserved.</p>
             <div className="mt-2 flex items-center justify-center gap-4 text-xs">
               <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
               <span className="text-gray-600">•</span>

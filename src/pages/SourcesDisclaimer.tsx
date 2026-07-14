@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheckIcon,
@@ -14,7 +14,7 @@ const SourcesDisclaimer: React.FC = () => {
   const lastUpdated = "January 2025";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-primary-50 to-purple-50">
 
       {/* Hero Header */}
       <div className="bg-gradient-to-r from-primary-600 to-purple-600 text-white">
@@ -53,13 +53,13 @@ const SourcesDisclaimer: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Welcome to <strong className="text-primary-600">MockTale Academy</strong>.
+              Welcome to <strong className="text-primary-600">Viewebit Academy</strong>.
               Transparency and trust are important to us. This page explains the
               information sources used in the app and clearly outlines our
               disclaimer regarding government-related examinations.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              MockTale Academy is an independent educational platform created
+              Viewebit Academy is an independent educational platform created
               solely for exam preparation and self-practice. Please review the
               sections below to understand our sources and limitations.
             </p>
@@ -79,7 +79,7 @@ const SourcesDisclaimer: React.FC = () => {
             <div className="p-8 space-y-4 text-gray-700 leading-relaxed">
               <p>
                 <strong>
-                  MockTale Academy does NOT represent, affiliate with, authorize,
+                  Viewebit Academy does NOT represent, affiliate with, authorize,
                   or claim any association with any government entity,
                   department, or examination authority.
                 </strong>
@@ -99,7 +99,7 @@ const SourcesDisclaimer: React.FC = () => {
 
           {/* Section 2: Government Sources */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="bg-gradient-to-r from-indigo-500 to-blue-600 p-6">
+            <div className="bg-gradient-to-r from-secondary-500 to-primary-600 p-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <GlobeAltIcon className="h-7 w-7" />
                 Official Government Information Sources
@@ -194,7 +194,7 @@ const SourcesDisclaimer: React.FC = () => {
 
         {/* Footer */}
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>© 2025 MockTale Academy. All rights reserved.</p>
+          <p>© 2025 Viewebit Academy. All rights reserved.</p>
           <p className="mt-2">
             This page is provided to ensure transparency and compliance with
             Google Play policies.

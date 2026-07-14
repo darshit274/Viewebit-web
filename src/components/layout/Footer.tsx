@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 const Footer: React.FC = () => {
   return (
@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
       <div className="px-6 py-4">
         <div className="flex items-center justify-between text-sm text-gray-600">
           <div>
-            © 2025 Mocktail Academy. All rights reserved.
+            © 2025 Viewebit Academy. All rights reserved.
           </div>
           <div className="flex space-x-4">
             <a href="#" className="hover:text-primary-600">Privacy Policy</a>

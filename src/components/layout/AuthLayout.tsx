@@ -1,6 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { Outlet } from 'react-router-dom';
-import MockTaleLogo from '../../assets/MockTale.jpg';
+import ViewebitLogo from '../../assets/Viewebit.jpg';
 
 const AuthLayout: React.FC = () => {
   return (
@@ -12,14 +12,14 @@ const AuthLayout: React.FC = () => {
               <div className="flex justify-center mb-4">
                 <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg">
                   <img
-                    src={MockTaleLogo}
-                    alt="MockTale Logo"
+                    src={ViewebitLogo}
+                    alt="Viewebit Logo"
                     className="w-full h-full object-cover"
                   />
                 </div>
               </div>
               <h1 className="text-3xl font-bold text-primary-600 mb-2">
-                MockTale Academy
+                Viewebit Academy
               </h1>
               <p className="text-gray-600">
                 Your Gateway to Educational Excellence
