@@ -18,6 +18,8 @@ const contactQuerySchema = z.object({
       const digits = val.replace(/[^0-9]/g, '');
       return digits.length === 10 || (digits.length === 12 && val.startsWith('+91'));
     }, 'Please enter a valid 10-digit Indian mobile number'),
+  role: z.string().optional(),
+  institution_name: z.string().optional(),
   query_message: z.string()
     .min(10, 'Message must be at least 10 characters')
     .max(5000, 'Message must not exceed 5000 characters')
@@ -25,8 +27,10 @@ const contactQuerySchema = z.object({
 
 type ContactQueryFormData = z.infer<typeof contactQuerySchema>;
 
+const DEMO_ROLE_OPTIONS = ['Institution', 'Teacher', 'Admin', 'Student', 'Other'];
+
 interface ContactQueryFormProps {
-  variant?: 'full' | 'compact';
+  variant?: 'full' | 'compact' | 'demo';
   onSuccess?: () => void;
 }
 
@@ -35,6 +39,8 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
     full_name: '',
     email: '',
     mobile_number: '',
+    role: '',
+    institution_name: '',
     query_message: ''
   });
   const [errors, setErrors] = useState<Partial<Record<keyof ContactQueryFormData, string>>>({});
@@ -42,7 +48,7 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     // Clear error for this field
@@ -53,17 +59,25 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted with data:', formData);
     setErrors({});
     setSuccessMessage('');
     setErrorMessage('');
 
+    // The demo variant has no message textarea; synthesize one from role/institution
+    // so it still satisfies the shared backend's required query_message field.
+    const submitData = isDemo
+      ? {
+          ...formData,
+          query_message: `Demo request from ${formData.role || 'Unspecified role'}${
+            formData.institution_name ? ` at ${formData.institution_name}` : ''
+          }.`
+        }
+      : formData;
+
     // Validate
     try {
-      contactQuerySchema.parse(formData);
-      console.log('Validation passed');
+      contactQuerySchema.parse(submitData);
     } catch (error) {
-      console.log('Validation failed:', error);
       if (error instanceof z.ZodError && error.errors) {
         const newErrors: Partial<Record<keyof ContactQueryFormData, string>> = {};
         error.errors.forEach(err => {
@@ -72,7 +86,6 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
           }
         });
         setErrors(newErrors);
-        console.log('Validation errors:', newErrors);
       }
       return;
     }
@@ -80,9 +93,9 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
     // Submit
     setIsSubmitting(true);
     try {
-      const response = await api.post('/contact/submit', formData);
+      const response = await api.post('/contact/submit', submitData);
       setSuccessMessage(response.data.message || 'Your query has been submitted successfully!');
-      setFormData({ full_name: '', email: '', mobile_number: '', query_message: '' });
+      setFormData({ full_name: '', email: '', mobile_number: '', role: '', institution_name: '', query_message: '' });
       if (onSuccess) onSuccess();
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -102,9 +115,10 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
   };
 
   const isCompact = variant === 'compact';
+  const isDemo = variant === 'demo';
 
   return (
-    <div className={`w-full ${isCompact ? 'max-w-lg' : 'max-w-2xl'} mx-auto`}>
+    <div className={`w-full ${isCompact || isDemo ? 'max-w-lg' : 'max-w-2xl'} mx-auto`}>
       <form onSubmit={handleSubmit} className="space-y-6">
         {successMessage && (
           <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
@@ -143,7 +157,7 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
           {/* Mobile Number */}
           <div>
             <label htmlFor="mobile_number" className="block text-sm font-medium text-gray-700 mb-2">
-              Mobile Number <span className="text-red-500">*</span>
+              {isDemo ? 'Phone Number' : 'Mobile Number'} <span className="text-red-500">*</span>
             </label>
             <input
               type="tel"
@@ -183,29 +197,69 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
           )}
         </div>
 
+        {/* Demo-only fields: Role & Institution Name */}
+        {isDemo && (
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+                Your Role
+              </label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors bg-white"
+              >
+                <option value="">Select your role</option>
+                {DEMO_ROLE_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="institution_name" className="block text-sm font-medium text-gray-700 mb-2">
+                Institution Name
+              </label>
+              <input
+                type="text"
+                id="institution_name"
+                name="institution_name"
+                value={formData.institution_name}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                placeholder="Your institution name"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Query Message */}
-        <div>
-          <label htmlFor="query_message" className="block text-sm font-medium text-gray-700 mb-2">
-            Your Query <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            id="query_message"
-            name="query_message"
-            rows={isCompact ? 4 : 6}
-            value={formData.query_message}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none ${
-              errors.query_message ? 'border-red-500' : 'border-gray-300'
-            }`}
-            placeholder="Please describe your query in detail..."
-          />
-          {errors.query_message && (
-            <p className="mt-1 text-sm text-red-600">{errors.query_message}</p>
-          )}
-          <p className="mt-1 text-sm text-gray-500">
-            {formData.query_message.length}/5000 characters
-          </p>
-        </div>
+        {!isDemo && (
+          <div>
+            <label htmlFor="query_message" className="block text-sm font-medium text-gray-700 mb-2">
+              Your Query <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="query_message"
+              name="query_message"
+              rows={isCompact ? 4 : 6}
+              value={formData.query_message}
+              onChange={handleChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none ${
+                errors.query_message ? 'border-red-500' : 'border-gray-300'
+              }`}
+              placeholder="Please describe your query in detail..."
+            />
+            {errors.query_message && (
+              <p className="mt-1 text-sm text-red-600">{errors.query_message}</p>
+            )}
+            <p className="mt-1 text-sm text-gray-500">
+              {formData.query_message.length}/5000 characters
+            </p>
+          </div>
+        )}
 
         {/* Submit Button */}
         <button
@@ -223,6 +277,8 @@ const ContactQueryForm: React.FC<ContactQueryFormProps> = ({ variant = 'full', o
               </svg>
               Submitting...
             </span>
+          ) : isDemo ? (
+            'Book My Demo'
           ) : (
             'Submit Query'
           )}
