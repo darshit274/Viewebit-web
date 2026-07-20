@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import {
   ArrowRightIcon,
@@ -26,6 +26,10 @@ const PublicLayout: React.FC = () => {
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
 
   const isActive = (to: string) => location.pathname === to;
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +71,7 @@ const PublicLayout: React.FC = () => {
             </nav>
 
             {/* Desktop Auth Buttons */}
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
               <Link
                 to="/login"
                 className="inline-flex items-center px-6 py-2.5 text-sm font-semibold text-gray-700 hover:text-primary-600 bg-white/60 hover:bg-white backdrop-blur-md rounded-full transition-all duration-200 shadow-md hover:shadow-lg border border-white/50"
