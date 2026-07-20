@@ -11,6 +11,7 @@ import { restoreSession } from './store/slices/authSlice';
 import AuthLayout from './components/layout/AuthLayout';
 import MainLayout from './components/layout/MainLayout';
 import ProtectedRoute from './components/layout/ProtectedRoute';
+import PublicLayout from './components/layout/PublicLayout';
 
 // Auth Pages
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -21,6 +22,11 @@ import VerifyOTPPage from './pages/auth/VerifyOTPPage';
 
 // Main Pages
 import AppComingSoonPage from './pages/AppComingSoonPage';
+import AboutPage from './pages/AboutPage';
+import FeaturesPage from './pages/FeaturesPage';
+import PricingPage from './pages/PricingPage';
+import ProductTourPage from './pages/ProductTourPage';
+import SolutionsPage from './pages/SolutionsPage';
 import ContactPage from './pages/ContactPage';
 import DashboardPage from './pages/DashboardPage';
 import HelpSupportPage from './pages/HelpSupportPage';
@@ -39,7 +45,7 @@ import EnrolledSeriesPage from './pages/tests/EnrolledSeriesPage';
 import FreeInPaidTestsPage from './pages/tests/FreeInPaidTestsPage';
 import FreeTestsPage from './pages/tests/FreeTestsPage';
 import PreviousYearsPapersPage from './pages/tests/PreviousYearsPapersPage';
-import SolutionsPage from './pages/tests/SolutionsPage';
+import TestQuizSolutionsPage from './pages/tests/SolutionsPage';
 import TakeTestPage from './pages/tests/TakeTestPage';
 import TestAttemptsPage from './pages/tests/TestAttemptsPage';
 import TestHistoryDetailPage from './pages/tests/TestHistoryDetailPage';
@@ -91,9 +97,6 @@ function AppContent() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          
           {/* Auth Routes */}
           <Route element={<AuthLayout />}>
             <Route 
@@ -134,7 +137,7 @@ function AppContent() {
             <Route path="/tests/series/:uuid" element={<TestSeriesDetailPage />} />
             <Route path="/tests/category/:uuid" element={<CategoryDetailPage />} />
             <Route path="/tests/quiz/:uuid" element={<TakeTestPage />} />
-            <Route path="/tests/solutions/:uuid" element={<SolutionsPage />} />
+            <Route path="/tests/solutions/:uuid" element={<TestQuizSolutionsPage />} />
             <Route path="/tests/leaderboard/:uuid" element={<TestLeaderboardPage />} />
             <Route path="/tests/series/:id" element={<TestSeriesPage />} />
             <Route path="/tests/take/:id" element={<TakeTestPage />} />
@@ -181,13 +184,23 @@ function AppContent() {
             {/* Other Routes - Leaderboard removed from sidebar, now only accessible after tests */}
           </Route>
 
-          {/* Privacy & Support Routes - Public Access */}
-          <Route path="/privacy" element={<PrivacySecurityPage />} />
-          <Route path="/help" element={<HelpSupportPage />} />
-          <Route path="/terms" element={<TermsConditionsPage />} />
-          <Route path="/refund-policy" element={<RefundPolicyPage />} />
-          <Route path="/source" element={<SourcesDisclaimer />} />
-          <Route path="/contact" element={<ContactPage />} />
+          {/* Public Marketing Site Routes */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/tour" element={<ProductTourPage />} />
+            <Route path="/solutions" element={<SolutionsPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacySecurityPage />} />
+            <Route path="/help" element={<HelpSupportPage />} />
+            <Route path="/terms" element={<TermsConditionsPage />} />
+            <Route path="/refund-policy" element={<RefundPolicyPage />} />
+            <Route path="/source" element={<SourcesDisclaimer />} />
+          </Route>
+
+          {/* App Coming Soon - standalone, no marketing chrome */}
           <Route path="/app-coming-soon" element={<AppComingSoonPage />} />
 
           {/* Error Routes */}
