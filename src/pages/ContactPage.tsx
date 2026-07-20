@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { Link } from 'react-router-dom';
 import { EnvelopeIcon, ChatBubbleLeftRightIcon, ClockIcon } from '@heroicons/react/24/outline';
 import ContactQueryForm from '../components/ContactQueryForm';
 
@@ -57,21 +58,21 @@ const ContactPage: React.FC = () => {
                 <p className="text-gray-600">Sunday: Closed</p>
               </div>
 
-              {/* FAQ Link */}
+              {/* Help Center Link */}
               <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
                 <ChatBubbleLeftRightIcon className="w-8 h-8 text-primary-600 mb-3" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Looking for quick answers?
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Check out our FAQ page for instant answers to common questions.
+                  Check out our Help Center for guidance on using the platform.
                 </p>
-                <a href="/#faqs" className="text-primary-600 hover:underline font-medium inline-flex items-center">
-                  Visit FAQs
+                <Link to="/help" className="text-primary-600 hover:underline font-medium inline-flex items-center">
+                  Visit Help Center
                   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </Link>
               </div>
 
               {/* Why Contact Us */}
