@@ -25,7 +25,8 @@ import ContactPage from './pages/ContactPage';
 import DashboardPage from './pages/DashboardPage';
 import HelpSupportPage from './pages/HelpSupportPage';
 import HomePage from './pages/HomePage';
-// PDFs are available only in the mobile app — web routes intentionally removed.
+import PDFsPage from './pages/pdfs/PDFsPage';
+import PDFViewerPage from './pages/pdfs/PDFViewerPage';
 import PrivacySecurityPage from './pages/PrivacySecurityPage';
 import SourcesDisclaimer from './pages/SourcesDisclaimer';
 import PerformancePage from './pages/profile/PerformancePage';
@@ -49,6 +50,13 @@ import TestSeriesDetailPage from './pages/tests/TestSeriesDetailPage';
 import TestSeriesPage from './pages/tests/TestSeriesPage';
 import TestSolutionsPage from './pages/tests/TestSolutionsPage';
 import TestsPage from './pages/tests/TestsPage';
+import CoursesPage from './pages/courses/CoursesPage';
+import CoursePlayerPage from './pages/courses/CoursePlayerPage';
+import AssignmentsPage from './pages/assignments/AssignmentsPage';
+import AssignmentDetailPage from './pages/assignments/AssignmentDetailPage';
+import LiveSessionsPage from './pages/live/LiveSessionsPage';
+import CertificatesPage from './pages/certificates/CertificatesPage';
+import RankingsPage from './pages/rankings/RankingsPage';
 
 // Payment Pages
 import PaymentPage from './pages/PaymentPage';
@@ -149,7 +157,18 @@ function AppContent() {
             <Route path="/test-history/:sessionId" element={<TestHistoryDetailPage />} />
             <Route path="/test-history/:sessionId/solutions" element={<TestSolutionsPage />} />
 
-            {/* PDF routes removed — PDFs are available only in the mobile app. */}
+            {/* PDF Routes */}
+            <Route path="/pdfs" element={<PDFsPage />} />
+            <Route path="/pdfs/:id" element={<PDFViewerPage />} />
+
+            {/* Course / Assignments / Live / Rankings / Certificates Routes */}
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/courses/:uuid" element={<CoursePlayerPage />} />
+            <Route path="/assignments" element={<AssignmentsPage />} />
+            <Route path="/assignments/:uuid" element={<AssignmentDetailPage />} />
+            <Route path="/live" element={<LiveSessionsPage />} />
+            <Route path="/rankings" element={<RankingsPage />} />
+            <Route path="/certificates" element={<CertificatesPage />} />
 
             {/* Profile Routes */}
             <Route path="/profile" element={<ProfilePage />} />

@@ -14,7 +14,12 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
-  DocumentDuplicateIcon
+  DocumentDuplicateIcon,
+  VideoCameraIcon,
+  TrophyIcon,
+  CheckBadgeIcon as CertificateIcon,
+  RectangleStackIcon,
+  ClipboardDocumentListIcon,
 } from '@heroicons/react/24/outline';
 import {
   HomeIcon as HomeIconSolid,
@@ -24,7 +29,12 @@ import {
   BookOpenIcon as BookOpenIconSolid,
   GiftIcon as GiftIconSolid,
   ClockIcon as ClockIconSolid,
-  DocumentDuplicateIcon as DocumentDuplicateIconSolid
+  DocumentDuplicateIcon as DocumentDuplicateIconSolid,
+  VideoCameraIcon as VideoCameraIconSolid,
+  TrophyIcon as TrophyIconSolid,
+  CheckBadgeIcon as CertificateIconSolid,
+  RectangleStackIcon as RectangleStackIconSolid,
+  ClipboardDocumentListIcon as ClipboardDocumentListIconSolid,
 } from '@heroicons/react/24/solid';
 
 interface NavigationItem {
@@ -70,6 +80,42 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       href: '/previous-years-papers',
       icon: DocumentDuplicateIcon,
       iconSolid: DocumentDuplicateIconSolid,
+    },
+    {
+      name: 'Study Materials',
+      href: '/pdfs',
+      icon: DocumentTextIcon,
+      iconSolid: DocumentTextIconSolid,
+    },
+    {
+      name: 'Courses',
+      href: '/courses',
+      icon: RectangleStackIcon,
+      iconSolid: RectangleStackIconSolid,
+    },
+    {
+      name: 'Assignments',
+      href: '/assignments',
+      icon: ClipboardDocumentListIcon,
+      iconSolid: ClipboardDocumentListIconSolid,
+    },
+    {
+      name: 'Live & Recorded',
+      href: '/live',
+      icon: VideoCameraIcon,
+      iconSolid: VideoCameraIconSolid,
+    },
+    {
+      name: 'Rankings',
+      href: '/rankings',
+      icon: TrophyIcon,
+      iconSolid: TrophyIconSolid,
+    },
+    {
+      name: 'Certificates',
+      href: '/certificates',
+      icon: CertificateIcon,
+      iconSolid: CertificateIconSolid,
     },
     // Removed: "Free Samples" page - Free samples now shown inline in hierarchy with FREE badges
     // {

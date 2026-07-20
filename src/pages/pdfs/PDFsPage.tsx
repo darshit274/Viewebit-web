@@ -16,9 +16,6 @@ import {
   FunnelIcon,
   ChevronDownIcon,
   AdjustmentsHorizontalIcon,
-  BookOpenIcon,
-  AcademicCapIcon,
-  DocumentArrowDownIcon,
   LockClosedIcon,
   CheckCircleIcon,
   CurrencyRupeeIcon,
@@ -28,7 +25,8 @@ import {
   GiftIcon
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
-import { api } from '../../services/api';
+import { pdfsService } from '../../services/pdfs';
+import type { PdfCategory } from '../../services/pdfs';
 import { toast } from 'react-hot-toast';
 import { cn } from '../../utils/cn';
 
@@ -75,14 +73,22 @@ const PDFsPage: React.FC = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState<string>('newest');
   const [selectedAccessLevel, setSelectedAccessLevel] = useState<string>('all');
+  const [pdfCategories, setPdfCategories] = useState<PdfCategory[]>([]);
 
   const categories = [
-    { value: 'all', label: 'All Categories', icon: FolderIcon, count: 0, color: 'bg-gray-100 text-gray-800' },
-    { value: 'notes', label: 'Study Notes', icon: DocumentTextIcon, count: 0, color: 'bg-primary-100 text-primary-800' },
-    { value: 'books', label: 'Reference Books', icon: BookOpenIcon, count: 0, color: 'bg-emerald-100 text-emerald-800' },
-    { value: 'papers', label: 'Question Papers', icon: AcademicCapIcon, count: 0, color: 'bg-purple-100 text-purple-800' },
-    { value: 'guides', label: 'Study Guides', icon: DocumentArrowDownIcon, count: 0, color: 'bg-amber-100 text-amber-800' },
+    { value: 'all', label: 'All Categories', icon: FolderIcon },
+    ...pdfCategories.map((c) => ({ value: String(c.id), label: c.name, icon: DocumentTextIcon })),
   ];
+
+  const sortParamsFor = (value: string): { sortBy: string; sortOrder: 'ASC' | 'DESC' } => {
+    switch (value) {
+      case 'oldest': return { sortBy: 'created_at', sortOrder: 'ASC' };
+      case 'popular': return { sortBy: 'view_count', sortOrder: 'DESC' };
+      case 'downloads': return { sortBy: 'download_count', sortOrder: 'DESC' };
+      case 'name': return { sortBy: 'title', sortOrder: 'ASC' };
+      default: return { sortBy: 'created_at', sortOrder: 'DESC' };
+    }
+  };
 
   const accessLevels = [
     { value: 'all', label: 'All Access' },
@@ -99,17 +105,18 @@ const PDFsPage: React.FC = () => {
   ];
 
   useEffect(() => {
+    pdfsService.getCategories().then(setPdfCategories).catch(() => setPdfCategories([]));
+  }, []);
+
+  useEffect(() => {
     fetchPDFs();
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, selectedAccessLevel, sortBy]);
 
   // Check user's access to a specific PDF
   const checkPDFAccess = async (pdfId: string): Promise<boolean> => {
     try {
-      const response = await api.get(`/subscription-access/pdf/${pdfId}`);
-      if (response.data.success) {
-        return response.data.data.hasAccess;
-      }
-      return false;
+      const access = await pdfsService.checkAccess(pdfId);
+      return access.hasAccess;
     } catch (error) {
       console.error(`Failed to check access for PDF ${pdfId}:`, error);
       return false; // Default to no access if check fails
@@ -118,60 +125,48 @@ const PDFsPage: React.FC = () => {
 
   const fetchPDFs = async () => {
     try {
-      const response = await api.get('/pdfs', {
-        params: {
-          category: selectedCategory !== 'all' ? selectedCategory : undefined,
-          search: searchQuery || undefined
-        }
+      setIsLoading(true);
+      const { sortBy: sortField, sortOrder } = sortParamsFor(sortBy);
+      const rawPdfs = await pdfsService.getPdfs({
+        category_id: selectedCategory !== 'all' ? selectedCategory : undefined,
+        search: searchQuery || undefined,
+        access_level: selectedAccessLevel !== 'all' ? (selectedAccessLevel as 'free' | 'premium') : undefined,
+        sortBy: sortField,
+        sortOrder,
       });
 
-      if (response.data.success) {
-        // Transform API response to match UI expectations
-        console.log('Raw PDF data from API:', response.data.data.slice(0, 2)); // Show first 2 PDFs for debugging
+      const transformedPdfs = await Promise.all(
+        rawPdfs.map(async (pdf: any) => {
+          const originalPrice = parseFloat(pdf.price || 0);
+          const discountPercentage = parseFloat(pdf.discount_percentage || 0);
+          const discountedPrice = discountPercentage > 0
+            ? originalPrice * (1 - discountPercentage / 100)
+            : originalPrice;
 
-        const transformedPdfs = await Promise.all(
-          response.data.data.map(async (pdf: any) => {
-            const originalPrice = parseFloat(pdf.price || 0);
-            const discountPercentage = parseFloat(pdf.discount_percentage || 0);
-            const discountedPrice = discountPercentage > 0
-              ? originalPrice * (1 - discountPercentage / 100)
-              : originalPrice;
+          // Determine access status
+          let hasAccess = false;
+          if (pdf.is_free === true || pdf.access_level === 'free') {
+            hasAccess = true; // Free PDFs are always accessible
+          } else if (pdf.access_level === 'premium') {
+            // For premium PDFs, check user's subscription status
+            hasAccess = await checkPDFAccess(pdf.id);
+          }
 
-            // Determine access status
-            let hasAccess = false;
-            if (pdf.is_free === true || pdf.access_level === 'free') {
-              hasAccess = true; // Free PDFs are always accessible
-            } else if (pdf.access_level === 'premium') {
-              // For premium PDFs, check user's subscription status
-              hasAccess = await checkPDFAccess(pdf.id);
-            }
-
-            console.log(`PDF: ${pdf.title}`, {
-              rawPrice: pdf.price,
-              originalPrice,
-              discountPercentage,
-              discountedPrice,
-              is_free: pdf.is_free,
-              access_level: pdf.access_level,
-              hasAccess
-            });
-
-            return {
-              ...pdf,
-              category: pdf.category_id || 'General',
-              fileSize: `${Math.round(pdf.file_size / 1024)} KB`,
-              downloadCount: pdf.download_count,
-              isDownloaded: false, // This would be determined by user data
-              isPremium: pdf.access_level === 'premium' || (!pdf.is_free && originalPrice > 0),
-              hasAccess,
-              uploadDate: pdf.created_at,
-              originalPrice,
-              discountedPrice: discountedPrice !== originalPrice ? discountedPrice : null
-            };
-          })
-        );
-        setPdfs(transformedPdfs);
-      }
+          return {
+            ...pdf,
+            category: pdf.category_id || 'General',
+            fileSize: `${Math.round(pdf.file_size / 1024)} KB`,
+            downloadCount: pdf.download_count,
+            isDownloaded: false, // This would be determined by user data
+            isPremium: pdf.access_level === 'premium' || (!pdf.is_free && originalPrice > 0),
+            hasAccess,
+            uploadDate: pdf.created_at,
+            originalPrice,
+            discountedPrice: discountedPrice !== originalPrice ? discountedPrice : null
+          };
+        })
+      );
+      setPdfs(transformedPdfs);
     } catch (error: any) {
       console.error('Failed to fetch PDFs:', error);
       toast.error('Failed to load PDFs');
@@ -180,18 +175,7 @@ const PDFsPage: React.FC = () => {
     }
   };
 
-  // Removed handleDownload function for security
-
   const handlePreview = (pdf: PDF) => {
-    console.log('handlePreview called for PDF:', {
-      title: pdf.title,
-      isPremium: pdf.isPremium,
-      hasAccess: pdf.hasAccess,
-      is_free: pdf.is_free,
-      access_level: pdf.access_level,
-      price: pdf.price
-    });
-
     if (!pdf.hasAccess && pdf.isPremium) {
       if (pdf.preview_pages && pdf.preview_pages > 0) {
         // Allow limited preview
@@ -221,8 +205,6 @@ const PDFsPage: React.FC = () => {
   const handlePurchase = (pdf: PDF) => {
     // Only proceed to payment if PDF is premium AND user doesn't have access
     if (!pdf.isPremium || pdf.hasAccess) {
-      console.log('Skipping payment - PDF is either free or user already has access');
-      console.log({ isPremium: pdf.isPremium, hasAccess: pdf.hasAccess, is_free: pdf.is_free, access_level: pdf.access_level });
       return;
     }
 
@@ -240,8 +222,6 @@ const PDFsPage: React.FC = () => {
   };
 
   const PDFCard = ({ pdf, isListView = false }: { pdf: PDF; isListView?: boolean }) => {
-    const category = categories.find(cat => cat.value === selectedCategory) || categories[0];
-
     if (isListView) {
       return (
         <div className="card p-4 hover:shadow-lg transition-all duration-200 cursor-pointer" onClick={() => handlePreview(pdf)}>
@@ -599,11 +579,6 @@ const PDFsPage: React.FC = () => {
                 >
                   <IconComponent className="w-4 h-4 mr-2" />
                   {category.label}
-                  {category.count > 0 && (
-                    <span className="ml-2 bg-white rounded-full px-2 py-0.5 text-xs">
-                      {category.count}
-                    </span>
-                  )}
                 </button>
               );
             })}
