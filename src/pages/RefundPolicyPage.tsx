@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CurrencyRupeeIcon,
@@ -6,7 +6,6 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   ArrowPathIcon,
-  ShieldCheckIcon,
   EnvelopeIcon,
   ArrowLeftIcon,
   ExclamationTriangleIcon,
@@ -14,7 +13,7 @@ import {
 
 const RefundPolicyPage: React.FC = () => {
   const navigate = useNavigate();
-  const lastUpdated = "January 2025";
+  const lastUpdated = "2026";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50 to-emerald-50">
@@ -53,11 +52,11 @@ const RefundPolicyPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              At <strong className="text-green-600">Viewebit Academy</strong>, all subscription purchases are final. This Cancellation & Refund Policy explains the terms and conditions for cancelling subscriptions and the limited circumstances under which refunds may be granted.
+              At <strong className="text-green-600">Viewebit LMS</strong>, all course and subscription purchases are final. This Cancellation & Refund Policy explains the terms and conditions for cancelling subscriptions and the limited circumstances under which refunds may be granted.
             </p>
             <div className="bg-red-50 border-l-4 border-red-500 p-4 my-4">
               <p className="text-red-900 font-semibold">
-                <strong>Important:</strong> We do NOT offer money-back guarantees or refunds for change of mind. Refunds are ONLY provided in cases of system errors, billing mistakes, or technical failures caused by Viewebit Academy.
+                <strong>Important:</strong> We do NOT offer money-back guarantees or refunds for change of mind. Refunds are ONLY provided in cases of system errors, billing mistakes, or technical failures caused by Viewebit LMS.
               </p>
             </div>
             <p className="text-gray-700 leading-relaxed">
@@ -103,14 +102,14 @@ const RefundPolicyPage: React.FC = () => {
                 <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
                   <h3 className="text-xl font-semibold text-red-900 mb-2">No General Refunds</h3>
                   <p className="text-red-800">
-                    <strong>Important:</strong> Viewebit Academy does NOT provide refunds for change of mind, dissatisfaction with content, or personal reasons. All subscription purchases are final.
+                    <strong>Important:</strong> Viewebit LMS does NOT provide refunds for change of mind, dissatisfaction with a course, or personal reasons. All subscription purchases are final.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Refunds Only for System Errors</h3>
                   <p className="text-gray-700 mb-3">
-                    Refunds will ONLY be issued in the following situations where <strong>Viewebit Academy is at fault:</strong>
+                    Refunds will ONLY be issued in the following situations where <strong>Viewebit LMS is at fault:</strong>
                   </p>
                   <div className="bg-green-50 rounded-lg p-4 space-y-2">
                     <div className="flex items-start gap-2">
@@ -131,7 +130,7 @@ const RefundPolicyPage: React.FC = () => {
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircleIcon className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <p className="text-gray-700"><strong>Technical Defects:</strong> Major technical issues on our end that prevent access to paid content</p>
+                      <p className="text-gray-700"><strong>Technical Defects:</strong> Major technical issues on our end that prevent access to a paid course</p>
                     </div>
                   </div>
                 </div>
@@ -164,11 +163,11 @@ const RefundPolicyPage: React.FC = () => {
                 <div className="bg-red-50 rounded-lg p-4 space-y-3">
                   <div className="flex items-start gap-2">
                     <XCircleIcon className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <p><strong>Change of mind</strong> or dissatisfaction with content</p>
+                    <p><strong>Change of mind</strong> or dissatisfaction with a course</p>
                   </div>
                   <div className="flex items-start gap-2">
                     <XCircleIcon className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <p>You have <strong>used any part of the platform</strong> (tests, PDFs, study materials)</p>
+                    <p>You have <strong>used any part of the platform</strong> (lessons, quizzes, PDFs, study materials)</p>
                   </div>
                   <div className="flex items-start gap-2">
                     <XCircleIcon className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -176,7 +175,7 @@ const RefundPolicyPage: React.FC = () => {
                   </div>
                   <div className="flex items-start gap-2">
                     <XCircleIcon className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <p>You have <strong>taken any tests</strong> or viewed any solutions</p>
+                    <p>You have <strong>taken any quizzes</strong> or viewed any solutions</p>
                   </div>
                   <div className="flex items-start gap-2">
                     <XCircleIcon className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -228,7 +227,7 @@ const RefundPolicyPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">How to Request a Refund</h3>
                   <ol className="list-decimal list-inside space-y-2 text-gray-700 ml-4">
-                    <li>Send an email to <strong>viewebit@gmail.com</strong> with subject "Refund Request"</li>
+                    <li>Send an email to <strong>info@viewebit.com</strong> with subject "Refund Request"</li>
                     <li>Include: Your registered email, order/transaction ID, reason for refund</li>
                     <li>Our team will review your request within <strong>24-48 hours</strong></li>
                     <li>You will receive an email confirming approval or denial</li>
@@ -300,14 +299,14 @@ const RefundPolicyPage: React.FC = () => {
                 <div className="bg-purple-50 border-l-4 border-purple-500 p-4">
                   <h4 className="font-semibold text-gray-900 mb-2">Account Closure</h4>
                   <p>
-                    Once a refund is processed (for system errors only), your account will be immediately deactivated, and you will lose access to all content, test history, and progress data permanently.
+                    Once a refund is processed (for system errors only), your account will be immediately deactivated, and you will lose access to all content, quiz history, and progress data permanently.
                   </p>
                 </div>
 
                 <div className="bg-primary-50 border-l-4 border-primary-500 p-4">
                   <h4 className="font-semibold text-gray-900 mb-2">Free Trial Recommended</h4>
                   <p>
-                    We strongly recommend using our free tests and trial content before purchasing a subscription. This allows you to evaluate the platform and content quality before making a commitment.
+                    We strongly recommend using our free courses and free preview lessons before purchasing a subscription. This allows you to evaluate the platform and content quality before making a commitment.
                   </p>
                 </div>
               </div>
@@ -323,13 +322,13 @@ const RefundPolicyPage: React.FC = () => {
               <div className="space-y-4 text-gray-700">
                 <div className="bg-primary-50 border-l-4 border-primary-500 p-4 mb-4">
                   <p className="text-primary-900">
-                    <strong>Our Commitment:</strong> If you experience technical issues caused by Viewebit Academy's systems, we will work to resolve them quickly.
+                    <strong>Our Commitment:</strong> If you experience technical issues caused by Viewebit LMS's systems, we will work to resolve them quickly.
                   </p>
                 </div>
 
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">If You Experience Technical Issues:</h3>
                 <ol className="list-decimal list-inside space-y-2 ml-4">
-                  <li>Contact our support team immediately at <strong>viewebit@gmail.com</strong></li>
+                  <li>Contact our support team immediately at <strong>info@viewebit.com</strong></li>
                   <li>Provide detailed information about the issue (screenshots, error messages, etc.)</li>
                   <li>Our team will investigate within <strong>24-48 hours</strong></li>
                   <li>If the issue is on our end, we will fix it as soon as possible</li>
@@ -384,18 +383,18 @@ const RefundPolicyPage: React.FC = () => {
               If you believe you were charged incorrectly due to a technical error on our end, contact our support team immediately.
             </p>
             <a
-              href="mailto:viewebit@gmail.com?subject=Billing%20Error%20Report"
+              href="mailto:info@viewebit.com?subject=Billing%20Error%20Report"
               className="inline-flex items-center gap-2 bg-white text-red-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all hover:scale-105"
             >
               <EnvelopeIcon className="h-6 w-6" />
-              viewebit@gmail.com
+              info@viewebit.com
             </a>
             <p className="text-white/70 text-sm mt-6">
               Include: Transaction ID, registered email, and detailed description of the error
             </p>
             <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-xl p-4 max-w-2xl mx-auto">
               <p className="text-white/90 text-sm">
-                <strong>Reminder:</strong> Refunds are NOT granted for change of mind or dissatisfaction. Please use our free tests before purchasing.
+                <strong>Reminder:</strong> Refunds are NOT granted for change of mind or dissatisfaction. Please use our free courses before purchasing.
               </p>
             </div>
           </div>
@@ -403,9 +402,9 @@ const RefundPolicyPage: React.FC = () => {
 
         {/* Footer Note */}
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>© 2025 Viewebit Academy. All rights reserved.</p>
+          <p>© 2026 Viewebit LMS. All rights reserved.</p>
           <p className="mt-2">All subscriptions are final. We provide refunds only for system errors and billing mistakes.</p>
-          <p className="mt-1 font-semibold text-red-600">Think before you buy. Try our free tests first!</p>
+          <p className="mt-1 font-semibold text-red-600">Think before you buy. Try our free courses first!</p>
         </div>
 
       </div>

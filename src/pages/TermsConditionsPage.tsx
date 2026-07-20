@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   DocumentTextIcon,
@@ -14,7 +14,7 @@ import {
 
 const TermsConditionsPage: React.FC = () => {
   const navigate = useNavigate();
-  const lastUpdated = "January 2025";
+  const lastUpdated = "2026";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-primary-50 to-cyan-50">
@@ -53,7 +53,7 @@ const TermsConditionsPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Welcome to <strong className="text-primary-600">Viewebit Academy</strong>. These Terms and Conditions ("Terms") govern your access to and use of our online educational platform for Gujarat competitive Exam preparation. By registering, accessing, or using our services, you agree to be bound by these Terms.
+              Welcome to <strong className="text-primary-600">Viewebit LMS</strong>. These Terms and Conditions ("Terms") govern your access to and use of our learning management platform, used by institutions, educators, and students to deliver and take courses, live sessions, quizzes, and assignments. By registering, accessing, or using our services, you agree to be bound by these Terms.
             </p>
             <p className="text-gray-700 leading-relaxed">
               <strong>IMPORTANT:</strong> If you do not agree to these Terms, please do not use our platform. Your continued use constitutes acceptance of any modifications to these Terms.
@@ -72,7 +72,7 @@ const TermsConditionsPage: React.FC = () => {
                   <li>• Use services lawfully</li>
                   <li>• Protect your account credentials</li>
                   <li>• Respect intellectual property</li>
-                  <li>• Follow exam conduct rules</li>
+                  <li>• Follow course and quiz conduct rules</li>
                 </ul>
               </div>
             </div>
@@ -85,7 +85,7 @@ const TermsConditionsPage: React.FC = () => {
                 <h3 className="font-bold text-lg mb-2">You Must NOT:</h3>
                 <ul className="text-white/90 text-sm space-y-1">
                   <li>• Share or resell course content</li>
-                  <li>• Cheat or manipulate tests</li>
+                  <li>• Cheat or manipulate quizzes</li>
                   <li>• Create multiple accounts</li>
                   <li>• Violate copyright laws</li>
                 </ul>
@@ -109,7 +109,7 @@ const TermsConditionsPage: React.FC = () => {
               <div className="space-y-4 text-gray-700">
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Eligibility</h3>
-                  <p className="mb-2">You must be at least 13 years old to use Viewebit Academy. By creating an account, you represent that:</p>
+                  <p className="mb-2">You must be at least 13 years old to use Viewebit LMS. By creating an account, you represent that:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li>You are legally capable of entering into binding contracts</li>
                     <li>All registration information you provide is accurate and current</li>
@@ -149,11 +149,11 @@ const TermsConditionsPage: React.FC = () => {
               <div className="space-y-4 text-gray-700">
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Permitted Use</h3>
-                  <p>Viewebit Academy grants you a limited, non-exclusive, non-transferable license to:</p>
+                  <p>Viewebit LMS grants you a limited, non-exclusive, non-transferable license to:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
-                    <li>Access and use our platform for personal educational purposes</li>
-                    <li>Take mock tests and practice quizzes</li>
-                    <li>View study materials and solutions</li>
+                    <li>Access and use our platform for your own learning or teaching purposes</li>
+                    <li>Enroll in and complete courses, live sessions, quizzes, and assignments</li>
+                    <li>View study materials and solutions made available to you</li>
                     <li>Track your performance and progress</li>
                   </ul>
                 </div>
@@ -162,11 +162,11 @@ const TermsConditionsPage: React.FC = () => {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Prohibited Activities</h3>
                   <p className="mb-2">You agree NOT to:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li><strong>Copy, reproduce, or distribute</strong> our content without written permission</li>
+                    <li><strong>Copy, reproduce, or distribute</strong> course content without written permission from the institution/educator that owns it</li>
                     <li><strong>Upload to AI tools,</strong> file-sharing sites, or other platforms</li>
                     <li><strong>Reverse engineer,</strong> decompile, or modify our platform</li>
                     <li><strong>Use automated tools</strong> (bots, scrapers) to access content</li>
-                    <li><strong>Cheat or manipulate</strong> test scores or rankings</li>
+                    <li><strong>Cheat or manipulate</strong> quiz scores or rankings</li>
                     <li><strong>Resell or commercialize</strong> any part of our services</li>
                     <li><strong>Interfere with</strong> the proper functioning of the platform</li>
                     <li><strong>Violate any laws</strong> or regulations</li>
@@ -193,9 +193,9 @@ const TermsConditionsPage: React.FC = () => {
             <div className="p-8">
               <div className="space-y-4 text-gray-700">
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Our Content</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Platform & Course Content</h3>
                   <p className="mb-3">
-                    All content on Viewebit Academy, including but not limited to questions, solutions, study materials, PDFs, videos, images, text, graphics, logos, and software, is owned by or licensed to Viewebit Academy and protected by:
+                    The Viewebit LMS platform itself — including its software, design, and branding — is owned by or licensed to Viewebit LMS and protected by copyright, trademark, and other intellectual property laws. Course content published on the platform (questions, solutions, study materials, PDFs, videos, and lesson text) is owned by the institution or educator who created it, unless otherwise stated.
                   </p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li>Copyright laws of India and international treaties</li>
@@ -208,8 +208,8 @@ const TermsConditionsPage: React.FC = () => {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Content Restrictions</h3>
                   <p className="mb-2">You may NOT:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>Claim ownership of our content</li>
-                    <li>Modify, adapt, or create derivative works</li>
+                    <li>Claim ownership of platform or course content that isn't yours</li>
+                    <li>Modify, adapt, or create derivative works from course content</li>
                     <li>Share screenshots or recordings of paid content publicly</li>
                     <li>Remove copyright notices or watermarks</li>
                   </ul>
@@ -218,7 +218,7 @@ const TermsConditionsPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Educational Use Only</h3>
                   <p>
-                    All materials provided are for <strong>educational and informational purposes only</strong>. They are not intended to replace professional advice or guarantee exam success.
+                    All materials provided are for <strong>educational and informational purposes only</strong>. They are not intended to replace professional advice or guarantee any specific outcome.
                   </p>
                 </div>
               </div>
@@ -237,11 +237,11 @@ const TermsConditionsPage: React.FC = () => {
               <div className="space-y-4 text-gray-700">
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Subscription Plans</h3>
-                  <p className="mb-2">Viewebit Academy offers:</p>
+                  <p className="mb-2">Viewebit LMS offers:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li><strong>Free Content:</strong> Limited access to select quizzes and materials</li>
-                    <li><strong>Paid Subscriptions:</strong> Full access to premium test series and content</li>
-                    <li><strong>One-Time Purchases:</strong> Access to specific test series or study packs</li>
+                    <li><strong>Free Content:</strong> Limited access to select courses, quizzes, and materials</li>
+                    <li><strong>Paid Subscriptions:</strong> Full access to premium courses and content</li>
+                    <li><strong>One-Time Purchases:</strong> Access to specific courses, test series, or study packs</li>
                   </ul>
                 </div>
 
@@ -274,17 +274,17 @@ const TermsConditionsPage: React.FC = () => {
           {/* Section 5 */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
             <div className="bg-gradient-to-r from-secondary-500 to-purple-500 p-6">
-              <h2 className="text-2xl font-bold text-white">5. Test Conduct & Academic Integrity</h2>
+              <h2 className="text-2xl font-bold text-white">5. Quiz Conduct & Academic Integrity</h2>
             </div>
             <div className="p-8">
               <div className="space-y-4 text-gray-700">
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Fair Use Policy</h3>
-                  <p className="mb-2">When taking tests, you must:</p>
+                  <p className="mb-2">When taking quizzes, you must:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>Attempt tests individually without external assistance</li>
-                    <li>Not use unauthorized aids, references, or communication during timed tests</li>
-                    <li>Not share test questions or answers with others</li>
+                    <li>Attempt quizzes individually without external assistance</li>
+                    <li>Not use unauthorized aids, references, or communication during timed quizzes</li>
+                    <li>Not share quiz questions or answers with others</li>
                     <li>Accept that only <strong>first attempt scores</strong> count for leaderboard rankings</li>
                   </ul>
                 </div>
@@ -293,8 +293,8 @@ const TermsConditionsPage: React.FC = () => {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Cheating & Misconduct</h3>
                   <p className="mb-2">We have zero tolerance for:</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
-                    <li>Using multiple accounts to retake tests</li>
-                    <li>Collaborating with others during individual tests</li>
+                    <li>Using multiple accounts to retake quizzes</li>
+                    <li>Collaborating with others during individual quizzes</li>
                     <li>Using scripts or automated tools to manipulate scores</li>
                     <li>Any form of academic dishonesty</li>
                   </ul>
@@ -316,7 +316,7 @@ const TermsConditionsPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">No Guarantee of Results</h3>
                   <p>
-                    Viewebit Academy provides educational content and practice materials. We do <strong>NOT guarantee</strong>:
+                    Viewebit LMS provides educational content and practice materials published by institutions and educators. We do <strong>NOT guarantee</strong>:
                   </p>
                   <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
                     <li>Passing of any government examination</li>
@@ -329,7 +329,7 @@ const TermsConditionsPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Errors & Accuracy</h3>
                   <p>
-                    While we strive for accuracy, we cannot guarantee that all content is error-free or up-to-date. Exam patterns and syllabi may change. Users should verify information from official sources.
+                    While institutions and educators strive for accuracy, we cannot guarantee that all course content is error-free or up-to-date. Exam patterns and syllabi may change. Users should verify information from official sources.
                   </p>
                 </div>
 
@@ -357,7 +357,7 @@ const TermsConditionsPage: React.FC = () => {
             <div className="p-8">
               <div className="text-gray-700">
                 <p className="mb-3">
-                  To the maximum extent permitted by law, Viewebit Academy and its affiliates shall not be liable for:
+                  To the maximum extent permitted by law, Viewebit LMS and its affiliates shall not be liable for:
                 </p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
                   <li>Any indirect, incidental, special, or consequential damages</li>
@@ -450,11 +450,10 @@ const TermsConditionsPage: React.FC = () => {
             <div className="p-8">
               <div className="text-gray-700 space-y-3">
                 <p>
-                  Viewebit Academy does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
+                  Viewebit LMS does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
                 </p>
                 <p className="mt-3">
-                  This platform is an independent educational service created solely for practice and self-assessment purposes.
-                  All exam-related information is collected from publicly available official websites for reference only.                </p>
+                  Viewebit LMS is a learning management platform used by institutions and educators to publish and deliver their own courses. See our <a href="/source" className="underline hover:text-primary-700">Sources &amp; Disclaimer</a> page for details on content ownership.</p>
               </div>
             </div>
           </div>
@@ -470,18 +469,18 @@ const TermsConditionsPage: React.FC = () => {
               If you have any questions or concerns regarding these Terms & Conditions, please contact us.
             </p>
             <a
-              href="mailto:viewebit@gmail.com"
+              href="mailto:info@viewebit.com"
               className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all hover:scale-105"
             >
               <EnvelopeIcon className="h-6 w-6" />
-              viewebit@gmail.com
+              info@viewebit.com
             </a>
           </div>
         </div>
 
         {/* Footer Note */}
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>© 2025 Viewebit Academy. All rights reserved.</p>
+          <p>© 2026 Viewebit LMS. All rights reserved.</p>
           <p className="mt-2">By using our platform, you acknowledge that you have read and agree to these Terms.</p>
         </div>
 

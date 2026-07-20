@@ -234,7 +234,7 @@ const PublicLayout: React.FC = () => {
               <span className="text-gray-600">•</span>
               <div className="flex items-center">
                 <EnvelopeIcon className="w-3.5 h-3.5 mr-1" />
-                viewebit@gmail.com
+                info@viewebit.com
               </div>
             </div>
           </div>

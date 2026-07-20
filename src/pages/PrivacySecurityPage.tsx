@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ShieldCheckIcon,
@@ -14,7 +14,7 @@ import {
 const PrivacySecurityPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const lastUpdated = "January 2025";
+  const lastUpdated = "2026";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-primary-50 to-purple-50">
@@ -53,10 +53,10 @@ const PrivacySecurityPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Welcome to <strong className="text-primary-600">Viewebit Academy</strong>. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our educational platform for Gujarat competitive exam preparation.
+              Welcome to <strong className="text-primary-600">Viewebit LMS</strong>. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our learning management platform — whether you're a student, an educator, or an institution administrator.
             </p>
             <p className="text-gray-700 leading-relaxed">
-              By accessing or using Viewebit Academy, you agree to this Privacy Policy. If you do not agree with the terms, please discontinue use of our services.
+              By accessing or using Viewebit LMS, you agree to this Privacy Policy. If you do not agree with the terms, please discontinue use of our services.
             </p>
           </div>
         </div>
@@ -109,6 +109,7 @@ const PrivacySecurityPage: React.FC = () => {
                     <li>Username and password (encrypted)</li>
                     <li>Profile picture (optional)</li>
                     <li>Phone number (optional)</li>
+                    <li>Institution, branch, or department affiliation, where applicable</li>
                   </ul>
                 </div>
 
@@ -116,9 +117,10 @@ const PrivacySecurityPage: React.FC = () => {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Usage Information</h3>
                   <p className="text-gray-700 mb-2">We automatically collect information about your activity:</p>
                   <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                    <li>Test scores, rankings, and performance analytics</li>
-                    <li>Questions attempted and time spent</li>
-                    <li>Test history and progress tracking</li>
+                    <li>Course enrollment, lesson progress, and completion status</li>
+                    <li>Quiz scores, rankings, and performance analytics</li>
+                    <li>Assignment submissions and grades</li>
+                    <li>Live session attendance</li>
                     <li>Device information (browser type, operating system)</li>
                     <li>IP address and location data</li>
                   </ul>
@@ -146,10 +148,10 @@ const PrivacySecurityPage: React.FC = () => {
               <div className="space-y-4 text-gray-700">
                 <p className="font-medium text-gray-900 mb-3">We use your information to:</p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
-                  <li><strong>Provide Services:</strong> Create and manage your account, deliver test content, track progress</li>
+                  <li><strong>Provide Services:</strong> Create and manage your account, deliver course content, and track your progress</li>
                   <li><strong>Improve Platform:</strong> Analyze usage patterns to enhance user experience and add new features</li>
-                  <li><strong>Communication:</strong> Send important updates, test reminders, and support responses</li>
-                  <li><strong>Personalization:</strong> Customize content based on your performance and preferences</li>
+                  <li><strong>Communication:</strong> Send important updates, course/live session reminders, and support responses</li>
+                  <li><strong>Personalization:</strong> Customize content based on your enrollment and performance</li>
                   <li><strong>Security:</strong> Protect against fraud, abuse, and unauthorized access</li>
                   <li><strong>Legal Compliance:</strong> Meet legal obligations and enforce our terms of service</li>
                 </ul>
@@ -175,7 +177,7 @@ const PrivacySecurityPage: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">We DO NOT sell your data</h3>
                   <p className="text-gray-700 mb-4">
-                    Viewebit Academy does not sell, rent, or trade your personal information to third parties for marketing purposes.
+                    Viewebit LMS does not sell, rent, or trade your personal information to third parties for marketing purposes.
                   </p>
                 </div>
 
@@ -183,7 +185,8 @@ const PrivacySecurityPage: React.FC = () => {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Limited Sharing</h3>
                   <p className="text-gray-700 mb-2">We may share your information only in these specific cases:</p>
                   <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                    <li><strong>Service Providers:</strong> Trusted third-party services that help us operate (hosting, payment processing, analytics) - under strict confidentiality agreements</li>
+                    <li><strong>Your Institution/Educator:</strong> Your course progress, quiz results, and assignment submissions are visible to the educator and institution administering your course</li>
+                    <li><strong>Service Providers:</strong> Trusted third-party services that help us operate (hosting, payment processing, analytics) — under strict confidentiality agreements</li>
                     <li><strong>Leaderboards:</strong> Your username and scores may be visible to other users on public leaderboards</li>
                     <li><strong>Legal Requirements:</strong> When required by law, court order, or government regulations</li>
                     <li><strong>Business Transfers:</strong> In case of merger, acquisition, or sale of assets (users will be notified)</li>
@@ -275,7 +278,7 @@ const PrivacySecurityPage: React.FC = () => {
             </div>
             <div className="p-8">
               <p className="text-gray-700 leading-relaxed">
-                Viewebit Academy is intended for users preparing for government exams. While we do not specifically target children under 13,
+                Viewebit LMS is intended for students, educators, and institution staff aged 13 and older. While we do not specifically target children under 13,
                 if we learn that we have collected personal information from a child under 13 without parental consent, we will take steps to
                 delete that information promptly. Parents or guardians who believe their child has provided us with information should contact us immediately.
               </p>
@@ -298,7 +301,7 @@ const PrivacySecurityPage: React.FC = () => {
                 <li>Displaying a prominent notice on our platform</li>
               </ul>
               <p className="text-gray-700">
-                Your continued use of Viewebit Academy after changes become effective constitutes acceptance of the updated policy.
+                Your continued use of Viewebit LMS after changes become effective constitutes acceptance of the updated policy.
               </p>
             </div>
           </div>
@@ -310,11 +313,10 @@ const PrivacySecurityPage: React.FC = () => {
             </div>
             <div className="p-8">
               <p className="text-gray-700 leading-relaxed mb-4">
-                Viewebit Academy does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
+                Viewebit LMS does <strong>not represent, affiliate with, or claim any association with any government entity or examination authority</strong>.
               </p>
               <p className="text-gray-700">
-                This platform is an independent educational service created solely for practice and self-assessment purposes.
-                All exam-related information is collected from publicly available official websites for reference only.</p>
+                Viewebit LMS is a learning management platform. Course content, quizzes, and study materials are authored and owned by the institutions and educators who publish them, not by Viewebit LMS itself. See our <a href="/source" className="text-primary-600 hover:underline">Sources &amp; Disclaimer</a> page for details.</p>
             </div>
           </div>
 
@@ -330,11 +332,11 @@ const PrivacySecurityPage: React.FC = () => {
               please don't hesitate to contact us.
             </p>
             <a
-              href="mailto:viewebit@gmail.com"
+              href="mailto:info@viewebit.com"
               className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all hover:scale-105"
             >
               <EnvelopeIcon className="h-6 w-6" />
-              viewebit@gmail.com
+              info@viewebit.com
             </a>
             <p className="text-white/70 text-sm mt-6">
               We typically respond within 24-48 hours
@@ -344,7 +346,7 @@ const PrivacySecurityPage: React.FC = () => {
 
         {/* Footer Note */}
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>© 2025 Viewebit Academy. All rights reserved.</p>
+          <p>© 2026 Viewebit LMS. All rights reserved.</p>
           <p className="mt-2">Your trust is important to us. We are committed to protecting your privacy.</p>
         </div>
 

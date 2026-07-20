@@ -1,8 +1,7 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   QuestionMarkCircleIcon,
-  ChatBubbleLeftRightIcon,
   EnvelopeIcon,
   ChevronDownIcon,
   ChevronUpIcon,
@@ -10,7 +9,6 @@ import {
   LightBulbIcon,
   AcademicCapIcon,
   ClockIcon,
-  GlobeAltIcon,
   TrophyIcon,
   DocumentTextIcon,
   ArrowLeftIcon,
@@ -21,7 +19,7 @@ interface FAQ {
   id: number;
   question: string;
   answer: string;
-  category: 'general' | 'technical' | 'tests' | 'features';
+  category: 'general' | 'technical' | 'courses' | 'features';
 }
 
 const HelpSupportPage: React.FC = () => {
@@ -32,68 +30,74 @@ const HelpSupportPage: React.FC = () => {
   const faqs: FAQ[] = [
     {
       id: 1,
-      question: 'How do I start taking practice tests?',
-      answer: 'Navigate to the "Tests" section from the sidebar menu. Browse available test series or categories for Gujarat competitive Exams (GPSC, GSSSB, etc.). Click on any test to view details, then click "Start Test". Choose your preferred language (English or Gujarati) and begin!',
+      question: 'How do I enroll in a course?',
+      answer: 'Navigate to the "Courses" section from the sidebar menu. Browse courses published by your institution, then click on one to view its modules and lessons. Free courses give you instant access; paid courses take you to checkout to activate your subscription.',
       category: 'general',
     },
     {
       id: 2,
-      question: 'What exams does Viewebit Academy cover?',
-      answer: 'We provide comprehensive preparation for Gujarat competitive Exams including GPSC (Gujarat Public Service Commission), GSSSB (Gujarat Subordinate Service Selection Board), GPSSB (Gujarat Panchayat Service Selection Board), Police Constable Bharti, PSI (Police Sub Inspector), Talati, and Junior Clerk examinations.',
+      question: 'What can I do on Viewebit LMS?',
+      answer: 'Viewebit LMS brings courses, live and recorded classes, quizzes and test series, assignments, certificates, and rankings together in one platform, so you can learn, practice, and track your progress without switching between tools.',
       category: 'general',
     },
     {
       id: 3,
-      question: 'Can I switch between English and Gujarati during tests?',
-      answer: 'Yes! Viewebit Academy offers bilingual support. You can switch between English and Gujarati at any time during the test using the language toggle button. Your progress is automatically saved, and all questions, options, and explanations are available in both languages.',
-      category: 'features',
+      question: 'How do I join a live class?',
+      answer: 'Open the "Live & Recorded" section or the relevant lesson inside your course. Scheduled sessions show a "Join" link that opens the class in your video platform of choice. If you miss a session, check back later for the recording.',
+      category: 'courses',
     },
     {
       id: 4,
       question: 'How is my leaderboard rank calculated?',
-      answer: 'Your rank is based on your FIRST ATTEMPT score for each test. The leaderboard ranks users by score (highest first). In case of a tie, the user who completed the test earlier receives the higher rank. This ensures fair competition and prevents gaming the system by retaking tests after viewing solutions.',
-      category: 'tests',
+      answer: 'Your rank is based on your FIRST ATTEMPT score for each quiz. The leaderboard ranks users by score (highest first). In case of a tie, whoever completed the quiz earlier receives the higher rank — this keeps rankings fair and prevents gaming the system by retaking a quiz after viewing solutions.',
+      category: 'features',
     },
     {
       id: 5,
-      question: 'What is Practice Mode and how does it work?',
-      answer: 'Practice Mode allows you to reattempt questions after completing a test and viewing solutions. You can practice as many times as you want to strengthen your understanding. However, only your FIRST attempt score counts for leaderboard rankings. This feature is perfect for learning from mistakes and improving gradually.',
+      question: 'Can I attempt a quiz more than once?',
+      answer: 'Once you have completed a quiz and viewed its solutions, you can reattempt it as many times as you like to reinforce what you learned. Only your FIRST attempt score counts toward leaderboard rankings, so take your time and prepare before your first try.',
       category: 'features',
     },
     {
       id: 6,
       question: 'How do I view detailed solutions with explanations?',
-      answer: 'After submitting any test, click the "View Solutions" button on the results page. You will see comprehensive explanations for all questions, including: why the correct answer is right, why other options are incorrect, key concepts to remember, and tips for similar questions.',
-      category: 'tests',
+      answer: 'After submitting any quiz, click "View Solutions" on the results page. You will see explanations for every question, including why the correct answer is right, why the other options are wrong, and key concepts to remember.',
+      category: 'courses',
     },
     {
       id: 7,
-      question: 'Are there really free tests available?',
-      answer: 'Yes! Viewebit Academy offers numerous free resources including: free practice quizzes (especially for Maths and Reasoning), free Previous Year Question Papers (PYQPs) for all major Gujarat exams, free topic-wise tests, and sample full-length mock tests. Premium test series require a subscription for complete access.',
-      category: 'general',
+      question: 'How do assignments work?',
+      answer: 'Your educator may assign text answers, file uploads, or quiz-based assignments. Open "Assignments" from the sidebar, submit your work before the due date, and check back for your grade and feedback once your educator has reviewed it.',
+      category: 'courses',
     },
     {
       id: 8,
-      question: 'My test results are not showing. What should I do?',
-      answer: 'First, try refreshing your browser (Ctrl+R or Cmd+R). If the issue persists, go to "Test History" from the sidebar menu to view all your completed tests. Check your internet connection to ensure submissions were successful. If you still cannot see results after 5 minutes, please contact our support team.',
-      category: 'technical',
+      question: 'How do I get a certificate?',
+      answer: 'Certificates are issued automatically once you complete a course — finishing its lessons and any linked quizzes past your educator\'s completion threshold. You can view and download your certificates anytime from the "Certificates" section.',
+      category: 'features',
     },
     {
       id: 9,
-      question: 'How do test analytics and performance tracking work?',
-      answer: 'Viewebit Academy provides detailed analytics including: overall accuracy percentage, subject-wise performance breakdown, time management analysis, comparison with top performers, strength and weakness identification, and progress tracking over time. Access your analytics from the Dashboard or Profile sections.',
+      question: 'My progress or results are not showing. What should I do?',
+      answer: 'First, try refreshing your browser (Ctrl+R or Cmd+R). If the issue persists, check "Test History" from the sidebar to view your completed quizzes, and confirm your internet connection was stable when you submitted. If results still don\'t appear after a few minutes, please contact our support team.',
+      category: 'technical',
+    },
+    {
+      id: 10,
+      question: 'How do performance analytics work?',
+      answer: 'Viewebit LMS tracks your accuracy, subject-wise performance, time spent per question, and progress over time, so you can see exactly where to focus your effort. Access your analytics from the Dashboard or Profile sections.',
       category: 'features',
     },
     {
       id: 11,
       question: 'What is negative marking and how is it calculated?',
-      answer: 'Negative marking mirrors actual Gujarat competitive Exam patterns. Typically, wrong answers deduct 0.25 to 0.33 marks per question (varies by exam type). Your final score = (Correct answers × Marks per question) - (Wrong answers × Negative marks per question). The results page shows your score breakdown clearly.',
-      category: 'tests',
+      answer: 'Some quizzes deduct marks for wrong answers, matching real exam patterns — the exact deduction per wrong answer is set by whoever authored the quiz and shown before you start. Your final score = (Correct answers × Marks per question) − (Wrong answers × Negative marks per question). The results page always shows your score breakdown clearly.',
+      category: 'courses',
     },
     {
       id: 12,
       question: 'How do I reset my password or update my profile?',
-      answer: 'Click on your profile picture/name in the top-right corner. Select "Profile" from the dropdown menu. Click "Account Settings" to update your name, email, or profile picture. For password changes, go to "Privacy & Security" section and use the "Change Password" form.',
+      answer: 'Click on your profile picture/name in the top-right corner and select "Profile" from the dropdown menu. Use "Account Settings" to update your name, email, or profile picture. For password changes, go to the "Privacy & Security" section and use the "Change Password" form.',
       category: 'technical',
     },
   ];
@@ -101,7 +105,7 @@ const HelpSupportPage: React.FC = () => {
   const categories = [
     { id: 'all', name: 'All FAQs', icon: BookOpenIcon, color: 'from-primary-500 to-cyan-500' },
     { id: 'general', name: 'General', icon: QuestionMarkCircleIcon, color: 'from-purple-500 to-pink-500' },
-    { id: 'tests', name: 'Tests & Exams', icon: AcademicCapIcon, color: 'from-green-500 to-emerald-500' },
+    { id: 'courses', name: 'Courses & Quizzes', icon: AcademicCapIcon, color: 'from-green-500 to-emerald-500' },
     { id: 'features', name: 'Features', icon: SparklesIcon, color: 'from-orange-500 to-red-500' },
     { id: 'technical', name: 'Technical', icon: DocumentTextIcon, color: 'from-secondary-500 to-primary-500' },
   ];
@@ -133,7 +137,7 @@ const HelpSupportPage: React.FC = () => {
             </div>
             <h1 className="text-5xl font-bold mb-4">Help & Support Center</h1>
             <p className="text-white/90 text-xl max-w-2xl mx-auto">
-              Find answers, get help, and learn everything about Viewebit Academy
+              Find answers, get help, and learn everything about Viewebit LMS
             </p>
           </div>
         </div>
@@ -145,7 +149,7 @@ const HelpSupportPage: React.FC = () => {
         {/* Quick Contact Cards */}
         <div className="grid gap-6 mb-12">
           <a
-            href="mailto:viewebit@gmail.com"
+            href="mailto:info@viewebit.com"
             className="group bg-gradient-to-br from-primary-500 to-cyan-500 rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all hover:scale-105"
           >
             <div className="flex items-start gap-4">
@@ -155,29 +159,11 @@ const HelpSupportPage: React.FC = () => {
               <div>
                 <h3 className="text-2xl font-bold mb-2">Email Support</h3>
                 <p className="text-white/90 mb-2">Get detailed help via email</p>
-                <p className="text-lg font-semibold">viewebit@gmail.com</p>
+                <p className="text-lg font-semibold">info@viewebit.com</p>
                 <p className="text-sm text-white/70 mt-2">Response time: 24-48 hours</p>
               </div>
             </div>
           </a>
-
-          {/* <a
-            href="https://wa.me/919876543210"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl p-8 text-white shadow-xl hover:shadow-2xl transition-all hover:scale-105"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <ChatBubbleLeftRightIcon className="h-8 w-8" />
-              </div>
-              <div>
-                <p className="text-white/90 mb-2">Instant messaging support</p>
-                <p className="text-lg font-semibold">Quick & Easy</p>
-                <p className="text-sm text-white/70 mt-2">Chat with us anytime!</p>
-              </div>
-            </div>
-          </a> */}
         </div>
 
         {/* FAQ Section */}
@@ -265,7 +251,7 @@ const HelpSupportPage: React.FC = () => {
             <LightBulbIcon className="h-12 w-12 mb-4 opacity-90" />
             <h3 className="text-xl font-bold mb-2">Pro Tip</h3>
             <p className="text-white/90">
-              Take tests regularly and review solutions thoroughly to track your progress and identify weak areas.
+              Work through quizzes regularly and review solutions thoroughly to track your progress and identify weak areas.
             </p>
           </div>
 
@@ -273,15 +259,15 @@ const HelpSupportPage: React.FC = () => {
             <TrophyIcon className="h-12 w-12 mb-4 opacity-90" />
             <h3 className="text-xl font-bold mb-2">Best Practice</h3>
             <p className="text-white/90">
-              Focus on your first attempt! Only your first test score counts for rankings, so prepare well before starting.
+              Focus on your first attempt! Only your first quiz score counts for rankings, so prepare well before starting.
             </p>
           </div>
 
           <div className="bg-gradient-to-br from-green-500 to-emerald-500 text-white rounded-2xl p-6 shadow-lg">
-            <GlobeAltIcon className="h-12 w-12 mb-4 opacity-90" />
-            <h3 className="text-xl font-bold mb-2">Bilingual</h3>
+            <AcademicCapIcon className="h-12 w-12 mb-4 opacity-90" />
+            <h3 className="text-xl font-bold mb-2">Stay Enrolled</h3>
             <p className="text-white/90">
-              All content is available in both English and Gujarati. Switch languages anytime for better understanding.
+              Complete a course's lessons and quizzes to automatically unlock its certificate — no extra steps needed.
             </p>
           </div>
         </div>
@@ -312,8 +298,8 @@ const HelpSupportPage: React.FC = () => {
                   2
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Browse Test Series</h3>
-                  <p className="text-gray-700">Explore available tests for your target exam (GPSC, GSSSB, Police, etc.). Start with free tests to get familiar.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Browse Courses</h3>
+                  <p className="text-gray-700">Explore courses published by your institution. Start with a free course or free preview lesson to get familiar with the platform.</p>
                 </div>
               </div>
 
@@ -322,8 +308,8 @@ const HelpSupportPage: React.FC = () => {
                   3
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Take Your First Test</h3>
-                  <p className="text-gray-700">Select language, read instructions, and start the test. Submit when done or time expires automatically.</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Learn, Attempt, and Submit</h3>
+                  <p className="text-gray-700">Work through lessons, attend live classes, take quizzes, and submit assignments as your educator schedules them.</p>
                 </div>
               </div>
 
@@ -332,8 +318,8 @@ const HelpSupportPage: React.FC = () => {
                   4
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Review & Learn</h3>
-                  <p className="text-gray-700">Check results, view detailed solutions, and use Practice Mode to reattempt questions. Track your progress!</p>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Review & Track Progress</h3>
+                  <p className="text-gray-700">Check quiz results, review detailed solutions, and follow your analytics and certificates as you complete each course.</p>
                 </div>
               </div>
             </div>
@@ -346,7 +332,7 @@ const HelpSupportPage: React.FC = () => {
             <ClockIcon className="h-12 w-12 text-purple-600 mb-4" />
             <h3 className="text-2xl font-bold text-gray-900 mb-3">Test History</h3>
             <p className="text-gray-700 mb-4">
-              View all your completed tests, scores, and performance analytics in one place.
+              View all your completed quizzes, scores, and performance analytics in one place.
             </p>
             <button
               onClick={() => navigate('/test-history')}
@@ -367,7 +353,7 @@ const HelpSupportPage: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
-                href="mailto:viewebit@gmail.com"
+                href="mailto:info@viewebit.com"
                 className="inline-flex items-center gap-3 bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all hover:scale-105"
               >
                 <EnvelopeIcon className="h-6 w-6" />
@@ -375,15 +361,15 @@ const HelpSupportPage: React.FC = () => {
               </a>
             </div>
             <p className="text-white/70 text-sm mt-6">
-              Email: We respond within 24-48 hours 
+              Email: We respond within 24-48 hours
             </p>
           </div>
         </div>
 
         {/* Footer Note */}
         <div className="mt-12 text-center text-gray-600">
-          <p className="text-lg">© 2025 Viewebit Academy. All rights reserved.</p>
-          <p className="mt-2">Practice Relentlessly. Perform Flawlessly.</p>
+          <p className="text-lg">© 2026 Viewebit LMS. All rights reserved.</p>
+          <p className="mt-2">Everything you need to teach, learn, and grow — in one platform.</p>
         </div>
 
       </div>

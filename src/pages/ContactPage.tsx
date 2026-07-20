@@ -41,8 +41,8 @@ const ContactPage: React.FC = () => {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                    <a href="mailto:viewebit@gmail.com" className="text-primary-600 hover:underline">
-                      viewebit@gmail.com
+                    <a href="mailto:info@viewebit.com" className="text-primary-600 hover:underline">
+                      info@viewebit.com
                     </a>
                   </div>
                 </div>
@@ -128,11 +128,11 @@ const ContactPage: React.FC = () => {
             You can also reach us directly at our email address
           </p>
           <a
-            href="mailto:viewebit@gmail.com"
+            href="mailto:info@viewebit.com"
             className="inline-flex items-center justify-center px-8 py-3 text-lg font-semibold text-gray-900 bg-white rounded-full hover:bg-gray-100 transition-colors shadow-lg"
           >
             <EnvelopeIcon className="w-5 h-5 mr-2" />
-            viewebit@gmail.com
+            info@viewebit.com
           </a>
         </div>
       </section>
