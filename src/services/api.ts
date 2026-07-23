@@ -45,16 +45,19 @@ api.interceptors.response.use(
   (error) => {
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
-      // Clear stored auth data
+      // Only treat this as a session expiry (and force a redirect) if we actually
+      // had a token — a failed login/forgot-password attempt never had one, and
+      // should just show its own inline error instead of hard-reloading the page.
+      const hadToken = !!sessionStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
+
       sessionStorage.removeItem(AUTH_CONFIG.TOKEN_KEY);
       sessionStorage.removeItem(AUTH_CONFIG.USER_KEY);
-      
-      // Show error message
-      toast.error('Session expired. Please login again.');
-      
-      // Redirect to login page
-      window.location.href = '/login';
-      
+
+      if (hadToken) {
+        toast.error('Session expired. Please login again.');
+        window.location.href = '/login';
+      }
+
       return Promise.reject(error);
     }
     
