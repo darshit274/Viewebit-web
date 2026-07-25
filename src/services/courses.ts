@@ -7,6 +7,7 @@ export interface CourseListItem {
   title: string;
   description?: string;
   thumbnail_url?: string | null;
+  status: string;
   educator: { id: string; name: string; avatar?: string | null; designation?: string };
   isPremium: boolean;
   price: number;

@@ -61,14 +61,19 @@ const CoursesPage: React.FC = () => {
                 <p className="text-sm text-gray-600 line-clamp-2 mb-2">{course.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-500">{course.educator.name}</span>
-                  {course.hasAccess ? (
-                    <span className="badge badge-green">Enrolled</span>
-                  ) : (
-                    <span className="badge badge-yellow inline-flex items-center gap-1">
-                      <LockClosedIcon className="h-3 w-3" />
-                      {course.isPremium ? `₹${course.price}` : 'Locked'}
-                    </span>
-                  )}
+                  <div className="flex items-center gap-1">
+                    {course.status !== 'published' && (
+                      <span className="badge badge-blue">No longer open for enrollment</span>
+                    )}
+                    {course.hasAccess ? (
+                      <span className="badge badge-green">Enrolled</span>
+                    ) : (
+                      <span className="badge badge-yellow inline-flex items-center gap-1">
+                        <LockClosedIcon className="h-3 w-3" />
+                        {course.isPremium ? `₹${course.price}` : 'Locked'}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </Link>
