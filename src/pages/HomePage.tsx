@@ -13,6 +13,16 @@ import {
   VideoCameraIcon,
   ArrowRightIcon,
 } from '@heroicons/react/24/outline';
+import {
+  SiReact,
+  SiTypescript,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiExpress,
+  SiMysql,
+  SiSequelize,
+  SiRazorpay,
+} from 'react-icons/si';
 
 const TEASERS = [
   {
@@ -44,6 +54,17 @@ const STATS = [
   { icon: BookOpenIcon, value: '10K+', label: 'Courses' },
   { icon: ShieldCheckIcon, value: '99.9%', label: 'Uptime' },
   { icon: ClockIcon, value: '24/7', label: 'Support' },
+];
+
+const TECH_PARTNERS = [
+  { icon: SiReact, name: 'React', color: '#61DAFB' },
+  { icon: SiTypescript, name: 'TypeScript', color: '#3178C6' },
+  { icon: SiTailwindcss, name: 'Tailwind CSS', color: '#06B6D4' },
+  { icon: SiNodedotjs, name: 'Node.js', color: '#5FA04E' },
+  { icon: SiExpress, name: 'Express', color: '#000000' },
+  { icon: SiMysql, name: 'MySQL', color: '#4479A1' },
+  { icon: SiSequelize, name: 'Sequelize', color: '#52B0E7' },
+  { icon: SiRazorpay, name: 'Razorpay', color: '#0C2451' },
 ];
 
 const HomePage: React.FC = () => {
@@ -164,7 +185,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Trusted By Section */}
+      {/* Trusted By Section
       <section className="section-spacing bg-white">
         <div className="page-container">
           <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-900 mb-10">
@@ -178,6 +199,27 @@ const HomePage: React.FC = () => {
               >
                 <BuildingLibraryIcon className="w-6 h-6" />
                 <span className="text-xs font-medium">Institute Logo</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      */}
+
+      {/* Our Technology Partners */}
+      <section className="section-spacing bg-white">
+        <div className="page-container">
+          <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-900 mb-10">
+            Our Technology Partners
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+            {TECH_PARTNERS.map(({ icon: Icon, name, color }) => (
+              <div
+                key={name}
+                className="flex flex-col items-center justify-center gap-2 bg-gray-50 border border-gray-100 rounded-xl py-6 px-3 hover:shadow-md hover:border-gray-200 transition-shadow"
+              >
+                <Icon className="w-8 h-8" style={{ color }} />
+                <span className="text-xs font-medium text-gray-600">{name}</span>
               </div>
             ))}
           </div>
