@@ -12,6 +12,7 @@ import AuthLayout from './components/layout/AuthLayout';
 import MainLayout from './components/layout/MainLayout';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import PublicLayout from './components/layout/PublicLayout';
+import CookieConsentBanner from './components/CookieConsentBanner';
 
 // Auth Pages
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -229,6 +230,7 @@ function AppContent() {
             },
           }}
         />
+        <CookieConsentBanner />
       </Router>
     </QueryClientProvider>
   );
