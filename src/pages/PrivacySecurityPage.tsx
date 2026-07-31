@@ -186,7 +186,7 @@ const PrivacySecurityPage: React.FC = () => {
                   <p className="text-gray-700 mb-2">We may share your information only in these specific cases:</p>
                   <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
                     <li><strong>Your Institution/Educator:</strong> Your course progress, quiz results, and assignment submissions are visible to the educator and institution administering your course</li>
-                    <li><strong>Service Providers:</strong> Trusted third-party services that help us operate (hosting, payment processing, analytics) — under strict confidentiality agreements</li>
+                    <li><strong>Service Providers:</strong> Razorpay processes our payments (they receive only what's needed to complete a transaction — we never share your password or profile data with them), and our email provider sends transactional emails (OTPs, receipts, notifications) — both operate under confidentiality obligations and never use your data for their own marketing</li>
                     <li><strong>Leaderboards:</strong> Your username and scores may be visible to other users on public leaderboards</li>
                     <li><strong>Legal Requirements:</strong> When required by law, court order, or government regulations</li>
                     <li><strong>Business Transfers:</strong> In case of merger, acquisition, or sale of assets (users will be notified)</li>
@@ -235,7 +235,9 @@ const PrivacySecurityPage: React.FC = () => {
                   </div>
                 </div>
                 <p className="text-sm text-gray-600 mt-4 italic">
-                  To exercise any of these rights, please contact us at the email provided below.
+                  To exercise any of these rights, contact your institution's administrator (or email us directly
+                  below) — requests for data access or account erasure are verified and fulfilled through our
+                  internal admin tooling, and every request is logged for audit purposes.
                 </p>
               </div>
             </div>
@@ -264,7 +266,11 @@ const PrivacySecurityPage: React.FC = () => {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Data Retention</h3>
                   <p>
                     We retain your personal information only as long as necessary to provide services and comply with legal obligations.
-                    When you delete your account, we will remove your personal data within 30 days, except where retention is required by law.
+                    When you request account deletion, we anonymize your personal details (name, email, phone, and
+                    similar identifying fields) so the account can no longer be tied to you. Payment/transaction
+                    records are kept in anonymized form for approximately 7 years, as required by Indian tax and
+                    accounting law — this is why we anonymize rather than fully delete records tied to a paid
+                    subscription.
                   </p>
                 </div>
               </div>
