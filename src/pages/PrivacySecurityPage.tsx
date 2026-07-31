@@ -128,9 +128,18 @@ const PrivacySecurityPage: React.FC = () => {
 
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">Cookies and Tracking</h3>
-                  <p className="text-gray-700">
-                    We use cookies and similar technologies to enhance your experience, remember your preferences, and analyze site usage. You can control cookie settings through your browser.
+                  <p className="text-gray-700 mb-3">
+                    We use browser storage to keep you signed in and remember your preferences. Our payment provider sets cookies during checkout. We do not currently run analytics or tracking scripts. You can accept or reject non-essential cookies via the banner shown on your first visit, and change your choice at any time — see below.
                   </p>
+                  <button
+                    onClick={() => {
+                      window.localStorage.removeItem('viewebit_cookie_consent');
+                      window.location.reload();
+                    }}
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Reset Cookie Preferences
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // Any future analytics/tracking script must check
 // window.localStorage.getItem('viewebit_cookie_consent') === 'accepted'
@@ -23,11 +24,11 @@ const CookieConsentBanner: React.FC = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-50 bg-gray-900 text-white px-4 py-4 sm:px-6 shadow-2xl">
+    <div className="fixed bottom-0 inset-x-0 z-[60] bg-gray-900 text-white px-4 py-4 sm:px-6 shadow-2xl">
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center gap-4">
         <p className="text-sm text-gray-200 flex-1">
-          We use cookies to keep you signed in and remember your preferences. See our{' '}
-          <a href="/privacy" className="underline hover:text-white">Privacy Policy</a> for details.
+          We use browser storage to keep you signed in and remember your preferences, and our payment provider sets cookies during checkout. See our{' '}
+          <Link to="/privacy" className="underline hover:text-white">Privacy Policy</Link> for details.
         </p>
         <div className="flex gap-3 shrink-0">
           <button
