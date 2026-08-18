@@ -210,7 +210,7 @@ const HomePage: React.FC = () => {
       <section className="section-spacing bg-white">
         <div className="page-container">
           <h2 className="text-center text-2xl md:text-3xl font-bold text-gray-900 mb-10">
-            Our Technology Partners
+            Our Trusted Integrations
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
             {TECH_PARTNERS.map(({ icon: Icon, name, color }) => (
