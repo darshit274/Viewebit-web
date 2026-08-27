@@ -23,6 +23,9 @@ import VerifyOTPPage from './pages/auth/VerifyOTPPage';
 
 // Main Pages
 import AppComingSoonPage from './pages/AppComingSoonPage';
+import AssessmentIntroPage from './pages/assessment/AssessmentIntroPage';
+import AssessmentWizardPage from './pages/assessment/AssessmentWizardPage';
+import AssessmentResultsPage from './pages/assessment/AssessmentResultsPage';
 import AboutPage from './pages/AboutPage';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage';
@@ -194,6 +197,7 @@ function AppContent() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/ai-workforce-assessment" element={<AssessmentIntroPage />} />
             <Route path="/privacy" element={<PrivacySecurityPage />} />
             <Route path="/help" element={<HelpSupportPage />} />
             <Route path="/terms" element={<TermsConditionsPage />} />
@@ -203,6 +207,10 @@ function AppContent() {
 
           {/* App Coming Soon - standalone, no marketing chrome */}
           <Route path="/app-coming-soon" element={<AppComingSoonPage />} />
+
+          {/* AI Workforce Skills Assessment - wizard/results standalone, no nav/footer, public */}
+          <Route path="/ai-workforce-assessment/start" element={<AssessmentWizardPage />} />
+          <Route path="/ai-workforce-assessment/results" element={<AssessmentResultsPage />} />
 
           {/* Error Routes */}
           <Route path="/404" element={<NotFoundPage />} />
