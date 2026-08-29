@@ -9,6 +9,7 @@ import {
   type LeadInfo
 } from '../../services/assessment';
 import QuestionRenderer from './QuestionRenderer';
+import TurnstileWidget from './TurnstileWidget';
 
 const LEAD_CAPTURE_AFTER_SECTION = 'use_case_maturity';
 
@@ -19,6 +20,8 @@ const AssessmentWizardPage: React.FC = () => {
   const [showLeadCapture, setShowLeadCapture] = useState(false);
   const [answers, setAnswers] = useState<AnswersMap>({});
   const [leadInfo, setLeadInfo] = useState<Partial<LeadInfo>>({});
+  const [website, setWebsite] = useState(''); // honeypot - stays empty for real users
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const startedAt = useMemo(() => Date.now(), []);
 
@@ -108,9 +111,13 @@ const AssessmentWizardPage: React.FC = () => {
       toast.error('We are missing some of your details. Please go back and fill them in.');
       return;
     }
+    if (!turnstileToken) {
+      toast.error('Please complete the verification check before submitting.');
+      return;
+    }
     setSubmitting(true);
     try {
-      const result = await assessmentService.submit(leadInfo as LeadInfo, answers);
+      const result = await assessmentService.submit(leadInfo as LeadInfo, answers, website, turnstileToken);
       sessionStorage.setItem('assessment_result', JSON.stringify(result));
       navigate('/ai-workforce-assessment/results');
     } catch {
@@ -190,10 +197,29 @@ const AssessmentWizardPage: React.FC = () => {
                   value={leadInfo.phone || ''}
                   onChange={(e) => setLeadInfo((p) => ({ ...p, phone: e.target.value }))}
                 />
+                {/* Honeypot: real users never see this field. Off-screen rather than
+                    display:none/type=hidden, since some bots skip those specifically. */}
+                <div style={{ position: 'absolute', left: '-9999px', top: 'auto' }} aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
           ) : (
             <QuestionRenderer section={currentSection} answers={answers} onAnswer={handleAnswer} />
+          )}
+          {isLastSection && !showLeadCapture && (
+            <div className="mt-6 pt-6 border-t border-gray-100">
+              <TurnstileWidget onToken={setTurnstileToken} onExpire={() => setTurnstileToken('')} />
+            </div>
           )}
         </div>
 
@@ -218,7 +244,7 @@ const AssessmentWizardPage: React.FC = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={submitting}
+              disabled={submitting || !turnstileToken}
               className="px-6 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-60"
             >
               {submitting ? 'Submitting...' : 'See My Results'}

@@ -84,8 +84,18 @@ export const assessmentService = {
     return response.data.data;
   },
 
-  submit: async (leadInfo: LeadInfo, answers: AnswersMap): Promise<AssessmentResult> => {
-    const response = await api.post('/assessment/submit', { leadInfo, answers });
+  submit: async (
+    leadInfo: LeadInfo,
+    answers: AnswersMap,
+    website?: string,
+    turnstileToken?: string
+  ): Promise<AssessmentResult> => {
+    // `website` is a honeypot field - real users never see or fill it (see
+    // AssessmentWizardPage), so a non-empty value means a bot blindly filled
+    // every input on the page. The backend rejects the submission if set.
+    // `turnstileToken` is verified server-side against Cloudflare before the
+    // submission is accepted - the check here is just to fail fast.
+    const response = await api.post('/assessment/submit', { leadInfo, answers, website, turnstileToken });
     return response.data.data;
   }
 };
