@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { assessmentService } from '../../services/assessment';
 
 const AssessmentIntroPage: React.FC = () => {
   const navigate = useNavigate();
+  const [introVideoUrl, setIntroVideoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    assessmentService
+      .getConfig()
+      .then((config) => setIntroVideoUrl(config.intro_video_url))
+      .catch(() => setIntroVideoUrl(null));
+  }, []);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-16 text-center">
@@ -12,6 +21,23 @@ const AssessmentIntroPage: React.FC = () => {
       </p>
       <p className="text-gray-700 mb-2">A practical 5&ndash;7 minute assessment for UK recruitment agencies.</p>
       <p className="font-medium text-indigo-700 mb-8">No technical knowledge required.</p>
+      {introVideoUrl && (
+        <div
+          className="w-full mx-auto mb-8 rounded-lg overflow-hidden shadow-md"
+          style={{ maxWidth: '700px', aspectRatio: '7 / 5' }}
+        >
+          <iframe
+            width="100%"
+            height="100%"
+            src={introVideoUrl}
+            title="Assessment intro video"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+      )}
       <button
         type="button"
         onClick={() => navigate('/ai-workforce-assessment/start')}

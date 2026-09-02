@@ -133,6 +133,17 @@ const CoursePlayerPage: React.FC = () => {
                 <video controls className="w-full rounded-lg bg-black" src={selectedLesson.video_url} />
               )}
 
+              {selectedLesson.lesson_type === 'text' && (
+                selectedLesson.content_html ? (
+                  <HTMLContent content={selectedLesson.content_html} />
+                ) : (
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center text-gray-600">
+                    <DocumentTextIcon className="h-10 w-10 mx-auto mb-2 text-gray-400" />
+                    This lesson has no content yet.
+                  </div>
+                )
+              )}
+
               {selectedLesson.lesson_type === 'document' && (
                 selectedLesson.content_html ? (
                   <HTMLContent content={selectedLesson.content_html} />
@@ -174,7 +185,7 @@ const CoursePlayerPage: React.FC = () => {
                 </div>
               )}
 
-              {(selectedLesson.lesson_type === 'video' || selectedLesson.lesson_type === 'document') && (
+              {(selectedLesson.lesson_type === 'video' || selectedLesson.lesson_type === 'document' || selectedLesson.lesson_type === 'text') && (
                 <button onClick={handleMarkComplete} disabled={completing} className="btn-secondary inline-flex items-center gap-2 disabled:opacity-50">
                   <CheckCircleIcon className="h-4 w-4" />
                   {completing ? 'Saving...' : 'Mark as Complete'}

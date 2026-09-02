@@ -84,6 +84,11 @@ export const assessmentService = {
     return response.data.data;
   },
 
+  getConfig: async (): Promise<{ intro_video_url: string | null }> => {
+    const response = await api.get('/assessment/config');
+    return response.data.data;
+  },
+
   submit: async (
     leadInfo: LeadInfo,
     answers: AnswersMap,
