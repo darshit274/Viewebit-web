@@ -64,6 +64,12 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       iconSolid: HomeIconSolid,
     },
     {
+      name: 'Courses',
+      href: '/courses',
+      icon: RectangleStackIcon,
+      iconSolid: RectangleStackIconSolid,
+    },
+    {
       name: 'Test Series',
       href: '/tests',
       icon: AcademicCapIcon,
@@ -86,12 +92,6 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       href: '/pdfs',
       icon: DocumentTextIcon,
       iconSolid: DocumentTextIconSolid,
-    },
-    {
-      name: 'Courses',
-      href: '/courses',
-      icon: RectangleStackIcon,
-      iconSolid: RectangleStackIconSolid,
     },
     {
       name: 'Assignments',
