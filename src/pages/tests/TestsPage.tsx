@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   AcademicCapIcon,
   ClockIcon,
@@ -195,6 +195,7 @@ const TestSeriesCard = ({
 };
 
 const TestsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [testSeries, setTestSeries] = useState<TestSeries[]>([]);
   const [subscriptionData, setSubscriptionData] = useState<Record<number, any>>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -263,10 +264,12 @@ const TestsPage: React.FC = () => {
   };
 
   const handlePurchase = (series: TestSeries) => {
-    // For now, show a message since payment integration is not yet implemented
-    toast.success('Payment integration coming soon! This series is currently free to access.');
-    // Navigate to series detail page to explore content
-    window.location.href = `/tests/series/${series.uuid}`;
+    navigate('/payment', {
+      state: {
+        type: 'test-series',
+        item: { id: series.uuid, title: series.name || series.title, price: series.price }
+      }
+    });
   };
 
   const handleRetry = () => {

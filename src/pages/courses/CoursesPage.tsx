@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AcademicCapIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { coursesService } from '../../services/courses';
 import type { CourseListItem } from '../../services/courses';
 import toast from 'react-hot-toast';
 
 const CoursesPage: React.FC = () => {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState<CourseListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -59,7 +60,7 @@ const CoursesPage: React.FC = () => {
               <div className="p-4">
                 <h3 className="font-semibold text-gray-900 mb-1">{course.title}</h3>
                 <p className="text-sm text-gray-600 line-clamp-2 mb-2">{course.description}</p>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-gray-500">{course.educator.name}</span>
                   <div className="flex items-center gap-1">
                     {course.status !== 'published' && (
@@ -75,6 +76,24 @@ const CoursesPage: React.FC = () => {
                     )}
                   </div>
                 </div>
+                {!course.hasAccess && course.isPremium && course.testSeriesUuid && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      navigate('/payment', {
+                        state: {
+                          type: 'test-series',
+                          item: { id: course.testSeriesUuid, title: course.title, price: course.price }
+                        }
+                      });
+                    }}
+                    className="btn-primary w-full text-sm py-1.5"
+                  >
+                    Enroll Now
+                  </button>
+                )}
               </div>
             </Link>
           ))}

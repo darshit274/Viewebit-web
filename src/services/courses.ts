@@ -11,6 +11,7 @@ export interface CourseListItem {
   educator: { id: string; name: string; avatar?: string | null; designation?: string };
   isPremium: boolean;
   price: number;
+  testSeriesUuid?: string | null;
   hasAccess: boolean;
 }
 

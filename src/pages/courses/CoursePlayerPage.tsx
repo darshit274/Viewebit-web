@@ -119,6 +119,27 @@ const CoursePlayerPage: React.FC = () => {
         <p className="text-sm text-gray-500 mt-1">Instructor: {course.educator.name}</p>
       </div>
 
+      {!course.hasAccess && course.testSeries?.pricing_type === 'paid' && (
+        <div className="flex items-center justify-between bg-primary-50 border border-primary-200 rounded-lg px-4 py-3 mb-6">
+          <div>
+            <p className="text-sm font-medium text-primary-900">This course requires enrollment</p>
+            <p className="text-xs text-primary-700">Free-preview lessons stay open — enroll to unlock the rest.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/payment', {
+              state: {
+                type: 'test-series',
+                item: { id: course.testSeries!.uuid, title: course.title, price: course.testSeries!.price }
+              }
+            })}
+            className="btn-primary whitespace-nowrap"
+          >
+            Enroll Now &mdash; ₹{course.testSeries.price}
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 card p-6">
           {!selectedLesson ? (
