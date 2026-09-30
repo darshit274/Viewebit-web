@@ -14,7 +14,6 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
-  DocumentDuplicateIcon,
   VideoCameraIcon,
   TrophyIcon,
   CheckBadgeIcon as CertificateIcon,
@@ -29,7 +28,6 @@ import {
   BookOpenIcon as BookOpenIconSolid,
   GiftIcon as GiftIconSolid,
   ClockIcon as ClockIconSolid,
-  DocumentDuplicateIcon as DocumentDuplicateIconSolid,
   VideoCameraIcon as VideoCameraIconSolid,
   TrophyIcon as TrophyIconSolid,
   CheckBadgeIcon as CertificateIconSolid,
@@ -83,12 +81,6 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       href: '/free-tests',
       icon: BookOpenIcon,
       iconSolid: BookOpenIconSolid,
-    },
-    {
-      name: 'Previous Years Papers',
-      href: '/previous-years-papers',
-      icon: DocumentDuplicateIcon,
-      iconSolid: DocumentDuplicateIconSolid,
     },
     {
       name: 'Study Materials',

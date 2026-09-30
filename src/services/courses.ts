@@ -1,6 +1,6 @@
 import { api } from './api';
 
-export type LessonType = 'video' | 'document' | 'quiz' | 'live';
+export type LessonType = 'video' | 'document' | 'text' | 'quiz' | 'live' | 'assignment';
 
 export interface CourseListItem {
   uuid: string;
@@ -29,6 +29,7 @@ export interface Lesson {
   progress_status?: LessonProgressStatus;
   quizCategory?: { id: number; uuid: string; name: string } | null;
   pdf?: { id: string; title: string } | null;
+  assignment?: { id: number; uuid: string; title: string } | null;
 }
 
 export interface CourseModule {

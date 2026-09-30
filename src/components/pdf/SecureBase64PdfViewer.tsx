@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import * as pdfjsLib from 'pdfjs-dist';
 import type { PDFDocumentLoadingTask, PDFDocumentProxy, RenderTask } from 'pdfjs-dist';
-import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+// A plain public/ path, not a Vite ?url asset import — the source .mjs file
+// is served by web servers with no .mjs mime-type mapping (see
+// scripts/copy-pdf-worker.mjs), which browsers refuse to execute as a Worker.
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 interface SecureBase64PdfViewerProps {
   base64Content: string;

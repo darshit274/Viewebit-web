@@ -7,6 +7,7 @@ import {
   VideoCameraIcon,
   LockClosedIcon,
   CheckCircleIcon,
+  ClipboardDocumentListIcon,
 } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleIconSolid } from '@heroicons/react/24/solid';
 import { coursesService } from '../../services/courses';
@@ -21,6 +22,7 @@ const LESSON_ICON: Record<string, React.ComponentType<{ className?: string }>> =
   document: DocumentTextIcon,
   quiz: QuestionMarkCircleIcon,
   live: PlayCircleIcon,
+  assignment: ClipboardDocumentListIcon,
 };
 
 const CoursePlayerPage: React.FC = () => {
@@ -215,6 +217,23 @@ const CoursePlayerPage: React.FC = () => {
                   <PlayCircleIcon className="h-10 w-10 mx-auto mb-2 text-gray-400" />
                   Check the Live Sessions page to join this class when it starts.
                 </div>
+              )}
+
+              {selectedLesson.lesson_type === 'assignment' && (
+                selectedLesson.assignment ? (
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                    <ClipboardDocumentListIcon className="h-10 w-10 mx-auto mb-2 text-primary-500" />
+                    <p className="text-gray-700 mb-4">This lesson is an assignment — submit it to count toward course completion.</p>
+                    <button onClick={() => navigate(`/assignments/${selectedLesson.assignment!.uuid}`)} className="btn btn-primary">
+                      Go to Assignment
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center text-gray-600">
+                    <ClipboardDocumentListIcon className="h-10 w-10 mx-auto mb-2 text-gray-400" />
+                    No assignment is linked to this lesson yet.
+                  </div>
+                )
               )}
 
               {(selectedLesson.lesson_type === 'video' || selectedLesson.lesson_type === 'document' || selectedLesson.lesson_type === 'text') && (
