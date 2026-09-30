@@ -31,6 +31,7 @@ interface TestSeries {
   is_subscribed?: boolean;
   difficulty_level: "beginner" | "intermediate" | "advanced";
   categories?: Category[];
+  course?: { uuid: string; title: string } | null;
 }
 
 interface Category {
@@ -175,7 +176,9 @@ const TestSeriesDetailPage: React.FC = () => {
         if (!category.is_free_in_paid_series) {
           // Locked test - show error
           toast.error(
-            "This test requires a subscription. Please purchase to access."
+            series?.course
+              ? `Enroll in "${series.course.title}" to unlock this quiz.`
+              : "This test requires a subscription. Please purchase to access."
           );
           return;
         }
@@ -456,6 +459,13 @@ const TestSeriesDetailPage: React.FC = () => {
                 ✓ You have access to this series
               </span>
             </div>
+          ) : series.course ? (
+            <div className="flex items-center px-4 py-2 bg-purple-50 border border-purple-200 rounded-lg">
+              <LockClosedIcon className="h-5 w-5 text-purple-600 mr-2" />
+              <span className="text-sm font-medium text-purple-700">
+                🔒 Part of "{series.course.title}" — enroll in the course to unlock
+              </span>
+            </div>
           ) : (
             <div className="flex items-center px-4 py-2 bg-yellow-50 border border-yellow-200 rounded-lg">
               <LockClosedIcon className="h-5 w-5 text-yellow-600 mr-2" />
@@ -499,6 +509,14 @@ const TestSeriesDetailPage: React.FC = () => {
                 className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
               >
                 Continue Learning
+              </button>
+            ) : series.course ? (
+              <button
+                onClick={() => navigate(`/courses/${series.course!.uuid}`)}
+                className="flex items-center px-6 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                <LockClosedIcon className="h-4 w-4 mr-2" />
+                Go to Course
               </button>
             ) : (
               <button

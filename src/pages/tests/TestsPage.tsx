@@ -45,6 +45,7 @@ interface TestSeries {
   original_price?: number;
   discount_percentage?: number;
   validity_days?: number;
+  course?: { uuid: string; title: string } | null;
 }
 
 // Component for individual test series card
@@ -91,6 +92,11 @@ const TestSeriesCard = ({
             )}
           </div>
           <div className="flex items-center flex-wrap gap-2">
+            {series.course && (
+              <div className="badge bg-purple-100 text-purple-700 text-xs">
+                Course: {series.course.title}
+              </div>
+            )}
             {series.difficulty_level && (
               <div className={cn('badge text-xs', getDifficultyColor(series.difficulty_level))}>
                 {series.difficulty_level.charAt(0).toUpperCase() + series.difficulty_level.slice(1)}
@@ -175,6 +181,15 @@ const TestSeriesCard = ({
             >
               Continue
               <ArrowRightIcon className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          ) : series.course ? (
+            <Link
+              to={`/courses/${series.course.uuid}`}
+              onClick={(e) => e.stopPropagation()}
+              className="btn btn-outline group"
+            >
+              <LockClosedIcon className="h-4 w-4 mr-2" />
+              Enroll in Course
             </Link>
           ) : (
             <button

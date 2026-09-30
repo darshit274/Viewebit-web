@@ -34,11 +34,30 @@ const HTMLContent: React.FC<HTMLContentProps> = ({ content, className = '' }) =>
       className={`html-content ${className}`}
       dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       style={{
-        // Add styles for better HTML content rendering
         lineHeight: '1.6',
+        // Rich-text editors sometimes save runs of words joined by &nbsp;
+        // instead of real spaces, which normally can't wrap and just
+        // overflows the container. Force a break wherever needed so long
+        // content never gets clipped.
+        overflowWrap: 'anywhere',
+        wordBreak: 'break-word',
       }}
     />
   );
+};
+
+// Plain-text preview of rich HTML content, for card summaries and other
+// spots that need a short, reliably-wrappable snippet rather than the full
+// formatted content. Goes through a detached DOM node (not DOMPurify's own
+// string output, which re-serializes entities like &nbsp; rather than
+// decoding them) so textContent gives back real, wrappable characters.
+export const htmlToPlainText = (html: string): string => {
+  const sanitized = DOMPurify.sanitize(html);
+  const el = document.createElement('div');
+  el.innerHTML = sanitized;
+  const text = el.textContent || '';
+  const NBSP = String.fromCharCode(160);
+  return text.split(NBSP).join(' ').replace(/\s+/g, ' ').trim();
 };
 
 export default HTMLContent;
