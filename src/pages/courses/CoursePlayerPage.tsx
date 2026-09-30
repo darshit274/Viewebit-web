@@ -8,6 +8,7 @@ import {
   LockClosedIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
+import { CheckCircleIcon as CheckCircleIconSolid } from '@heroicons/react/24/solid';
 import { coursesService } from '../../services/courses';
 import type { CourseDetail, Lesson } from '../../services/courses';
 import { pdfsService } from '../../services/pdfs';
@@ -92,6 +93,16 @@ const CoursePlayerPage: React.FC = () => {
     try {
       await coursesService.updateLessonProgress(selectedLesson.uuid, 'completed');
       toast.success('Lesson marked as complete');
+      setSelectedLesson((prev) => (prev ? { ...prev, progress_status: 'completed' } : prev));
+      setCourse((prev) => prev ? {
+        ...prev,
+        modules: prev.modules.map((module) => ({
+          ...module,
+          lessons: module.lessons.map((lesson) =>
+            lesson.uuid === selectedLesson.uuid ? { ...lesson, progress_status: 'completed' } : lesson
+          )
+        }))
+      } : prev);
     } catch (error) {
       toast.error('Failed to update progress');
     } finally {
@@ -115,7 +126,7 @@ const CoursePlayerPage: React.FC = () => {
     <div className="p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{course.title}</h1>
-        <p className="text-gray-600">{course.description}</p>
+        {course.description && <HTMLContent content={course.description} className="text-gray-600" />}
         <p className="text-sm text-gray-500 mt-1">Instructor: {course.educator.name}</p>
       </div>
 
@@ -133,7 +144,7 @@ const CoursePlayerPage: React.FC = () => {
                 item: { id: course.testSeries!.uuid, title: course.title, price: course.testSeries!.price }
               }
             })}
-            className="btn-primary whitespace-nowrap"
+            className="btn btn-primary whitespace-nowrap"
           >
             Enroll Now &mdash; ₹{course.testSeries.price}
           </button>
@@ -193,7 +204,7 @@ const CoursePlayerPage: React.FC = () => {
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
                   <QuestionMarkCircleIcon className="h-10 w-10 mx-auto mb-2 text-primary-500" />
                   <p className="text-gray-700 mb-4">This lesson is a quiz — completing it counts toward course completion.</p>
-                  <button onClick={() => navigate(`/tests/quiz/${selectedLesson.quizCategory!.uuid}`)} className="btn-primary">
+                  <button onClick={() => navigate(`/tests/quiz/${selectedLesson.quizCategory!.uuid}`)} className="btn btn-primary">
                     Start Quiz
                   </button>
                 </div>
@@ -207,10 +218,17 @@ const CoursePlayerPage: React.FC = () => {
               )}
 
               {(selectedLesson.lesson_type === 'video' || selectedLesson.lesson_type === 'document' || selectedLesson.lesson_type === 'text') && (
-                <button onClick={handleMarkComplete} disabled={completing} className="btn-secondary inline-flex items-center gap-2 disabled:opacity-50">
-                  <CheckCircleIcon className="h-4 w-4" />
-                  {completing ? 'Saving...' : 'Mark as Complete'}
-                </button>
+                selectedLesson.progress_status === 'completed' ? (
+                  <button disabled className="inline-flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2 text-sm font-medium cursor-default">
+                    <CheckCircleIconSolid className="h-4 w-4" />
+                    Completed
+                  </button>
+                ) : (
+                  <button onClick={handleMarkComplete} disabled={completing} className="btn btn-secondary gap-2">
+                    <CheckCircleIcon className="h-4 w-4" />
+                    {completing ? 'Saving...' : 'Mark as Complete'}
+                  </button>
+                )
               )}
             </div>
           )}
@@ -234,6 +252,9 @@ const CoursePlayerPage: React.FC = () => {
                     >
                       {lesson.locked ? <LockClosedIcon className="h-4 w-4 text-gray-400 flex-shrink-0" /> : <Icon className="h-4 w-4 flex-shrink-0" />}
                       <span className="flex-1 truncate">{lesson.title}</span>
+                      {lesson.progress_status === 'completed' && (
+                        <CheckCircleIconSolid className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      )}
                       {lesson.is_free_preview && !course.hasAccess && (
                         <span className="badge badge-green text-[10px]">Free</span>
                       )}

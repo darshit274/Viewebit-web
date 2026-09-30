@@ -67,7 +67,10 @@ const TakeTestPage: React.FC = () => {
   const [markedQuestions, setMarkedQuestions] = useState<{
     [key: number]: boolean;
   }>({});
-  const [language, setLanguage] = useState<"english" | "gujarati">("gujarati");
+  // Language picker is disabled for now (English only) - see AskUserQuestion-less
+  // removal of the Gujarati/English chooser below; kept as state (not hardcoded
+  // inline) since getQuestionText/getOptionText/getLanguageIndicator still key off it.
+  const [language] = useState<"english" | "gujarati">("english");
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -751,33 +754,6 @@ const TakeTestPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Language Selector */}
-            <div className="mb-6">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-3 text-center">
-                Choose Language / ભાષા પસંદ કરો
-              </label>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md mx-auto">
-                <button
-                  onClick={() => setLanguage("gujarati")}
-                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${language === "gujarati"
-                    ? "bg-primary-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                >
-                  ગુજરાતી (Gujarati)
-                </button>
-                <button
-                  onClick={() => setLanguage("english")}
-                  className={`flex-1 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${language === "english"
-                    ? "bg-primary-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                >
-                  English
-                </button>
-              </div>
-            </div>
-
             {/* Negative Marking Indicator */}
             {quizData.category.negative_marking_enabled && (
               <div className="mb-4 sm:mb-6 p-2 sm:p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-center mx-auto max-w-sm">
@@ -1434,22 +1410,6 @@ const TakeTestPage: React.FC = () => {
                       </button>
                     );
                   })}
-                </div>
-
-                <div className="mb-6 sm:mb-8">
-                  <h4 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-sm sm:text-base">
-                    Language:
-                  </h4>
-                  <select
-                    value={language}
-                    onChange={(e) =>
-                      setLanguage(e.target.value as "english" | "gujarati")
-                    }
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full"
-                  >
-                    <option value="english">English</option>
-                    <option value="gujarati">Gujarati</option>
-                  </select>
                 </div>
 
                 {/* Legend */}

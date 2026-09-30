@@ -51,6 +51,9 @@ interface ModernSidebarProps {
 
 const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  // Desktop-only sidebar collapse — open by default, collapsible into a
+  // drawer the user can bring back with the toggle in the top bar.
+  const [desktopOpen, setDesktopOpen] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -161,9 +164,9 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        } ${desktopOpen ? 'lg:translate-x-0' : 'lg:-translate-x-full'}`}
       >
         {/* Sidebar header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
@@ -180,6 +183,13 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden p-1.5 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <XMarkIcon className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => setDesktopOpen(false)}
+            className="hidden lg:block p-1.5 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            title="Collapse sidebar"
           >
             <XMarkIcon className="w-5 h-5" />
           </button>
@@ -243,7 +253,7 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className={desktopOpen ? 'lg:pl-64' : 'lg:pl-0'}>
         {/* Top navigation bar */}
         <div className="sticky top-0 z-30 bg-white border-b border-gray-200">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6">
@@ -254,6 +264,17 @@ const ModernSidebar: React.FC<ModernSidebarProps> = ({ children }) => {
             >
               <Bars3Icon className="w-6 h-6" />
             </button>
+
+            {/* Desktop sidebar toggle — only needed to bring it back once collapsed */}
+            {!desktopOpen && (
+              <button
+                onClick={() => setDesktopOpen(true)}
+                className="hidden lg:block p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                title="Open sidebar"
+              >
+                <Bars3Icon className="w-6 h-6" />
+              </button>
+            )}
 
             {/* Page title placeholder */}
             <div className="flex-1">

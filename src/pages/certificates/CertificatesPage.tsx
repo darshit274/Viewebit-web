@@ -57,7 +57,7 @@ const CertificatesPage: React.FC = () => {
                   href={cert.pdf_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-primary inline-flex items-center gap-2 text-sm"
+                  className="btn btn-primary gap-2"
                 >
                   <ArrowDownTrayIcon className="h-4 w-4" />
                   Download

@@ -6,10 +6,11 @@ export interface LiveSession {
   description?: string;
   scheduled_start: string;
   scheduled_end?: string | null;
-  meeting_provider: string;
+  meeting_provider?: string;
   status: 'scheduled' | 'live' | 'completed' | 'cancelled';
   course?: { id: number; uuid: string; title: string } | null;
   educator: { id: string; name: string; avatar?: string | null };
+  locked?: boolean;
 }
 
 export const liveSessionsService = {

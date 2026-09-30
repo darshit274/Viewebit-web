@@ -81,7 +81,7 @@ const Header: React.FC = () => {
             
             <button
               onClick={handleLogout}
-              className="btn-secondary text-sm"
+              className="btn btn-secondary text-sm"
             >
               Logout
             </button>

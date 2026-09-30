@@ -12,8 +12,7 @@ import {
   Squares2X2Icon,
   XMarkIcon,
   FlagIcon,
-  MinusCircleIcon,
-  LanguageIcon
+  MinusCircleIcon
 } from '@heroicons/react/24/outline';
 import { api } from '../../services/api';
 import { toast } from 'react-hot-toast';
@@ -95,10 +94,9 @@ const SolutionsPage: React.FC = () => {
     language: initialLanguage = 'english'
   } = location.state || {};
 
-  // Language is now switchable in this screen — initialised from the language used during the test
-  const [language, setLanguage] = useState<'english' | 'gujarati'>(
-    (initialLanguage === 'gujarati' ? 'gujarati' : 'english') as 'english' | 'gujarati'
-  );
+  // Language switching is disabled for now (English only)
+  void initialLanguage;
+  const language: 'english' | 'gujarati' = 'english';
 
   // State to hold session-based data (when viewing from test history)
   const [userAnswers, setUserAnswers] = useState<{ [key: number]: string }>(locationUserAnswers || {});
@@ -125,11 +123,6 @@ const SolutionsPage: React.FC = () => {
     if (!q) return '';
     if (language === 'gujarati') return q.explanation_gujarati || q.explanation || '';
     return q.explanation || q.explanation_gujarati || '';
-  };
-
-  const hasBothLanguages = (q?: Question): boolean => {
-    if (!q) return false;
-    return Boolean(q.question_text_gujarati || q.options_gujarati?.A || q.explanation_gujarati);
   };
 
   // Helper function to convert newlines to HTML br tags
@@ -503,35 +496,6 @@ const SolutionsPage: React.FC = () => {
                   }`} />
               </div>
 
-              {/* Language Switcher — shown when any solution has Gujarati content */}
-              {solutionsData.solutions.some(hasBothLanguages) && (
-                <div className="flex items-center space-x-2">
-                  <LanguageIcon className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700 hidden sm:inline">Language:</span>
-                  <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
-                    <button
-                      type="button"
-                      onClick={() => setLanguage('english')}
-                      className={`px-3 py-1.5 text-sm font-medium transition-colors ${language === 'english'
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-white text-gray-700 hover:bg-gray-50'
-                        }`}
-                    >
-                      English
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setLanguage('gujarati')}
-                      className={`px-3 py-1.5 text-sm font-medium transition-colors border-l border-gray-200 ${language === 'gujarati'
-                        ? 'bg-primary-600 text-white'
-                        : 'bg-white text-gray-700 hover:bg-gray-50'
-                        }`}
-                    >
-                      ગુજરાતી
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Show All/Hide All Explanations */}

@@ -181,11 +181,11 @@ const PDFViewerPage: React.FC = () => {
                 : 'You do not have access to this document.'}
             </p>
             {accessInfo!.showEnrollButton ? (
-              <button onClick={() => navigate('/tests')} className="btn-primary">
+              <button onClick={() => navigate('/tests')} className="btn btn-primary">
                 Enroll Now
               </button>
             ) : accessInfo!.canPurchase ? (
-              <button onClick={handlePurchase} className="btn-primary inline-flex items-center">
+              <button onClick={handlePurchase} className="btn btn-primary">
                 <ShoppingCartIcon className="w-4 h-4 mr-2" />
                 Purchase
               </button>

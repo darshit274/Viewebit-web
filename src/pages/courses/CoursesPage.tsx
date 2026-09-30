@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AcademicCapIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { coursesService } from '../../services/courses';
 import type { CourseListItem } from '../../services/courses';
+import HTMLContent from '../../components/common/HTMLContent';
 import toast from 'react-hot-toast';
 
 const CoursesPage: React.FC = () => {
@@ -59,7 +60,12 @@ const CoursesPage: React.FC = () => {
               </div>
               <div className="p-4">
                 <h3 className="font-semibold text-gray-900 mb-1">{course.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-2 mb-2">{course.description}</p>
+                {course.description && (
+                  <HTMLContent
+                    content={course.description}
+                    className="text-sm text-gray-600 mb-2 overflow-hidden line-clamp-2"
+                  />
+                )}
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-gray-500">{course.educator.name}</span>
                   <div className="flex items-center gap-1">
@@ -89,7 +95,7 @@ const CoursesPage: React.FC = () => {
                         }
                       });
                     }}
-                    className="btn-primary w-full text-sm py-1.5"
+                    className="btn btn-primary w-full text-sm py-1.5"
                   >
                     Enroll Now
                   </button>

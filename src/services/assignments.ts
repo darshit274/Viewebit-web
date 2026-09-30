@@ -12,6 +12,7 @@ export interface AssignmentListItem {
   course: { id: number; uuid: string; title: string } | null;
   submissionStatus: SubmissionStatus;
   grade: number | null;
+  locked?: boolean;
 }
 
 export interface AssignmentSubmission {
@@ -28,7 +29,18 @@ export interface QuizResult {
   percentage: number;
 }
 
-export interface AssignmentDetail extends AssignmentListItem {
+// When locked (course not purchased), the backend returns only
+// { uuid, title, course, locked: true } — every other field is absent.
+export interface AssignmentDetail {
+  uuid: string;
+  title: string;
+  course: { id: number; uuid: string; title: string } | null;
+  locked?: boolean;
+  submission_type?: SubmissionType;
+  due_date?: string | null;
+  max_points?: number | null;
+  submissionStatus?: SubmissionStatus;
+  grade?: number | null;
   description?: string;
   quizCategory?: { id: number; uuid: string; name: string } | null;
   submission?: AssignmentSubmission | null;

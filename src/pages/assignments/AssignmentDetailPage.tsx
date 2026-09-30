@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   QuestionMarkCircleIcon,
   ArrowUpTrayIcon,
   CheckCircleIcon,
   DocumentIcon,
+  LockClosedIcon,
 } from '@heroicons/react/24/outline';
 import { assignmentsService } from '../../services/assignments';
 import type { AssignmentDetail } from '../../services/assignments';
@@ -93,6 +94,18 @@ const AssignmentDetailPage: React.FC = () => {
         </div>
       </div>
 
+      {assignment.locked ? (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center">
+          <LockClosedIcon className="h-10 w-10 mx-auto mb-2 text-amber-500" />
+          <p className="text-gray-700 mb-4">Enroll in this course to view and submit this assignment.</p>
+          {assignment.course && (
+            <Link to={`/courses/${assignment.course.uuid}`} className="btn btn-primary">
+              Go to Course
+            </Link>
+          )}
+        </div>
+      ) : (
+        <>
       {assignment.description && (
         <p className="whitespace-pre-line text-gray-700 mb-6">{assignment.description}</p>
       )}
@@ -118,7 +131,7 @@ const AssignmentDetailPage: React.FC = () => {
           {assignment.quizCategory ? (
             <button
               onClick={() => navigate(`/tests/quiz/${assignment.quizCategory!.uuid}`)}
-              className="btn-primary"
+              className="btn btn-primary"
             >
               Start Quiz
             </button>
@@ -148,7 +161,7 @@ const AssignmentDetailPage: React.FC = () => {
             <button
               onClick={handleSubmitText}
               disabled={submitting || !submissionText.trim()}
-              className="btn-primary mt-3"
+              className="btn btn-primary mt-3"
             >
               {submitting ? 'Submitting...' : 'Submit'}
             </button>
@@ -183,7 +196,7 @@ const AssignmentDetailPage: React.FC = () => {
               <button
                 onClick={handleSubmitFile}
                 disabled={submitting || !selectedFile}
-                className="btn-primary mt-3 inline-flex items-center"
+                className="btn btn-primary mt-3"
               >
                 <ArrowUpTrayIcon className="h-4 w-4 mr-2" />
                 {submitting ? 'Submitting...' : 'Submit'}
@@ -191,6 +204,8 @@ const AssignmentDetailPage: React.FC = () => {
             </>
           )}
         </div>
+      )}
+        </>
       )}
     </div>
   );

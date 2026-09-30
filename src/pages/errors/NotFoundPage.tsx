@@ -13,7 +13,7 @@ const NotFoundPage: React.FC = () => {
         </p>
         <Link
           to="/dashboard"
-          className="btn-primary inline-flex items-center space-x-2"
+          className="btn btn-primary space-x-2"
         >
           <HomeIcon className="w-5 h-5" />
           <span>Back to Dashboard</span>

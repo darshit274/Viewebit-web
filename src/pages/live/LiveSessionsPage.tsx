@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { VideoCameraIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
+import { VideoCameraIcon, ClockIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { liveSessionsService } from '../../services/liveSessions';
 import type { LiveSession } from '../../services/liveSessions';
 import toast from 'react-hot-toast';
@@ -32,6 +33,10 @@ const LiveSessionsPage: React.FC = () => {
   }, []);
 
   const handleJoin = async (session: LiveSession) => {
+    if (session.locked) {
+      toast.error('Enroll in this course to join this live session');
+      return;
+    }
     setJoiningUuid(session.uuid);
     try {
       const { meeting_url } = await liveSessionsService.join(session.uuid);
@@ -79,14 +84,34 @@ const LiveSessionsPage: React.FC = () => {
                   {session.course && <span className="text-xs text-gray-500">{session.course.title}</span>}
                   <span className="text-xs text-gray-500">by {session.educator.name}</span>
                 </div>
+                {session.locked && (
+                  <p className="text-xs text-amber-700 mt-2 flex items-center gap-1">
+                    <LockClosedIcon className="h-3.5 w-3.5" />
+                    Enroll in {session.course?.title || 'this course'} to unlock this session
+                  </p>
+                )}
               </div>
-              <button
-                onClick={() => handleJoin(session)}
-                disabled={joiningUuid === session.uuid || session.status === 'completed' || session.status === 'cancelled'}
-                className="btn-primary disabled:opacity-50"
-              >
-                {joiningUuid === session.uuid ? 'Joining...' : 'Join'}
-              </button>
+              {session.locked ? (
+                session.course ? (
+                  <Link to={`/courses/${session.course.uuid}`} className="btn btn-outline inline-flex items-center gap-1.5">
+                    <LockClosedIcon className="h-4 w-4" />
+                    Enroll to Unlock
+                  </Link>
+                ) : (
+                  <button disabled className="btn btn-outline inline-flex items-center gap-1.5">
+                    <LockClosedIcon className="h-4 w-4" />
+                    Locked
+                  </button>
+                )
+              ) : (
+                <button
+                  onClick={() => handleJoin(session)}
+                  disabled={joiningUuid === session.uuid || session.status === 'completed' || session.status === 'cancelled'}
+                  className="btn btn-primary"
+                >
+                  {joiningUuid === session.uuid ? 'Joining...' : 'Join'}
+                </button>
+              )}
             </div>
           ))}
         </div>

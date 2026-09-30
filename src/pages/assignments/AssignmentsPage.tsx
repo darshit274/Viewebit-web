@@ -5,6 +5,7 @@ import {
   QuestionMarkCircleIcon,
   PencilSquareIcon,
   ArrowUpTrayIcon,
+  LockClosedIcon,
 } from '@heroicons/react/24/outline';
 import { assignmentsService } from '../../services/assignments';
 import type { AssignmentListItem, SubmissionType, SubmissionStatus } from '../../services/assignments';
@@ -77,24 +78,34 @@ const AssignmentsPage: React.FC = () => {
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <Icon className="h-5 w-5 text-primary-500 flex-shrink-0" />
+                    {assignment.locked ? (
+                      <LockClosedIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                    ) : (
+                      <Icon className="h-5 w-5 text-primary-500 flex-shrink-0" />
+                    )}
                     <h3 className="font-semibold text-gray-900">{assignment.title}</h3>
                   </div>
-                  <span className={`badge ${badge.className} flex-shrink-0`}>{badge.label}</span>
+                  {!assignment.locked && (
+                    <span className={`badge ${badge.className} flex-shrink-0`}>{badge.label}</span>
+                  )}
                 </div>
                 {assignment.course && (
                   <p className="text-sm text-gray-500 mb-2">{assignment.course.title}</p>
                 )}
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  {assignment.due_date && (
-                    <span>Due {new Date(assignment.due_date).toLocaleDateString()}</span>
-                  )}
-                  {assignment.max_points != null && (
-                    <span>
-                      {assignment.grade != null ? `${assignment.grade}/${assignment.max_points}` : assignment.max_points} pts
-                    </span>
-                  )}
-                </div>
+                {assignment.locked ? (
+                  <p className="text-xs text-amber-700">Enroll in this course to unlock this assignment</p>
+                ) : (
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    {assignment.due_date && (
+                      <span>Due {new Date(assignment.due_date).toLocaleDateString()}</span>
+                    )}
+                    {assignment.max_points != null && (
+                      <span>
+                        {assignment.grade != null ? `${assignment.grade}/${assignment.max_points}` : assignment.max_points} pts
+                      </span>
+                    )}
+                  </div>
+                )}
               </Link>
             );
           })}

@@ -15,6 +15,8 @@ export interface CourseListItem {
   hasAccess: boolean;
 }
 
+export type LessonProgressStatus = 'not_started' | 'in_progress' | 'completed';
+
 export interface Lesson {
   uuid: string;
   title: string;
@@ -24,6 +26,7 @@ export interface Lesson {
   duration_minutes?: number | null;
   is_free_preview?: boolean;
   locked?: boolean;
+  progress_status?: LessonProgressStatus;
   quizCategory?: { id: number; uuid: string; name: string } | null;
   pdf?: { id: string; title: string } | null;
 }
