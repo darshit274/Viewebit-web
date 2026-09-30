@@ -61,6 +61,7 @@ interface PDF {
   uploadDate?: string;
   originalPrice?: number;
   discountedPrice?: number;
+  course?: { uuid: string; title: string } | null;
 }
 
 const PDFsPage: React.FC = () => {
@@ -143,9 +144,14 @@ const PDFsPage: React.FC = () => {
             ? originalPrice * (1 - discountPercentage / 100)
             : originalPrice;
 
-          // Determine access status
+          // Determine access status. Course-linked PDFs carry their own
+          // hasAccess from the listing (computed server-side against the
+          // course's purchase state) regardless of their own access_level,
+          // which is just a meaningless default for a course upload.
           let hasAccess = false;
-          if (pdf.is_free === true || pdf.access_level === 'free') {
+          if (pdf.course) {
+            hasAccess = !!pdf.hasAccess;
+          } else if (pdf.is_free === true || pdf.access_level === 'free') {
             hasAccess = true; // Free PDFs are always accessible
           } else if (pdf.access_level === 'premium') {
             // For premium PDFs, check user's subscription status
@@ -176,6 +182,11 @@ const PDFsPage: React.FC = () => {
   };
 
   const handlePreview = (pdf: PDF) => {
+    if (!pdf.hasAccess && pdf.course) {
+      navigate(`/courses/${pdf.course.uuid}`);
+      return;
+    }
+
     if (!pdf.hasAccess && pdf.isPremium) {
       if (pdf.preview_pages && pdf.preview_pages > 0) {
         // Allow limited preview
@@ -241,7 +252,11 @@ const PDFsPage: React.FC = () => {
                     Featured
                   </div>
                 )}
-                {pdf.isPremium && (
+                {pdf.course ? (
+                  <div className="badge bg-purple-100 text-purple-700">
+                    Course: {pdf.course.title}
+                  </div>
+                ) : pdf.isPremium && (
                   <div className={cn('badge', pdf.hasAccess ? 'badge-green' : 'badge-blue')}>
                     {pdf.hasAccess ? (
                       <><CheckCircleIcon className="w-3 h-3 mr-1" />Owned</>
@@ -286,7 +301,7 @@ const PDFsPage: React.FC = () => {
                 </div>
               )}
 
-              {pdf.isPremium && !pdf.hasAccess && (
+              {!pdf.course && pdf.isPremium && !pdf.hasAccess && (
                 <div className="text-right mr-3">
                   {pdf.discountedPrice && (
                     <div className="flex items-center space-x-1">
@@ -305,7 +320,18 @@ const PDFsPage: React.FC = () => {
               )}
 
               <div className="flex space-x-2">
-                {pdf.isPremium && !pdf.hasAccess ? (
+                {pdf.course && !pdf.hasAccess ? (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePreview(pdf);
+                    }}
+                    className="btn btn-outline btn-sm"
+                  >
+                    <LockClosedIcon className="w-4 h-4 mr-1" />
+                    Enroll in Course
+                  </button>
+                ) : pdf.isPremium && !pdf.hasAccess ? (
                   <>
                     {pdf.preview_pages && pdf.preview_pages > 0 && (
                       <button
@@ -371,7 +397,11 @@ const PDFsPage: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-end space-y-1">
-            {pdf.isPremium && (
+            {pdf.course ? (
+              <div className="badge bg-purple-100 text-purple-700">
+                Course: {pdf.course.title}
+              </div>
+            ) : pdf.isPremium && (
               <div className={cn('badge', pdf.hasAccess ? 'badge-green' : 'badge-blue')}>
                 {pdf.hasAccess ? (
                   <><CheckCircleIcon className="w-3 h-3 mr-1" />Owned</>
@@ -380,7 +410,7 @@ const PDFsPage: React.FC = () => {
                 )}
               </div>
             )}
-            {pdf.isPremium && !pdf.hasAccess && (
+            {!pdf.course && pdf.isPremium && !pdf.hasAccess && (
               <div className="text-right">
                 {pdf.discountedPrice && (
                   <div className="flex items-center space-x-1">
@@ -441,7 +471,7 @@ const PDFsPage: React.FC = () => {
               <ClockIcon className="w-3 h-3 mr-1" />
               Uploaded {new Date(pdf.uploadDate || '').toLocaleDateString()}
             </div>
-            {pdf.isPremium && !pdf.hasAccess && pdf.preview_pages && pdf.preview_pages > 0 && (
+            {!pdf.course && pdf.isPremium && !pdf.hasAccess && pdf.preview_pages && pdf.preview_pages > 0 && (
               <div className="text-xs text-primary-600 mt-1">
                 Preview {pdf.preview_pages} pages free
               </div>
@@ -449,7 +479,18 @@ const PDFsPage: React.FC = () => {
           </div>
 
           <div className="flex space-x-2">
-            {pdf.isPremium && !pdf.hasAccess ? (
+            {pdf.course && !pdf.hasAccess ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePreview(pdf);
+                }}
+                className="btn btn-outline"
+              >
+                <LockClosedIcon className="w-4 h-4 mr-2" />
+                Enroll in Course
+              </button>
+            ) : pdf.isPremium && !pdf.hasAccess ? (
               <>
                 {pdf.preview_pages && pdf.preview_pages > 0 && (
                   <button

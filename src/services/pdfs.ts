@@ -28,6 +28,8 @@ export interface PdfListItem {
   tags: string[] | null;
   is_featured: boolean;
   created_at: string;
+  course?: { uuid: string; title: string } | null;
+  hasAccess?: boolean;
 }
 
 export interface PdfDetail extends PdfListItem {
@@ -48,6 +50,7 @@ export interface PdfAccessInfo {
   showEnrollButton: boolean;
   pdf?: PdfListItem;
   category?: PdfCategory;
+  course?: { uuid: string; title: string } | null;
   subscription?: unknown;
 }
 

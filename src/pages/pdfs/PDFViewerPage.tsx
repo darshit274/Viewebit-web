@@ -60,7 +60,10 @@ const PDFViewerPage: React.FC = () => {
         if (cancelled) return;
         setPdf(detail);
 
-        const isFree = detail.is_free === true || detail.access_level === 'free';
+        // Course-linked PDFs always need the real check regardless of their
+        // own access_level, which is just a meaningless default for a
+        // course upload — the course's purchase state is the sole authority.
+        const isFree = !detail.course && (detail.is_free === true || detail.access_level === 'free');
 
         if (!isFree && !isPreviewMode) {
           const access = await pdfsService.checkAccess(id);
@@ -174,13 +177,19 @@ const PDFViewerPage: React.FC = () => {
             </div>
             <h3 className="text-lg font-medium text-white mb-2">{pdf!.title}</h3>
             <p className="text-sm text-gray-300 mb-6">
-              {accessInfo!.showEnrollButton
+              {accessInfo!.course
+                ? `Part of "${accessInfo!.course.title}" — enroll in the course to unlock this document.`
+                : accessInfo!.showEnrollButton
                 ? 'Enroll to get access to this document.'
                 : accessInfo!.canPurchase
                 ? 'Purchase this document to view it in full.'
                 : 'You do not have access to this document.'}
             </p>
-            {accessInfo!.showEnrollButton ? (
+            {accessInfo!.course ? (
+              <button onClick={() => navigate(`/courses/${accessInfo!.course!.uuid}`)} className="btn btn-primary">
+                Go to Course
+              </button>
+            ) : accessInfo!.showEnrollButton ? (
               <button onClick={() => navigate('/tests')} className="btn btn-primary">
                 Enroll Now
               </button>
