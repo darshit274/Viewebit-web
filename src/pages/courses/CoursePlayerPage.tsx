@@ -17,6 +17,33 @@ import SecureBase64PdfViewer from '../../components/pdf/SecureBase64PdfViewer';
 import HTMLContent from '../../components/common/HTMLContent';
 import toast from 'react-hot-toast';
 
+// The lesson video player is a plain <video> element, which only plays
+// direct media file URLs — never a youtube.com/youtu.be watch page. This
+// converts a YouTube URL (watch, youtu.be, embed, or shorts form) into its
+// embeddable form so it can be rendered in an <iframe> instead; returns null
+// for any non-YouTube URL, which falls back to the native <video> tag.
+function getYouTubeEmbedUrl(url: string): string | null {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\.|^m\./, '');
+    let videoId: string | null = null;
+    if (host === 'youtu.be') {
+      videoId = u.pathname.slice(1).split('/')[0] || null;
+    } else if (host === 'youtube.com') {
+      if (u.pathname === '/watch') {
+        videoId = u.searchParams.get('v');
+      } else if (u.pathname.startsWith('/embed/')) {
+        videoId = u.pathname.split('/embed/')[1] || null;
+      } else if (u.pathname.startsWith('/shorts/')) {
+        videoId = u.pathname.split('/shorts/')[1] || null;
+      }
+    }
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+  } catch {
+    return null;
+  }
+}
+
 const LESSON_ICON: Record<string, React.ComponentType<{ className?: string }>> = {
   video: VideoCameraIcon,
   document: DocumentTextIcon,
@@ -164,7 +191,19 @@ const CoursePlayerPage: React.FC = () => {
               <h2 className="text-lg font-semibold text-gray-900">{selectedLesson.title}</h2>
 
               {selectedLesson.lesson_type === 'video' && selectedLesson.video_url && (
-                <video controls className="w-full rounded-lg bg-black" src={selectedLesson.video_url} />
+                getYouTubeEmbedUrl(selectedLesson.video_url) ? (
+                  <div className="aspect-video w-full rounded-lg overflow-hidden bg-black">
+                    <iframe
+                      src={getYouTubeEmbedUrl(selectedLesson.video_url)!}
+                      title={selectedLesson.title}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <video controls className="w-full rounded-lg bg-black" src={selectedLesson.video_url} />
+                )
               )}
 
               {selectedLesson.lesson_type === 'text' && (
